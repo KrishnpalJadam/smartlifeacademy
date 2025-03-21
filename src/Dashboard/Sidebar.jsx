@@ -116,6 +116,7 @@ function Sidebar() {
   if (Role === 'admin') {
     menuItems.push({ path: '/adminpanel', icon: <FaHome />, text: 'Admin Panel' });
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
+    menuItems.push({ path: '/createPromocode', icon: <FaCog />, text: 'Create Promocode' });
 
   }
 

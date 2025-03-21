@@ -70,6 +70,8 @@ import BookDetails from "./Dashboard/Userpages/BookDetails";
 import UserDetails from "./Dashboard/Userpages/UserDetails";
 import AddBook from "./Dashboard/Userpages/AddBook";
 import Bookmanagement from "./Adminpanel/Bookmanagement";
+import CreatePromocode from "./Adminpanel/CreatePromocode";
+import Checkout from "./Dashboard/Userpages/Chackout";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
   return role === 'admin' ? children : <Navigate to="/Dashboard" />;
@@ -101,6 +103,8 @@ function App() {
         <Route path="addBook/:id" element={<AddBook />} />
 
         <Route path="/bookManagment" element={<Bookmanagement />} />
+        <Route path="/createPromocode" element={<CreatePromocode />} />
+        <Route path="/checkout/:id" element={<Checkout />} />
 
         {/* Admin-only Route */}
         <Route path="/adminpanel" element={
