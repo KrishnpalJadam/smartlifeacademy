@@ -1,0 +1,270 @@
+.custom-input::placeholder {
+  color: #a1a1aa;
+  opacity: 1; /* Full opacity */
+}
+body {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* testimonials */
+.testimonials-section {
+  background-color: var(--primary-black);
+  padding: 5rem 2rem;
+}
+
+.testimonials-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.testimonial-card {
+  background: rgba(17, 17, 17, 0.6);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 2rem;
+  transition: transform 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+}
+
+.testimonial-rating {
+  color: var(--primary-yellow);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.testimonial-text {
+  color: var(--text-gray);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.author-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-info h4 {
+  color: var(--primary-yellow);
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
+.author-info p {
+  color: var(--text-gray);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.bookimg {
+  width: 30px;
+  height: 30px;
+  border: 2px solid white;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.help1{
+  width: 50%;
+background-color: transparent !important;
+border: 1px solid #fcd34d;
+}
+.bnt-primary{
+  background-color: #fcd34d !important;
+  color: black;
+}
+
+.contact-container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 30px;
+}
+.contact-info i {
+  font-size: 24px;
+  margin-right: 10px;
+  color: #fcd34d;
+}
+.contact-info a {
+  text-decoration: none;
+  color: #0d6efd;
+  font-weight: bold;
+}
+.contact-info a:hover {
+  text-decoration: underline;
+}
+.contact-form {
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  padding: 20px;
+}
+.btn-orange {
+  background-color: #fcd34d;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+.btn-orange:hover {
+  background-color: #fcd34d;
+}
+.library-page {
+  padding-top: 70px !important;
+}
+/* Section Styling */
+.books-section {
+  border: 1px solid #fcd34d !important;
+  padding: 1rem !important;
+  border-radius: 1rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.books-section h2 {
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  color: #fcd34d !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Horizontal Scroll for Books */
+.horizontal-scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #fcd34d;
+  border-radius: 4px;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+/* Book Card */
+.book-card-wrapper {
+  flex: 0 0 auto;
+  width: 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Book Image */
+.book-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Hover Zoom with Restriction */
+.book-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.book-card img:hover {
+  transform: scale(4);
+  transform-origin: center center;
+  z-index: 10;
+}
+
+/* Book Title Overlay */
+.book-title-overlay {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  padding: 2px 0;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.book-card:hover .book-title-overlay {
+  opacity: 1;
+}
+
+/* Mobile Specific */
+@media (max-width: 768px) {
+  .horizontal-scroll-container {
+    flex-wrap: nowrap;
+  }
+
+  .book-card-wrapper {
+    width: 100px;
+  }
+
+  .book-card img:hover {
+    transform: scale(2.5); /* Mobile pe thoda kam zoom */
+  }
+}
+
+
+
+
+
+
+.btn-primary{
+background-color: #fcd34d;
+border: 0;
+color: black;
+}
+
+.btn-primary:hover{
+  background-color: goldenrod;
+  border: 0;
+  color: black;
+  }
+
+  .salessupoortbutton:hover{
+color: black !important;
+
+  }
+
+
+
+
+
+
+
+
+.imgtd{
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+  
