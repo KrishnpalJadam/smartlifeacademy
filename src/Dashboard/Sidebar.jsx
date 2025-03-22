@@ -126,7 +126,7 @@ function Sidebar() {
         {isSidebarOpen ? <FaTimes /> : <FaBars />}
       </button>
 
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+      <aside style={{overflowY: "auto"}} className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <Link to={"/hero"}><img src={logo} alt="Smart Life Academy" className="logo" /></Link>
           <h1 className={isSidebarOpen ? 'show' : 'hide'}>Smart Life Academy</h1>

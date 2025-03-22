@@ -14,11 +14,10 @@ const CreatePromocode = () => {
             code += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         setPromocode(code);
-        setMessage(''); // Clear previous messages
+        setMessage('');
 
-        // 2 second delay before API call
         setTimeout(() => {
-            axios.post(`${BASE_URL}/createpromocode`, { admin_id: 1, promocode: code }) // ✅ Corrected payload
+            axios.post(`${BASE_URL}/createpromocode`, { admin_id: 1, promocode: code })
                 .then(res => {
                     setMessage(`✅ ${res.data.message} (ID: ${res.data.promocode_id})`);
                 })
@@ -29,31 +28,32 @@ const CreatePromocode = () => {
     };
 
     return (
-        <div className='container mt-4'>
-            <nav className="flex items-center justify-between mb-4">
-                <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
-                    <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
+        <div className='promo-container'>
+            <nav className="promo-nav">
+                <Link to="/Dashboard" className="promo-back-link">
+                    <i className="fa-solid fa-chevron-left" /> Back to Dashboard
                 </Link>
             </nav>
+            <div className='p-4 rounded-4' style={{ border: "1px solid goldenrod" }}>
+                <div className="promo-input-group">
+                    <label htmlFor="promocode" className="promo-label">Promocode</label>
+                    <input
+                        type="text"
+                        className="promo-input"
+                        id="promocode"
+                        value={promocode}
+                        readOnly
+                    />
+                </div>
 
-            <div className="mb-3">
-                <label htmlFor="promocode" className="form-label fw-bold" style={{ color: "goldenrod" }}>Promocode</label>
-                <input
-                    style={{ width: "300px" }}
-                    type="text"
-                    className="form-control"
-                    id="promocode"
-                    value={promocode}
-                    readOnly
-                />
+                <button className="promo-btn" onClick={generatePromocode}>
+                    Generate Promocode
+                </button>
             </div>
 
-            <button className="btn btn-primary" onClick={generatePromocode}>
-                Generate Promocode
-            </button>
 
             {message && (
-                <div className="mt-3 alert alert-info" style={{ width: '300px' }}>
+                <div className="promo-alert">
                     {message}
                 </div>
             )}

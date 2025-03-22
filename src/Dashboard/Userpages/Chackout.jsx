@@ -2,7 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import BASE_URL from '../../Config';
-
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-bootstrap';
 const Checkout = () => {
     const { id } = useParams();
     const [data, setData] = useState(null); // API se aane wale data ke liye state
@@ -21,7 +22,24 @@ const Checkout = () => {
 
     if (!data) return <p>Loading...</p>; // Jab tak data nahi aata tab tak loading show karein
 
+
+    const setchallenge = async () => {
+        try {
+            const response = await axios.post(`${BASE_URL}/startChallenge`, { user_id: "90"});
+               
+               if(response.data.message){
+                alert(response.data.message);
+               }
+            
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong!");
+        }
+    };
+
+
     return (
+        <>
+     <ToastContainer/>
         <div className="min-h-screen flex flex-col container">
             <nav className="mt-5">
                 <Link to="/hero" className="d-flex align-items-center mb-4 text-decoration-none text-white">
@@ -44,7 +62,7 @@ const Checkout = () => {
                                             </p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-lg font-semibold">${data.original_price}</p>
+                                            <p className="text-lg font-semibold">₺{data.original_price}</p>
                                             <p className="text-sm text-gray-500">{data.plan_name}</p>
                                         </div>
                                     </div>
@@ -81,15 +99,15 @@ const Checkout = () => {
                                 <div className="space-y-3">
                                     <div className="flex justify-between">
                                         <span className="text-gray-600">Subscription Price</span>
-                                        <span>${data.original_price}</span>
+                                        <span>₺{data.original_price}</span>
                                     </div>
                                     <div className="flex justify-between text-green-600">
                                         <span>Discount</span>
-                                        <span>${data.discount_applied}</span>
+                                        <span>₺{data.discount_applied}</span>
                                     </div>
                                     <div className="border-t pt-3 flex justify-between font-semibold">
                                         <span>Total</span>
-                                        <span>${parseFloat(data.original_price) - parseFloat(data.discount_applied)}</span>
+                                        <span>₺{parseFloat(data.original_price) - parseFloat(data.discount_applied)}</span>
                                     </div>
                                 </div>
                                 <div className="mt-6">
@@ -99,9 +117,17 @@ const Checkout = () => {
                                             I agree to the Terms of Service and Privacy Policy
                                         </label>
                                     </div>
-                                    <button className="w-full bg-custom text-white py-3 !rounded-button hover:bg-custom/90" style={{ backgroundColor: "black" }}>
+                                    <Link to="/login" className="w-full bg-custom text-white p-4 py-3 !rounded-button hover:bg-custom/90" style={{ backgroundColor: "black" }}>
                                         Secure Payment
-                                    </button>
+                                    </Link>
+                                </div>
+                                <div className="mt-6">
+                                    <div className="flex items-center mb-4">
+                                        
+                                    </div>
+                                    <Link to="" onClick={setchallenge}  className="w-full bg-custom text-white p-4 py-3 !rounded-button hover:bg-custom/90" style={{ backgroundColor: "black" }}>
+                                        Start 30 Day Challenge
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +135,7 @@ const Checkout = () => {
                 </div>
             </main>
         </div>
+        </>
     );
 };
 

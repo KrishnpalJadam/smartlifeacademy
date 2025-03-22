@@ -82,7 +82,7 @@ const Hero = () => {
                 </div>
               ))}
             </div>
-            <Link to={"/Plan"}>
+            <Link to={"/signup"}>
               <button className="cta-button">
                 Start Your Transformation
               </button></Link>
@@ -119,7 +119,7 @@ const Hero = () => {
             <p className="hero-description">
               Smart Life Academy is designed for individuals who are committed to personal growth, productivity, and success. Whether you are a student, a working professional, an entrepreneur, or someone looking to improve different aspects of your life, this program is tailored to help you achieve your goals efficiently.
             </p>
-            <Link to={"/plan"}>
+            <Link to={"/signup"}>
               <button className="btn btn-primary mt-4">
                 Join Now
               </button></Link>
@@ -137,7 +137,7 @@ const Hero = () => {
             <p className="unlock-description">
               Smart Life Academy is a structured 30-day program designed to help you unlock your full potential through guided learning, AI-powered insights, and actionable steps. The process is simple yet highly effective, requiring just 15-20 minutes a day to create lasting change.
             </p>
-            <Link to={"/Plan"}>
+            <Link to={"/signup"}>
               <button className="start-button">
                 Start Your Transformation
               </button></Link>
@@ -160,7 +160,7 @@ const Hero = () => {
             <p className="unlock-description">
               Smart Life Academy stands apart from other self-improvement programs because it offers a complete, AI-driven transformation system. Unlike traditional learning methods that focus only on information, this program ensures real-world application, progress tracking, and accountability, making your transformation fast, structured, and effective.
             </p>
-            <Link to={"/Plan"}>
+            <Link to={"/signup"}>
               <button className="start-button">
                 Join Now
               </button></Link>
@@ -189,7 +189,7 @@ const Hero = () => {
               <br />
               ✅ Real Transformation in 30 Days
             </p>
-            <Link to={"/Plan"}>
+            <Link to={"/signup"}>
               <button className="start-button">
                 Join Now
               </button></Link>
@@ -214,7 +214,7 @@ const Hero = () => {
             <p className="unlock-description">
               Smart Life Academy isn’t just about learning—it’s about growing financially. This program provides multiple opportunities to make money while learning. Whether you are looking for extra income, freelancing, or starting a business, this academy gives you the right tools and network to succeed.
             </p>
-            <Link to={"/Plan"}>
+            <Link to={"/signup"}>
               <button className="start-button">
                 Join Now
               </button></Link>
@@ -234,7 +234,7 @@ const Hero = () => {
             <strong>30-Day Challenge</strong>, grow with a  supportive community, <br /> and start
             earning while learning. Your journey towards success begins today!
           </p>
-          <Link to={"/Plan"}>
+          <Link to={"/signup"}>
             <button className="start-button mt-3">
               Join Now
             </button></Link>

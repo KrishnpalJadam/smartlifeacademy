@@ -386,6 +386,7 @@ import BASE_URL from '../../Config';
 
 const BookDetails = () => {
     const { id } = useParams();
+    console.log(id)
     const [demoBook, setDemoBook] = useState(null);
     const [questions, setQuestions] = useState([]);
     const [currentModal, setCurrentModal] = useState(null);
@@ -401,6 +402,7 @@ const BookDetails = () => {
         const fetchBookAndQuestions = async () => {
             try {
                 const bookResponse = await axios.get(`${BASE_URL}/book/${id}`);
+                console.log(bookResponse.data.data)
                 if (bookResponse.data && bookResponse.data.data) {
                     setDemoBook(bookResponse.data.data);
                 }
@@ -477,7 +479,7 @@ const BookDetails = () => {
                     <div className="flex flex-col items-center lg:items-start">
                         <div className="relative w-full max-w-md aspect-[3/4] mb-8">
                             <img
-                                src={demoBook[0]?.image}
+                                src={demoBook?.image}
                                 alt={demoBook?.book_name}
                                 className="w-full h-full object-cover rounded-lg shadow-xl cursor-pointer"
                                 onClick={() => setCurrentModal('flipbook')}
@@ -485,20 +487,20 @@ const BookDetails = () => {
                         </div>
                     </div>
                     <div className="space-y-8">
-                        <h1 className="text-4xl font-bold text-amber-400 mb-4">{demoBook[0]?.book_name}</h1>
-                        <p className="text-xl mb-8">by {demoBook[0]?.author}</p>
-                         {/* Book Summary */}
+                        <h1 className="text-4xl font-bold text-amber-400 mb-4">{demoBook?.book_name}</h1>
+                        <p className="text-xl mb-8">by {demoBook?.author}</p>
+                        {/* Book Summary */}
                         <div className="bg-gray-900 rounded-lg p-8 mb-8">
-                             <h2 className="text-2xl font-semibold text-amber-400 mb-4">Book Summary</h2>
-                            <p className="text-gray-300 leading-relaxed">{demoBook[0]?.description}</p>                        </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">                             <button
-                                onClick={() => setCurrentModal('flipbook')}
-                                className="!rounded-button flex items-center justify-center space-x-3 bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 transition-colors"
-                                style={{ color: "black" }}
-                            >
-                                <i className="fas fa-book-open text-2xl"></i>
-                                <span>Read & Listen</span>
-                            </button>
+                            <h2 className="text-2xl font-semibold text-amber-400 mb-4">Book Summary</h2>
+                            <p className="text-gray-300 leading-relaxed">{demoBook?.description}</p>                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">                             <button
+                            onClick={() => setCurrentModal('flipbook')}
+                            className="!rounded-button flex items-center justify-center space-x-3 bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 transition-colors"
+                            style={{ color: "black" }}
+                        >
+                            <i className="fas fa-book-open text-2xl"></i>
+                            <span>Read & Listen</span>
+                        </button>
 
                             {/* "Test Knowledge" Button to Open Chatbot */}
                             <button
@@ -514,12 +516,12 @@ const BookDetails = () => {
                 </div>
 
 
-                               {/* Flipbook Modal */}                 {currentModal === 'flipbook' && (
+                {/* Flipbook Modal */}                 {currentModal === 'flipbook' && (
                     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
                         <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative">
                             <h3 className="text-xl font-bold text-amber-400 mb-4">Flipbook & Audio - {demoBook[0]?.book_name}</h3>
                             <iframe
-                                src={demoBook[0]?.flip_book_url}
+                                src={demoBook?.flip_book_url}
                                 width="100%"
                                 height="500"
                                 className="rounded-lg"
@@ -527,7 +529,7 @@ const BookDetails = () => {
                                 allowFullScreen
                             ></iframe>
                             <audio ref={audioRef} controls className="w-full mt-4" controlsList="nodownload">
-                                <source src={demoBook[0]?.audio_book_url} type="audio/mp3" />
+                                <source src={demoBook?.audio_book_url} type="audio/mp3" />
                                 Your browser does not support the audio element.
                             </audio>
                             <button
@@ -548,7 +550,7 @@ const BookDetails = () => {
                             {!quizCompleted ? (
                                 <>
                                     <h3 className="text-xl font-bold text-amber-400 mb-4">Question : {currentQuestion + 1} of {questions.length}</h3>
-                                    <h2 className="mb-4 fs-4 " style={{color: "goldenrod"}}>{questions[currentQuestion]?.question}</h2>
+                                    <h2 className="mb-4 fs-4 " style={{ color: "goldenrod" }}>{questions[currentQuestion]?.question}</h2>
                                     {['option_1', 'option_2', 'option_3', 'option_4'].map((opt, index) => (
                                         <button
                                             key={index}
@@ -558,7 +560,7 @@ const BookDetails = () => {
                                             {questions[currentQuestion]?.[opt]}
                                         </button>
                                     ))}
-                                      <button onClick={closeModal} className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">✖ Close</button>
+                                    <button onClick={closeModal} className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">✖ Close</button>
                                     <div className="flex justify-between mt-4">
                                         <button onClick={handlePrev} disabled={currentQuestion === 0} className="bg-gray-500 text-white p-2 rounded-md">Previous</button>
                                         {currentQuestion + 1 === questions.length ? (

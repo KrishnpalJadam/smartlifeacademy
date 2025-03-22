@@ -267,4 +267,67 @@ color: black !important;
 
 
 
+.promo-container {
+  background-color: #000;
+  color: goldenrod;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  margin: auto;
+}
+
+.promo-nav {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 20px;
+}
+
+.promo-back-link {
+  color: white !important;
+  text-decoration: none;
   
+}
+
+.promo-input-group {
+  margin-bottom: 20px;
+}
+
+.promo-label {
+  display: block;
+  font-weight: bold;
+  font-size: 27px;
+  margin-bottom: 5px;
+  margin-top: 50px;
+}
+
+.promo-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid goldenrod;
+  background-color: #222;
+  color: white;
+  border-radius: 5px;
+}
+
+.promo-btn {
+  background-color: goldenrod;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.promo-btn:hover {
+  background-color: #b8860b;
+}
+
+.promo-alert {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: rgba(218, 165, 32, 0.2);
+  border: 1px solid goldenrod;
+  border-radius: 5px;
+}
