@@ -58,29 +58,31 @@ function SignUp() {
         ...formData,
         selectedPlan: selectedPlan
       });
-    
-      console.log("Signup Response:", response.data.data.id);
+
+      console.log("Signup Response:", response.data.data);
       const id = response.data.data.id;
-     
-      console.log("Signup Discount:");
-    
+      // Response ko local storage me save karna
+      localStorage.setItem("signupData", JSON.stringify(response.data.data));
+
+
+      const promoCode = response.data.data.subscription.promocode; // ✅ Correct way to access promo code
+      console.log("Promo Code:", promoCode);
       if (response.data.success && id) {
         toast.success(
           `${response.data.message}`, {
-          onClose: () => navigate(`/checkout/${id}`) 
+          onClose: () => navigate(`/checkout/${id}`)
         });
-    
-        setTimeout(() => navigate(`/checkout/${id}`), 3000); 
+        setTimeout(() => navigate(`/checkout/${id}`), 3000);
       } else {
         toast.success(response.data.message || "Signup successful! Redirecting to login...", {
-          onClose: () =>navigate(`/checkout/${id}`)  
+          onClose: () => navigate(`/checkout/${id}`)
         });
       }
     } catch (error) {
       console.error("Signup Error:", error);
       toast.error(error.response?.data?.message || "Error signing up. Please try again.");
     }
-    
+
 
   };
 
@@ -102,7 +104,7 @@ function SignUp() {
                     className={`plan-card col-sm-7 mt-3 ${selectedPlan === plan.plan_name ? 'selected' : ''}`}
                     onClick={() => setSelectedPlan(plan.plan_name)}>
                     <h2 style={{ color: "#fcd34d", fontSize: "20px" }}>{plan.plan_name}</h2>
-                    <span style={{ color: "white" }}>Original Price:</span> <div className="price"> {plan.original_price}₺</div>
+                    <span style={{ color: "white" }}>Original Price:</span> <div className="price"> {plan.original_price} TL</div>
                   </div>
                 ))
               ) : (
@@ -171,6 +173,7 @@ function SignUp() {
                   className="dark-input"
                 />
               </div>
+              <Link to="/login" style={{ color: "goldenrod" }}>You already have an account? </Link>
               <button
                 type="submit"
                 style={{ width: "100%" }}
@@ -178,7 +181,7 @@ function SignUp() {
               >
                 Get started
               </button>
-             
+
             </form>
           </div>
         </div>

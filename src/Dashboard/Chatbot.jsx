@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+
 
 const Chatbot = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
@@ -66,7 +66,7 @@ const Chatbot = () => {
         onClick={toggleChatbot}
         title={isChatbotOpen ? "Close Chatbot" : "Open Chatbot"}
       >
-        <i className="fas fa-comments fa-2x" style={{ visibility: "hidden" }}></i>
+        {/* <i className="fas fa-comments fa-2x" style={{ visibility: "hidden" }}></i> */}
       </button>
     </div>
   );

@@ -4,174 +4,6 @@
 // import React, { useState, useRef, useEffect } from 'react';
 // import { Link, useParams } from 'react-router-dom';
 // import BASE_URL from '../../Config';
-// import Chatbot from '../Chatbot';
-// import TestKnowledgeChatbot from './TestKnowledgeChatbot';
-
-
-// const BookDetails = () => {
-//     const { id } = useParams();
-//     const [demoBook, setDemoBook] = useState([]);
-//     const [currentModal, setCurrentModal] = useState(null);
-//     const [showChatbot, setShowChatbot] = useState(false); // Chatbot State
-//     const audioRef = useRef(null);
-
-//     useEffect(() => {
-//         const fetchAllBooks = async () => {
-//             try {
-//                 const response = await axios.get(`${BASE_URL}/book/${id}`);
-//                 if (response.data && response.data.data) {
-//                     setDemoBook(response.data.data);
-//                 }
-//             } catch (error) {
-//                 console.error("Error fetching books:", error);
-//             }
-//         };
-//         fetchAllBooks();
-//     }, [id]);
-
-//     // Close all modals
-//     const closeModal = () => {
-//         setCurrentModal(null);
-//         setShowChatbot(false); // Chatbot bhi close ho
-//         if (audioRef.current) {
-//             audioRef.current.pause();
-//         }
-//     };
-
-// // fetch all qustion by id
-// const qustionData = axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
-
-
-//     return (
-//         <div className="bg-custom text-white font-['Inter'] container">
-//             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-//                 {/* Top Navigation */}
-//                 <nav className="flex items-center justify-between mb-12">
-//                     <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
-//                         <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
-//                     </Link>
-//                 </nav>
-
-//                 {/* Main Book Section */}
-//                 <div className="grid lg:grid-cols-2 gap-12">
-//                     {/* Book Cover */}
-//                     <div className="flex flex-col items-center lg:items-start">
-//                         <div className="relative w-full max-w-md aspect-[3/4] mb-8">
-//                             <img
-//                                 src={demoBook[0]?.image}
-//                                 alt={demoBook[0]?.book_name}
-//                                 className="w-full h-full object-cover rounded-lg shadow-xl cursor-pointer"
-//                                 onClick={() => setCurrentModal('flipbook')}
-//                             />
-//                         </div>
-//                     </div>
-
-//                     {/* Book Details */}
-//                     <div className="space-y-8">
-//                         <h1 className="text-4xl font-bold text-amber-400 mb-4">{demoBook[0]?.book_name}</h1>
-//                         <p className="text-xl mb-8">by {demoBook[0]?.author}</p>
-
-//                         {/* Progress Bar */}
-//                         <div className="w-full bg-gray-800 rounded-full h-2 mb-4">
-//                             <div className="bg-amber-400 h-2 rounded-full" style={{ width: `${demoBook.progress}%` }}></div>
-//                         </div>
-
-//                         {/* Book Summary */}
-//                         <div className="bg-gray-900 rounded-lg p-8 mb-8">
-//                             <h2 className="text-2xl font-semibold text-amber-400 mb-4">Book Summary</h2>
-//                             <p className="text-gray-300 leading-relaxed">{demoBook[0]?.description}</p>
-//                         </div>
-
-//                         {/* Action Buttons */}
-//                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                             <button
-//                                 onClick={() => setCurrentModal('flipbook')}
-//                                 className="!rounded-button flex items-center justify-center space-x-3 bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 transition-colors"
-//                                 style={{ color: "black" }}
-//                             >
-//                                 <i className="fas fa-book-open text-2xl"></i>
-//                                 <span>Read & Listen</span>
-//                             </button>
-
-//                             {/* "Test Knowledge" Button to Open Chatbot */}
-//                             <button
-//                                 onClick={() => setShowChatbot(true)} // Chatbot Open
-//                                 className="!rounded-button flex items-center justify-center space-x-3 bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 transition-colors"
-//                                 style={{ color: "black" }}
-//                             >
-//                                 <i className="fas fa-pencil-alt text-2xl"></i>
-//                                 <span>Test Knowledge</span>
-//                             </button>
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 {/* Flipbook Modal */}
-//                 {currentModal === 'flipbook' && (
-//                     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-//                         <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative">
-//                             <h3 className="text-xl font-bold text-amber-400 mb-4">Flipbook & Audio - {demoBook[0]?.book_name}</h3>
-//                             <iframe
-//                                 src={demoBook[0]?.flip_book_url}
-//                                 width="100%"
-//                                 height="500"
-//                                 className="rounded-lg"
-//                                 style={{ border: 'none' }}
-//                                 allowFullScreen
-//                             ></iframe>
-//                             <audio ref={audioRef} controls className="w-full mt-4" controlsList="nodownload">
-//                                 <source src={demoBook[0]?.audio_book_url} type="audio/mp3" />
-//                                 Your browser does not support the audio element.
-//                             </audio>
-//                             <button
-//                                 onClick={closeModal}
-//                                 className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-//                             >
-//                                 ✖ Close
-//                             </button>
-//                         </div>
-//                     </div>
-//                 )}
-
-//                 {/* Chatbot Modal */}
-//                 {showChatbot && (
-//                     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-//                         <div className="bg-gray-900 p-6 rounded-lg max-w-4xl w-full relative">
-//                             <h3 className="text-xl font-bold text-amber-400 mb-4">Chatbot - Test Your Knowledge</h3>
-//                             <Chatbot /> {/* Chatbot Component Render */}
-//                             <button
-//                                 onClick={closeModal}
-//                                 className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-//                             >
-//                                 ✖ Close
-//                             </button>
-//                             <h2 className='text-primary'>{demoBook[0]?.question_text}</h2>
-
-//                             <p>{demoBook[0]?.text}</p>
-//                         </div>
-
-//                     </div>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default BookDetails;
-
-
-
-
-
-
-
-
-
-
-// import axios from 'axios';
-// import React, { useState, useRef, useEffect } from 'react';
-// import { Link, useParams } from 'react-router-dom';
-// import BASE_URL from '../../Config';
 
 // const BookDetails = () => {
 //     const { id } = useParams();
@@ -383,7 +215,7 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BASE_URL from '../../Config';
-
+import { useAudio } from '../AudioContext';
 const BookDetails = () => {
     const { id } = useParams();
     console.log(id)
@@ -395,21 +227,39 @@ const BookDetails = () => {
     const [selectedAnswers, setSelectedAnswers] = useState({});
     const [scoreData, setScoreData] = useState(null);
     const [quizCompleted, setQuizCompleted] = useState(false);
-    const audioRef = useRef(null);
-    const userId = 123;
 
+    const [newid, setNewId] = useState("");
+    console.log("newid", newid.id)
+
+    const audioRef = useRef(null);
+    const { setIsAudioPlayerVisible } = useAudio();
+    const { playAudio } = useAudio();
+    const userId = newid.id;
+
+
+
+
+    useEffect(() => {
+        const usernewid = localStorage.getItem('userdata');
+        if (usernewid) {
+            setNewId(JSON.parse(usernewid))
+        }
+    }, [])
     useEffect(() => {
         const fetchBookAndQuestions = async () => {
             try {
                 const bookResponse = await axios.get(`${BASE_URL}/book/${id}`);
-                console.log(bookResponse.data.data)
+                console.log("new1", bookResponse.data.data)
                 if (bookResponse.data && bookResponse.data.data) {
                     setDemoBook(bookResponse.data.data);
                 }
+
                 const questionResponse = await axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
                 if (questionResponse.data && questionResponse.data.data) {
                     setQuestions(questionResponse.data.data);
+                    console.log("qustion", questionResponse)
                 }
+
             } catch (error) {
                 console.error("Error fetching book or questions:", error);
             }
@@ -448,13 +298,38 @@ const BookDetails = () => {
 
     const submitTest = async () => {
         try {
+            // Count correct answers
+            let correctCount = 0;
+            questions.forEach((q) => {
+                const selected = selectedAnswers[q.id];
+                const correct = q.correct_option;
+
+                if (String(selected) === String(correct)) {
+                    correctCount += 1;
+                }
+            });
+
             const testData = {
                 book_id: id,
                 user_id: userId,
-                answers: selectedAnswers
+                correct_answers: correctCount,
+                total_questions: questions.length
             };
-            const response = await axios.post(`${BASE_URL}/submittest`, testData);
-            setScoreData(response.data);
+
+            const response = await axios.post(`${BASE_URL}/submitChallengeTest`, testData);
+            const { correct_answers, total_questions, message, status, requiredCorrect } = response.data;
+
+            const scorePercent = ((correct_answers / total_questions) * 100).toFixed(2);
+
+            setScoreData({
+                correctAnswers: correct_answers,
+                totalQuestions: total_questions,
+                score: scorePercent,
+                message,
+                status,
+                requiredCorrect
+            });
+
             setQuizCompleted(true);
             toast.success("Test submitted successfully!");
         } catch (error) {
@@ -462,6 +337,9 @@ const BookDetails = () => {
             toast.error("Error submitting test. Please try again.");
         }
     };
+
+
+
 
     if (!demoBook) {
         return <div className="text-white text-center py-8">Loading book details...</div>;
@@ -512,12 +390,14 @@ const BookDetails = () => {
                                 <span>Test Knowledge</span>
                             </button>
                         </div>
+
                     </div>
                 </div>
 
 
-                {/* Flipbook Modal */}                 {currentModal === 'flipbook' && (
-                    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+                {/* Flipbook Modal */}
+                {currentModal === 'flipbook' && (
+                    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50" style={{ height: "auto" }}>
                         <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative">
                             <h3 className="text-xl font-bold text-amber-400 mb-4">Flipbook & Audio - {demoBook[0]?.book_name}</h3>
                             <iframe
@@ -528,10 +408,18 @@ const BookDetails = () => {
                                 style={{ border: 'none' }}
                                 allowFullScreen
                             ></iframe>
-                            <audio ref={audioRef} controls className="w-full mt-4" controlsList="nodownload">
+
+                            <audio ref={audioRef} controls className="w-full mt-4 mobileaudio" controlsList="nodownload">
                                 <source src={demoBook?.audio_book_url} type="audio/mp3" />
                                 Your browser does not support the audio element.
                             </audio>
+                            <button
+                                onClick={() => playAudio(demoBook.audio_book_url, demoBook.book_name)}
+                                className="!rounded-button deskaudio  bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 mt-3" style={{ color: "black", width: "100%" }}
+                            >
+                                <i className="fas fa-book-open me-2"></i> Audio Play
+                            </button>
+
                             <button
                                 onClick={closeModal}
                                 className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
@@ -544,45 +432,222 @@ const BookDetails = () => {
 
 
 
+                {/* Quiz Modal */}
                 {showQuiz && (
                     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
                         <div className="bg-gray-900 p-6 rounded-lg max-w-4xl w-full relative">
                             {!quizCompleted ? (
                                 <>
-                                    <h3 className="text-xl font-bold text-amber-400 mb-4">Question : {currentQuestion + 1} of {questions.length}</h3>
-                                    <h2 className="mb-4 fs-4 " style={{ color: "goldenrod" }}>{questions[currentQuestion]?.question}</h2>
+                                    <h3 className="text-xl font-bold text-amber-400 mb-4">Question {currentQuestion + 1} of {questions.length}</h3>
+                                    <h2 className="mb-4 text-lg text-yellow-300">{questions[currentQuestion]?.question}</h2>
                                     {['option_1', 'option_2', 'option_3', 'option_4'].map((opt, index) => (
                                         <button
                                             key={index}
                                             onClick={() => handleAnswerSelect(index)}
-                                            className={`block w-full p-3 mb-2 rounded-md text-left ${selectedAnswers[questions[currentQuestion]?.id] === String(index + 1) ? 'bg-blue-500' : 'bg-gray-700'}`}
+                                            className={`block w-full p-3 mb-2 rounded-md text-left ${selectedAnswers[questions[currentQuestion]?.id] === String(index + 1)
+                                                ? 'bg-blue-500'
+                                                : 'bg-gray-700'
+                                                }`}
                                         >
                                             {questions[currentQuestion]?.[opt]}
                                         </button>
                                     ))}
-                                    <button onClick={closeModal} className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">✖ Close</button>
                                     <div className="flex justify-between mt-4">
                                         <button onClick={handlePrev} disabled={currentQuestion === 0} className="bg-gray-500 text-white p-2 rounded-md">Previous</button>
                                         {currentQuestion + 1 === questions.length ? (
                                             <button onClick={submitTest} className="bg-green-500 text-white p-2 rounded-md">Submit</button>
                                         ) : (
-                                            <button onClick={handleNext} className="bg-blue-500 p-2 btn-primary rounded-md text-dark">Next </button>
+                                            <button onClick={handleNext} className="bg-blue-500 p-2 rounded-md text-white">Next</button>
                                         )}
                                     </div>
                                 </>
                             ) : (
-                                <div className="text-center">
-                                    <h3 className="text-2xl font-bold text-white">{scoreData?.message}</h3>
-                                    <p className="text-lg">Correct Answers: {scoreData?.correctAnswers} / {scoreData?.totalQuestions}</p>
-                                    <button onClick={closeModal} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+                                <div className="text-center text-white">
+                                    <h3 className="text-3xl font-bold mb-4">{scoreData?.message}</h3>
+
+                                    <p className="text-lg mb-2">
+                                        ✅ Correct Answers: <span className="text-green-400 font-bold">{scoreData?.correctAnswers}</span> / {scoreData?.totalQuestions}
+                                    </p>
+
+                                    {/* Optional: Show score % */}
+                                    {/* <p className="text-lg mb-4">
+    📈 Score: <span className="text-amber-400 font-bold">{scoreData?.score}</span>%
+  </p> */}
+
+                                    <button onClick={closeModal} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">
+                                        Close
+                                    </button>
                                 </div>
+
                             )}
+                            <button onClick={closeModal} className="absolute top-2 right-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">✖</button>
                         </div>
                     </div>
                 )}
+
+
             </div>
         </div>
     );
 };
 
 export default BookDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import axios from 'axios';
+// import React, { useState, useEffect } from 'react';
+// import { Link, useParams } from 'react-router-dom';
+// import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+// import BASE_URL from '../../Config';
+// import { useAudio } from '../AudioContext';
+
+// const BookDetails = () => {
+//   const { id } = useParams();
+//   const [demoBook, setDemoBook] = useState(null);
+//   const [questions, setQuestions] = useState([]);
+//   const [currentModal, setCurrentModal] = useState(null);
+//   const [showQuiz, setShowQuiz] = useState(false);
+//   const [currentQuestion, setCurrentQuestion] = useState(0);
+//   const [selectedAnswers, setSelectedAnswers] = useState({});
+//   const [scoreData, setScoreData] = useState(null);
+//   const [quizCompleted, setQuizCompleted] = useState(false);
+
+//   const { playAudio } = useAudio();
+//   const userId = 123;
+
+//   useEffect(() => {
+//     const fetchBookAndQuestions = async () => {
+//       try {
+//         const bookResponse = await axios.get(`${BASE_URL}/book/${id}`);
+//         if (bookResponse.data && bookResponse.data.data) {
+//           setDemoBook(bookResponse.data.data);
+//         }
+//         const questionResponse = await axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
+//         if (questionResponse.data && questionResponse.data.data) {
+//           setQuestions(questionResponse.data.data);
+//         }
+//       } catch (error) {
+//         console.error("Error fetching book or questions:", error);
+//       }
+//     };
+
+//     fetchBookAndQuestions();
+//   }, [id]);
+
+//   const closeModal = () => {
+//     setCurrentModal(null);
+//     setShowQuiz(false);
+//     setQuizCompleted(false);
+//     setCurrentQuestion(0);
+//     setSelectedAnswers({});
+//     setScoreData(null);
+//   };
+
+//   const handleAnswerSelect = (optionIndex) => {
+//     const questionId = questions[currentQuestion]?.id;
+//     setSelectedAnswers({ ...selectedAnswers, [questionId]: String(optionIndex + 1) });
+//   };
+
+//   const handleNext = () => {
+//     if (currentQuestion + 1 < questions.length) {
+//       setCurrentQuestion(currentQuestion + 1);
+//     }
+//   };
+
+//   const handlePrev = () => {
+//     if (currentQuestion > 0) {
+//       setCurrentQuestion(currentQuestion - 1);
+//     }
+//   };
+
+//   const submitTest = async () => {
+//     try {
+//       const testData = {
+//         book_id: id,
+//         user_id: userId,
+//         answers: selectedAnswers,
+//       };
+//       const response = await axios.post(`${BASE_URL}/submittest`, testData);
+//       setScoreData(response.data);
+//       setQuizCompleted(true);
+//       toast.success("Test submitted successfully!");
+//     } catch (error) {
+//       console.error("Error submitting test:", error);
+//       toast.error("Error submitting test. Please try again.");
+//     }
+//   };
+
+//   if (!demoBook) {
+//     return <div className="text-white text-center py-8">Loading book details...</div>;
+//   }
+
+//   return (
+//     <div className="bg-custom text-white font-['Inter'] container">
+//       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+//         <nav className="flex items-center justify-between mb-12">
+//           <Link to="/Dashboard" className="text-decoration-none text-white">
+//             <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
+//           </Link>
+//         </nav>
+//         <div className="grid lg:grid-cols-2 gap-12">
+//           <div className="flex flex-col items-center lg:items-start">
+//             <img
+//               src={demoBook.image}
+//               alt={demoBook.book_name}
+//               className="w-full max-w-md aspect-[3/4] object-cover rounded-lg shadow-xl cursor-pointer"
+//               onClick={() => setCurrentModal('flipbook')}
+//             />
+//           </div>
+
+//           <div className="space-y-8">
+//             <h1 className="text-4xl font-bold text-amber-400 mb-4">{demoBook.book_name}</h1>
+//             <p className="text-xl mb-8">by {demoBook.author}</p>
+//             <div className="bg-gray-900 rounded-lg p-8 mb-8">
+//               <h2 className="text-2xl font-semibold text-amber-400 mb-4">Book Summary</h2>
+//               <p className="text-gray-300 leading-relaxed">{demoBook.description}</p>
+//             </div>
+//             <button
+//               onClick={() => playAudio(demoBook.audio_book_url, demoBook.book_name)}
+//               className="!rounded-button bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500"
+//             >
+//               <i className="fas fa-book-open me-2"></i> Read & Listen
+//             </button>
+//             <button
+//               onClick={() => setShowQuiz(true)}
+//               className="!rounded-button bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500"
+//             >
+//               <i className="fas fa-pencil-alt me-2"></i> Test Knowledge
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {currentModal === 'flipbook' && (
+//         <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center">
+//           <iframe src={demoBook.flip_book_url} width="90%" height="80%" allowFullScreen />
+//           <button onClick={closeModal} className="absolute top-4 right-4 bg-red-500 px-4 py-2">Close</button>
+//         </div>
+//       )}
+
+//       {/* Quiz Modal (unchanged for brevity) */}
+//     </div>
+//   );
+// };
+
+// export default BookDetails;

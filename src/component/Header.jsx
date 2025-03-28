@@ -56,7 +56,7 @@ const Header = () => {
                         <div className="relative d-flex">
                             <Link to="/Dashboard" className="flex items-center gap-2 px-4 py-2 text-white bg-transparent border-none outline-none">
                                 <FaUserCircle size={28} className="text-yellow-300" />
-                                <span>{user.firstname}</span>
+                                <span>{user.email}</span>
                             </Link>
 
                             {/* Logout Button */}

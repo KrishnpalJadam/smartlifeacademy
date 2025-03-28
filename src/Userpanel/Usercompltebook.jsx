@@ -1,16 +1,27 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BASE_URL from '../../Config';
+import BASE_URL from '../Config';
 
-const CompleteBooks = () => {
+const Usercompltebook = () => {
     const [books, setBooks] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    
+
+    // LocalStorage se `userdata` get karna aur uska `id` extract karna
+    const storedUserData = localStorage.getItem("userdata");
+    const userId = storedUserData ? JSON.parse(storedUserData).id : null;
+
+    console.log("User ID:", userId);  // Debugging ke liye
+
     useEffect(() => {
         const fetchBooks = async () => {
+            if (!userId) {
+                console.log("User ID not found!");
+                return;
+            }
+
             try {
-                const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
+                const response = await axios.get(`${BASE_URL}/GetCompletedBooks/${userId}`);
                 console.log("Fetched Data:", response.data);
 
                 const formattedBooks = response.data.data.map(book => ({
@@ -30,7 +41,7 @@ const CompleteBooks = () => {
         };
 
         fetchBooks();
-    }, []);
+    }, [userId]);
 
     const filteredBooks = books.filter(book =>
         book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,4 +122,4 @@ const CompleteBooks = () => {
     );
 };
 
-export default CompleteBooks;
+export default Usercompltebook;

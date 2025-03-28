@@ -51,7 +51,7 @@ const UserDetails = () => {
     <div>
       <div className="container mt-5">
         <Link
-          to="/Dashboard"
+          to="/adminpanel"
           className="text-white mb-3 d-block text-decoration-none"
           style={{ color: "white", textDecoration: "none", display: "block", marginBottom: 15 }}
         >
@@ -73,10 +73,10 @@ const UserDetails = () => {
 
           {/* Display User Email and Promo Code */}
           <p className="mt-3">
-            <strong style={{ color: "goldenrod" }}>Email: </strong> {userData.email}
+            <strong style={{ color: "goldenrod" }}>Email : </strong> {userData.email}
           </p>
           <p className="mt-3">
-            <strong style={{ color: "goldenrod" }}>Promo Code: </strong> {userData.promo_code || "N/A"}
+            <strong style={{ color: "goldenrod" }}>Promo Code : </strong> {userData.promocode || "GT45GTKO"}
           </p>
 
           <div className="head-text d-flex justify-content-between mt-4">

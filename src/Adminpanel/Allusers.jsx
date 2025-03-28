@@ -5,21 +5,21 @@ import BASE_URL from '../../Config';
 
 const CompleteBooks = () => {
     const [books, setBooks] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-    
+
     useEffect(() => {
         const fetchBooks = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
                 console.log("Fetched Data:", response.data);
 
+                // Backend se aaye data ko modify karke set karna
                 const formattedBooks = response.data.data.map(book => ({
                     id: book.book_id,
-                    image: book.image || "https://i.ibb.co/chfGcpmZ/6.png",
+                    image: book.image || "https://i.ibb.co/chfGcpmZ/6.png", // Default image agar missing ho
                     name: book.book_name,
-                    email: book.email,
-                    status: book.status ? book.status.toLowerCase() : "incompleted",
-                    is30DaysChallenge: book.correct_answers / book.total_questions >= 0.8
+                    author: `${book.firstname?.trim() || "Unknown"} ${book.lastname?.trim() || ""}`.trim(),
+                    status: book.status ? book.status.toLowerCase() : "incompleted", // Ensure lowercase status
+                    is30DaysChallenge: book.correct_answers / book.total_questions >= 0.8 // 80% ya zyada pass hone par
                 }));
 
                 console.log("Formatted Books:", formattedBooks);
@@ -32,11 +32,6 @@ const CompleteBooks = () => {
         fetchBooks();
     }, []);
 
-    const filteredBooks = books.filter(book =>
-        book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        book.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
     return (
         <div>
             <div className="container mt-5">
@@ -48,14 +43,6 @@ const CompleteBooks = () => {
                 </Link>
                 <h2 className="mb-4 text-white fs-4 fw-bold">All Books</h2>
                 
-                <input
-                    type="text"
-                    placeholder="Search by Book Name or Email"
-                    className="form-control mb-3"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-
                 <div
                     className="card-custom p-3 mb-3 rounded-3 border border-secondary"
                     style={{ backgroundColor: "#1a1a1a" }}
@@ -67,12 +54,12 @@ const CompleteBooks = () => {
                                     <th>S.No</th>
                                     <th>Book Image</th>
                                     <th>Book Name</th>
-                                    <th>User Name</th>
+                                    <th>Author Name</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredBooks.length > 0 ? filteredBooks.map((book, index) => (
+                                {books.length > 0 ? books.map((book, index) => (
                                     <tr key={book.id}>
                                         <td>{index + 1}.</td>
                                         <td>
@@ -87,7 +74,7 @@ const CompleteBooks = () => {
                                             {book.name}
                                             {book.status === "completed" && <span style={{ color: "#ffc107", marginLeft: "5px" }}>(*)</span>}
                                         </td>
-                                        <td>{book.email}</td>
+                                        <td>{book.author}</td>
                                         <td>
                                             <span
                                                 className={`badge ${book.status === "completed" ? "bg-success" : "bg-warning"} text-white`}

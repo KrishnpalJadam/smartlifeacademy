@@ -1,24 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import BASE_URL from "../../Config";
+import BASE_URL from "../Config";
+import { Link } from "react-router-dom";
 
-
-const MyCommissions = () => {
-  const { id } = useParams(); // Get the ID from URL
+const Usermycomition = () => {
   const [commissions, setCommissions] = useState([]);
-  const [promoCode, setPromoCode] = useState("");
+  const [promoCode, setPromoCode] = useState("Loading...");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const storedUser = localStorage.getItem("userdata");
+    if (!storedUser) {
+      console.error("No user found in localStorage!");
+      setLoading(false);
+      return;
+    }
+
+    const userId = JSON.parse(storedUser)?.id;
+    if (!userId) {
+      console.error("Invalid User ID from localStorage!");
+      setLoading(false);
+      return;
+    }
+
+    console.log("Fetching commission for User ID:", userId);
+
     const fetchCommissionData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getPromocodeRefer/${id}`);
-        console.log("Commission Data:", response.data);
+        const response = await axios.get(`${BASE_URL}/getPromocodeRefer/${userId}`);
+        console.log("API Response:", response.data);
 
         if (response.data && response.data.data) {
-          setCommissions([response.data.data]); // API response ko set karna
-          setPromoCode(response.data.data.promocode || "N/A"); // Promo code set karna
+          setCommissions([response.data.data]);
+          setPromoCode(response.data.data.promocode || "N/A");
         } else {
           setCommissions([]);
         }
@@ -30,13 +44,11 @@ const MyCommissions = () => {
       }
     };
 
-    if (id) fetchCommissionData();
-  }, [id]);
+    fetchCommissionData();
+  }, []);
 
-  // Calculate total commission
   const totalCommission = commissions.reduce((acc, curr) => acc + (curr.comitionErned || 0), 0);
 
-  // CSV Export Function
   const exportToCSV = () => {
     let csv = "Email Address, Purchased Referrals, Commission Earned\n";
     commissions.forEach(({ email, referCount, comitionErned }) => {
@@ -52,16 +64,12 @@ const MyCommissions = () => {
 
   return (
     <div className="container mt-5">
-      <Link to="/adminpanel" className="btn btn-outline-light mb-3">
+            <Link to="/adminpanel" className="btn btn-outline-light mb-3">
         &lt; Back to Dashboard
       </Link>
-
       <div className="border border-secondary p-4" style={{ backgroundColor: "#1a1a1a", borderRadius: 10, color: "white" }}>
-        <div className="d-flex justify-content-between align-items-center">
-          <h1 className="fs-5">My Commissions</h1>
-        </div>
-
-        <p className="mt-3">My Promo Code : <span style={{ color: "#ffc107", fontWeight: "bold" }}>{promoCode}</span></p>
+        <h1 className="fs-5">My Commissions</h1>
+        <p className="mt-3">My Promo Code: <span style={{ color: "#ffc107", fontWeight: "bold" }}>{promoCode}</span></p>
 
         {loading ? (
           <p>Loading...</p>
@@ -80,7 +88,7 @@ const MyCommissions = () => {
                   <tr key={index}>
                     <td>{user.email}</td>
                     <td>{user.referCount}</td>
-                    <td> {user.comitionErned || 0} TL</td>
+                    <td>{user.comitionErned || 0} TL</td>
                   </tr>
                 ))}
               </tbody>
@@ -90,7 +98,6 @@ const MyCommissions = () => {
           <p>No commission data available.</p>
         )}
 
-        {/* Total Commission & Export Button */}
         <div className="d-flex justify-content-between align-items-center mt-3">
           <h5 style={{ color: "#ffc107" }}>Total Commission This Month: ${totalCommission}</h5>
           <button className="btn btn-warning" onClick={exportToCSV}>Download CSV</button>
@@ -100,4 +107,4 @@ const MyCommissions = () => {
   );
 };
 
-export default MyCommissions;
+export default Usermycomition;
