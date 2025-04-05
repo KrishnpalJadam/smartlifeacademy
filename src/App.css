@@ -17,14 +17,9 @@ body {
 .testimonials-container {
   max-width: 1200px;
   margin: 0 auto;
+  margin-top: 100px;
 }
 
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
-}
 
 .testimonial-card {
   background: rgba(17, 17, 17, 0.6);
@@ -32,6 +27,10 @@ body {
   border-radius: 12px;
   padding: 2rem;
   transition: transform 0.3s ease;
+  height: 300px;
+  padding: 20px;
+  margin: 0 10px;
+  
 }
 
 .testimonial-card:hover {
@@ -373,3 +372,7 @@ body {
 nav a{
   margin-top: 20px;
 } */
+
+.fa-star {
+  transition: color 0.2s;
+}

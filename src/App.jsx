@@ -80,6 +80,7 @@ import UserProfile from "./Userpanel/Userprofile";
 import Usercompltebook from "./Userpanel/Usercompltebook";
 import Usermycomition from "./Userpanel/Usermycomition";
 import Progrestrackingadmin from "./Adminpanel/Progrestrackingadmin";
+import Review from "./Dashboard/Userpages/Review";
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
@@ -101,6 +102,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/helpCenter" element={<HelpCenter />} />
+            <Route path="/Review" element={<Review/>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/progresstracking" element={<Progresstracking />} />
             <Route path="/myreadingList" element={<MyreadingList />} />

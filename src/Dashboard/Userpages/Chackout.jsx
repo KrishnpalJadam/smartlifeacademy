@@ -180,8 +180,8 @@ import { ToastContainer } from 'react-bootstrap';
 const Checkout = () => {
     const { id } = useParams();
     const [data, setData] = useState(null);
-    const [promoCode, setPromoCode] = useState(""); // State for promo code
-    const [discount, setDiscount] = useState(0); // Store applied discount
+    const [promoCode, setPromoCode] = useState("");
+    const [discount, setDiscount] = useState(0);
     const [discountApplied, setDiscountApplied] = useState(0);
     const [newAmount, setNewAmount] = useState(data?.original_price || 0);
 
@@ -190,14 +190,14 @@ const Checkout = () => {
             try {
                 const response = await axios.get(`${BASE_URL}/user/${id}`);
                 setData(response.data.data);
-                setNewAmount(response.data.data.original_price); // Set default price
+                setNewAmount(response.data.data.original_price);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         fetchPlans();
     }, [id]);
-    
+
 
     if (!data) return <p>Loading...</p>;
 
@@ -259,7 +259,7 @@ const Checkout = () => {
                                         <div className="mt-4 bg-blue-50 p-3 rounded-lg">
                                             <p className="text-sm text-blue-700">
                                                 <i className="fas fa-gift mr-2"></i>
-                                                Complete the 30 Days Challenge and get 11 months free!
+                                                {data.challengeMessage}
                                             </p>
                                         </div>
                                     </div>
@@ -291,17 +291,14 @@ const Checkout = () => {
                                             </button>
                                         </div> */}
 
-<div className="flex justify-between text-green-600">
-    <span>Discount</span>
-    <span>{data.discount_percent}%</span> {/* Discount percentage show kar raha hai */}
-</div>
-<div className="border-t pt-3 flex justify-between font-semibold">
-    <span>Total</span>
-    <span>₺{data.final_price}</span> {/* Final price show kar raha hai */}
-</div>
-
-
-
+                                        <div className="flex justify-between text-green-600">
+                                            <span>Discount</span>
+                                            <span>{data.discount_percent}%</span>
+                                        </div>
+                                        <div className="border-t pt-3 flex justify-between font-semibold">
+                                            <span>Total</span>
+                                            <span>₺{data.final_price}</span>
+                                        </div> 
                                     </div>
                                     <div className="mt-6">
                                         <Link to="/login" className="w-full bg-custom text-white p-4 py-3 rounded-button hover:bg-custom/90" style={{ backgroundColor: "black" }}>

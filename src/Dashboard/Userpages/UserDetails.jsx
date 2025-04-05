@@ -33,6 +33,7 @@ const UserDetails = () => {
     };
 
     fetchUserData();
+    console.log(userData);
   }, [id]);
 
   if (loading) {
@@ -81,7 +82,7 @@ const UserDetails = () => {
 
           <div className="head-text d-flex justify-content-between mt-4">
             <p>Books Completed: {userData.books_completed || 0}/30</p>
-            <p>Days Elapsed: {userData.days_elapsed || 0}/30</p>
+            <p>Days Elapsed: {userData.elapsed_days || 0}/30</p>
           </div>
           <div
             className="progress mb-3 bg-dark rounded-pill mt-4"
@@ -94,7 +95,7 @@ const UserDetails = () => {
             />
           </div>
           <div className="row mt-3">
-            <div className="col-md-3 mt-2">
+            <div className="col-md-4 mt-2">
               <div className="progress-stat-card" style={{ backgroundColor: "#241e0d", padding: 15, borderRadius: 10, textAlign: "center" }}>
                 <div className="progress-icon" style={{ fontSize: 24 }}>
                   <i className="fa-solid fa-book-open" />
@@ -103,7 +104,7 @@ const UserDetails = () => {
                 <p>Books Read</p>
               </div>
             </div>
-            <div className="col-md-3 mt-2">
+            {/* <div className="col-md-3 mt-2">
               <div className="progress-stat-card" style={{ backgroundColor: "#241e0d", padding: 15, borderRadius: 10, textAlign: "center" }}>
                 <div className="progress-icon" style={{ fontSize: 24 }}>
                   <i className="fa-solid fa-clock" />
@@ -111,8 +112,8 @@ const UserDetails = () => {
                 <h5 className="mt-2">{userData.hours_spent || 0}</h5>
                 <p>Hours Spent</p>
               </div>
-            </div>
-            <div className="col-md-3 mt-2">
+            </div> */}
+            <div className="col-md-4 mt-2">
               <div className="progress-stat-card" style={{ backgroundColor: "#241e0d", padding: 15, borderRadius: 10, textAlign: "center" }}>
                 <div className="progress-icon" style={{ fontSize: 24 }}>
                   <i className="fa-solid fa-trophy" />
@@ -121,13 +122,13 @@ const UserDetails = () => {
                 <p>Avg Test Score</p>
               </div>
             </div>
-            <div className="col-md-3 mt-2">
+            <div className="col-md-4 mt-2">
               <div className="progress-stat-card" style={{ backgroundColor: "#241e0d", padding: 15, borderRadius: 10, textAlign: "center" }}>
                 <div className="progress-icon" style={{ fontSize: 24 }}>
                   <i className="fa-solid fa-hourglass-start" />
                 </div>
-                <h5 className="mt-2">{userData.challenge_status || "InCompleted"}</h5>
-                <p>Challenge Status</p>
+                <h5 className="mt-2">{userData.challenge_status || "Challenge Status"}</h5>
+                <span  className="btn btn-primary p-1 mt-1">Incompleted</span>
               </div>
             </div>
           </div>

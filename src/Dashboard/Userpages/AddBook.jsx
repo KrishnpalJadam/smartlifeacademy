@@ -821,7 +821,7 @@ const AddBook = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Upload Image</label>
+            <label className="block text-sm font-medium text-gray-700">Upload (only support JPEG, PNG)</label>
             <input
               type="file"
               accept="image/*"

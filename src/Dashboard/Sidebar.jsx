@@ -1,21 +1,11 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBars, FaTimes, FaBook, FaBookReader, FaChartLine, FaCog, FaQuestionCircle, FaHome, FaUser } from 'react-icons/fa';
 import logo from "../assets/logo.jpg";
 import Chatbot from './Chatbot';
+import { FaClipboardCheck } from 'react-icons/fa';
+
 
 function Sidebar() {
   const location = useLocation();
@@ -41,7 +31,7 @@ function Sidebar() {
     menuItems.push({ path: '/adminpanel', icon: <FaHome />, text: 'Admin Panel' });
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
     menuItems.push({ path: '/progrestrackingadmin', icon: <FaChartLine />, text: 'Progress Tracking' });
-    menuItems.push({ path: '/getAllUsers', icon: <FaUser />, text: 'All Users' });
+    menuItems.push({ path: '/Review', icon: <FaClipboardCheck />, text: 'Review' }); 
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
 

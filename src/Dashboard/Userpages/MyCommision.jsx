@@ -14,12 +14,10 @@ const MyCommissions = () => {
     const fetchCommissionData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/getPromocodeRefer/${id}`);
-        console.log("Commission Data:", response.data);
-
+         
         if (response.data && response.data.data) {
-          setCommissions([response.data.data]); // API response ko set karna
-          setPromoCode(response.data.data.promocode || "N/A"); // Promo code set karna
-        } else {
+          setCommissions([response.data.data]);  
+          setPromoCode(response.data.data.promocode || "N/A");  
           setCommissions([]);
         }
       } catch (error) {
@@ -80,7 +78,7 @@ const MyCommissions = () => {
                   <tr key={index}>
                     <td>{user.email}</td>
                     <td>{user.referCount}</td>
-                    <td> {user.comitionErned || 0} TL</td>
+                    <td>{(Number(user.comitionErned) || 0).toFixed(2)} TL</td>
                   </tr>
                 ))}
               </tbody>
@@ -92,7 +90,7 @@ const MyCommissions = () => {
 
         {/* Total Commission & Export Button */}
         <div className="d-flex justify-content-between align-items-center mt-3">
-          <h5 style={{ color: "#ffc107" }}>Total Commission This Month: ${totalCommission}</h5>
+          <h5 style={{ color: "#ffc107" }}>Total Commission This Month: ${(Number(totalCommission)||0).toFixed(2)}</h5>
           <button className="btn btn-warning" onClick={exportToCSV}>Download CSV</button>
         </div>
       </div>
