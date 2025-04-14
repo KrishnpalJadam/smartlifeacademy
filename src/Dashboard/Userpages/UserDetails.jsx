@@ -34,7 +34,7 @@ const UserDetails = () => {
 
     fetchUserData();
     console.log(userData);
-  }, [id]);
+  }, [id]);0
 
   if (loading) {
     return <div className="text-center text-white mt-5">Loading...</div>;

@@ -351,7 +351,7 @@ const BookDetails = () => {
       ) : demoBook.reviews && Array.isArray(demoBook.reviews) && demoBook.reviews.length > 0 ? (
         <Slider {...settings}>
           {demoBook.reviews.map((review, index) => (
-            <div key={review.review_id || index} className="testimonial-card">
+            <div key={review.review_id || index} className="testimonial-card"  >
               <div className="testimonial-rating">
                 {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
               </div>
