@@ -355,21 +355,5 @@ nav a{
 .fa-star {
   transition: color 0.2s;
 }
-.slick-track {
-  /* width: auto !important; */
-  display: flex;
-  gap: 1rem;
-  
 
 
-}
-.slick-list{
-  display:contents;
-  
-  
-
-}
-/* .slick-slide{ */
-  
-  /* width: 200%; */
-/* } */
