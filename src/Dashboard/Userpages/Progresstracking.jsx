@@ -1,7 +1,31 @@
-import React from 'react'
+import React , {useEffect} from 'react'
 import { Link } from 'react-router-dom'
+import    axios from 'axios'
+import BASE_URL from '../../Config'
+
 
 const Progresstracking = () => {
+  const [challengeUsers, setChallengeUsers] = React.useState([]);
+  useEffect(() => {
+    const getChallengeData = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/getUserChallengeProgress/${localStorage.getItem("id")}`);
+        //  console.log("response",response.data);
+
+        // console.log("challengeData", response.data);
+
+        // Ensure response.data.data is an array before setting state
+         
+          setChallengeUsers(response.data);
+         
+      } catch (error) {
+        console.error("Error fetching challenge data:", error);
+        setChallengeUsers([]); // Set empty array on error to avoid breaking UI
+      }
+    };
+    getChallengeData();
+  }, []);
+  console.log("challengeUsers", challengeUsers);
   return (
     <div>
       <div className="container mt-5">
@@ -29,8 +53,8 @@ const Progresstracking = () => {
   >
     <h4>30-Day Challenge Progress</h4>
     <div className="head-text d-flex justify-content-between mt-4">
-      <p>Books Completed: 0/30</p>
-      <p>Days Elapsed: 0/30</p>
+      <p>Books Completed: { challengeUsers.books_completed}/30</p>
+      <p>Days Elapsed: {challengeUsers.elapsed_days}/30</p>
     </div>
     <div
       className="progress mb-3 bg-dark rounded-pill  mt-4"
@@ -56,7 +80,7 @@ const Progresstracking = () => {
           <div className="progress-icon" style={{ fontSize: 24 }}>
             <i className="fa-solid fa-book-open" />
           </div>
-          <h5 className="mt-2">0</h5>
+          <h5 className="mt-2">{ challengeUsers.books_completed}</h5>
           <p>Books Read</p>
         </div>
       </div>
@@ -70,9 +94,9 @@ const Progresstracking = () => {
             textAlign: "center"
           }}
         >
-          <div className="progress-icon" style={{ fontSize: 24 }}>
+          {/* <div className="progress-icon" style={{ fontSize: 24 }}>
             <i className="fa-solid fa-clock" />
-          </div>
+          </div> */}
           <h5 className="mt-2">0</h5>
           <p>Hours Spent</p>
         </div>
@@ -90,7 +114,7 @@ const Progresstracking = () => {
           <div className="progress-icon" style={{ fontSize: 24 }}>
             <i className="fa-solid fa-trophy" />
           </div>
-          <h5 className="mt-2">0%</h5>
+          <h5 className="mt-2">{ challengeUsers.avg_test_score}</h5>
           <p>Avg Test Score</p>
         </div>
       </div>
