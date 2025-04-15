@@ -12,7 +12,7 @@ const GetAllUsers = () => {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/users`);
-                console.log("Fetched Data:", response.data);
+                // console.log("Fetched Data:", response.data);
 
                 // Response में "data" key के अंदर users array है, उसे एक्सट्रैक्ट करके सही फॉर्मेट में स्टोर कर रहे हैं।
                 const formattedUsers = response.data.data.map(user => ({

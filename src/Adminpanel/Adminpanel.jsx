@@ -20,7 +20,7 @@ const AdminPanel = () => {
         const response = await axios.get(`${BASE_URL}/gatallUserChallengeProgreses`);
 
 
-        console.log("challengeData", response.data);
+        // console.log("challengeData", response.data);
 
         // Ensure response.data.data is an array before setting state
         if (response.data && Array.isArray(response.data.data)) {

@@ -10,7 +10,7 @@ const CompleteBooks = () => {
         const fetchBooks = async () => {
             try {
                 const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
-                console.log("Fetched Data:", response.data);
+                // console.log("Fetched Data:", response.data);
 
                 // Backend se aaye data ko modify karke set karna
                 const formattedBooks = response.data.data.map(book => ({

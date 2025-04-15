@@ -14,19 +14,15 @@ function Sidebar() {
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const Role = localStorage.getItem('Role');  // Get user role from localStorage
+  const Signupdata = JSON.parse(localStorage.getItem("signupData")); // parse kar le object me
+
 
   const menuItems = [
-    // { path: '/dashboard', text: '' },
-
-    // { path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' },
-    // { path: '/myCommision', icon: <FaBook />, text: 'MyCommision' },
-    // { path: '/settings', icon: <FaCog />, text: 'Settings' },
-    // { path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' },
+ 
   ];
 
   // Add AdminPanel link only for admins
   if (Role === 'admin') {
-
     menuItems.push({ path: '/completeBooks', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/adminpanel', icon: <FaHome />, text: 'Admin Panel' });
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
@@ -40,9 +36,10 @@ function Sidebar() {
 
   // Add AdminPanel link only for admins
   if (Role === 'user') {
+    const plan_name = localStorage.getItem('plan_name');
     menuItems.push({ path: '/usercompltebook', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/usermycomition', icon: <FaBookReader />, text: 'MyCommision' });
-    menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' });
+    {plan_name==="1 Month" &&menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' }) }
     menuItems.push({ path: '/userprofile', icon: <FaUser />, text: 'Profile' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
