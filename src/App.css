@@ -16,19 +16,30 @@ body {
 
 .testimonials-container {
   max-width: 1200px;
+
   margin: 0 auto;
   margin-top: 100px;
+  
+
 }
 
 .testimonial-card {
   background: rgba(17, 17, 17, 0.6);
   border: 1px solid #333;
   border-radius: 12px;
-  padding: 2rem;
-  transition: transform 0.3s ease;
-  height: 300px;
+
   padding: 20px;
+  transition: transform 0.3s ease;
+  
+
+
+  height: 300px;
+
+
   margin: 0 10px;
+  
+ 
+
 }
 
 .testimonial-card:hover {
@@ -47,12 +58,15 @@ body {
   line-height: 1.6;
   margin-bottom: 2rem;
   font-style: italic;
+
 }
 
 .testimonial-author {
   display: flex;
   align-items: center;
   gap: 1rem;
+  
+
 }
 
 .author-image {
@@ -355,5 +369,37 @@ nav a{
 .fa-star {
   transition: color 0.2s;
 }
+/* .slick-track {
+  width: auto !important;
+  display: flex;
+  gap: 1rem;
+  
 
 
+}
+.slick-list{
+  display:contents;
+
+} */
+/* .slick-slide{ */
+  
+  /* width: 200%; */
+/* } */
+
+
+.testimonial-card {
+  background: rgba(17, 17, 17, 0.6);
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 0 10px;
+  height: 100%; /* ensure uniform height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.testimonials-grid .slick-slide {
+  padding: 10px;
+  box-sizing: border-box;
+}

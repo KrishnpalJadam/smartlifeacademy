@@ -146,7 +146,6 @@ const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
         ))}
 
         <button
-          onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
           className="btn btn-outline-light mx-2"
         >

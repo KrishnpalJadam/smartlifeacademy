@@ -19,18 +19,19 @@ function Login() {
     setError('');
     try {
       const response = await axios.post(`${BASE_URL}/auth/login`, formData);
-      console.log("Login Response:", response.data.data);
+      // console.log("Login Response:", response.data.data);
 
       if (response.data.success) {
         toast.success("Login successful! Redirecting...", {
           position: "top-right",
           autoClose: 2000,
           onClose: () => {
+            localStorage.setItem('plan_name', response.data.data.plan_name);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('Role', response.data.role);
              localStorage.setItem("userdata", JSON.stringify(response.data.data) )
             if (response.data.role === 'admin') {
-              navigate('/dashboard');
+              navigate('/dashboard'); 
             } else if (response.data.role === 'user') {
               navigate('/dashboard');
             } else {
