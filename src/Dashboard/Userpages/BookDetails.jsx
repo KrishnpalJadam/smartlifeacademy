@@ -58,7 +58,7 @@ const BookDetails = () => {
                 if (bookResponse.data && bookResponse.data.data) {
                     setDemoBook(bookResponse.data.data);
                 }
-                console.log("Farhan - Reviews:", bookResponse.data.data.reviews);
+                // console.log("Farhan - Reviews:", bookResponse.data.data.reviews);
                 const questionResponse = await axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
                 if (questionResponse.data && questionResponse.data.data) {
                     setQuestions(questionResponse.data.data);

@@ -97,7 +97,7 @@ const Library = () => {
   const [categories, setCategories] = useState([]);
   const [books, setBooks] = useState([]);
   const [roledata, setRoledata] = useState("")
-  console.log(roledata)
+  // console.log(roledata)
   useEffect(() => {
     const role = localStorage.getItem("Role")
     if (role) {

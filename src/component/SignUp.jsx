@@ -22,7 +22,7 @@ function SignUp() {
     const fetchPlans = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/getsubscription`);
-        console.log("Plan Data:", response);
+        // console.log("Plan Data:", response);
         if (response.data && response.data.data) {
           setPlans(response.data.data);
         }
