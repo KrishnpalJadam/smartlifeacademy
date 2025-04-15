@@ -5,7 +5,7 @@
 }
 
 body {
-  font-family: 'Poppins', sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
 }
 
 /* testimonials */
@@ -20,7 +20,6 @@ body {
   margin-top: 100px;
 }
 
-
 .testimonial-card {
   background: rgba(17, 17, 17, 0.6);
   border: 1px solid #333;
@@ -30,7 +29,6 @@ body {
   height: 300px;
   padding: 20px;
   margin: 0 10px;
-  
 }
 
 .testimonial-card:hover {
@@ -243,11 +241,6 @@ body {
   }
 }
 
-
-
-
-
-
 .btn-primary {
   background-color: #fcd34d;
   border: 0;
@@ -262,23 +255,12 @@ body {
 
 .salessupoortbutton:hover {
   color: black !important;
-
 }
-
-
-
-
-
-
-
 
 .imgtd {
   display: flex;
   justify-content: center;
 }
-
-
-
 
 .promo-container {
   background-color: #000;
@@ -299,7 +281,6 @@ body {
 .promo-back-link {
   color: white !important;
   text-decoration: none;
-
 }
 
 .promo-input-group {
@@ -345,17 +326,15 @@ body {
   border-radius: 5px;
 }
 
-
-
 @media (max-width: 767px) {
   .mobileaudio {
     display: none !important;
   }
-  .deskaudio{
+  .deskaudio {
     display: block !important;
   }
 }
-.deskaudio{
+.deskaudio {
   display: none;
 }
 .Toastify__toast-container {
@@ -376,3 +355,21 @@ nav a{
 .fa-star {
   transition: color 0.2s;
 }
+.slick-track {
+  /* width: auto !important; */
+  display: flex;
+  gap: 1rem;
+  
+
+
+}
+.slick-list{
+  display:contents;
+  
+  
+
+}
+/* .slick-slide{ */
+  
+  /* width: 200%; */
+/* } */

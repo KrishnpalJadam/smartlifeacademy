@@ -9,6 +9,13 @@ const Bookmanagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [roledata, setRoledata] = useState("");
   const navigate=  useNavigate()
+
+  const [currentPage, setCurrentPage] = useState(1);  // Current page
+  const itemsPerPage = 5;  // Items per page
+  
+
+
+
   useEffect(() => {
     const role = localStorage.getItem("Role");
     if (role) {
@@ -46,8 +53,17 @@ const Bookmanagement = () => {
 
   const handleEdit=(id)=>{
     navigate(`/addBook/${id}`)
-   
   }
+// Calculate pagination data
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
+
+const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+
+
+
+
   return (
     <div className="container mt-5">
       <nav className="mb-12">
@@ -76,8 +92,8 @@ const Bookmanagement = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredBooks.length > 0 ? (
-              filteredBooks.map((book) => (
+            {currentItems.length > 0 ? (
+              currentItems.map((book) => (
                 <tr key={book.id}>
                   <td className="imgtd">
                     <img
@@ -105,7 +121,45 @@ const Bookmanagement = () => {
             )}
           </tbody>
         </table>
+
       </div>
+
+     {/* Pagination Controls */}
+     <div className="d-flex justify-content-center my-4">
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="btn btn-outline-light mx-2"
+        >
+          Previous
+        </button>
+
+        {/* Page Number Buttons */}
+        {[...Array(totalPages).keys()].map((pageNumber) => (
+          <button
+            key={pageNumber}
+            onClick={() => setCurrentPage(pageNumber + 1)}
+            className={`btn mx-1 ${currentPage === pageNumber + 1 ? "btn-warning" : "btn-outline-light"}`}
+          >
+            {pageNumber + 1}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="btn btn-outline-light mx-2"
+        >
+          Next
+        </button>
+      </div>
+
+
+
+
+
+
+
     </div>
   );
 };
