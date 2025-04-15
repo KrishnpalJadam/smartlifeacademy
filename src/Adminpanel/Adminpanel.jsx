@@ -12,7 +12,7 @@ const AdminPanel = () => {
   const [challengeUsers, setChallengeUsers] = useState([]); // Ensure initial state is an empty array
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);  // ✅ Current page number
-  const itemsPerPage = 5;  // ✅ Har page pe kitni items dikhani hain
+  const itemsPerPage = 1;  // ✅ Har page pe kitni items dikhani hain
 
   useEffect(() => {
     const getChallengeData = async () => {
@@ -119,31 +119,30 @@ const AdminPanel = () => {
             </table>
           </div>
         </div>
+
         <div className="pagination-buttons d-flex justify-content-center mt-4">
-  <button 
+   <button 
     onClick={() => setCurrentPage(currentPage - 1)} 
     disabled={currentPage === 1}
-    className="btn btn-outline-light mx-2"
+    className="btn btn-outline-light "
   >
     Prev
   </button>
   
-  {
-    Array.from({ length: totalPages }, (_, index) => (
-      <button
-        key={index}
-        onClick={() => setCurrentPage(index + 1)}
-        className={`btn ${currentPage === index + 1 ? 'btn-warning' : 'btn-outline-light'} mx-1`}
-      >
-        {index + 1}
-      </button>
-    ))
-  }
-  
+  {[...Array(totalPages).keys()].map((pageNumber) => (
+  <button
+    key={pageNumber}
+    onClick={() => setCurrentPage(pageNumber + 1)}
+    className={`btn mx-1 ${currentPage === pageNumber + 1 ? "btn-warning" : "btn-outline-light"}`}
+  >
+    {pageNumber + 1}
+  </button>
+))}
+
   <button 
     onClick={() => setCurrentPage(currentPage + 1)} 
     disabled={currentPage === totalPages}
-    className="btn btn-outline-light mx-2"
+    className="btn btn-outline-light "
   >
     Next
   </button>
