@@ -12,7 +12,7 @@
     useEffect(() => {
       const fetchCommissionData = async () => {
         try {
-          const response = await axios.get(`${BASE_URL}/getPromocodeRefer/${id}`);
+          const response = await axios.get(`${BASE_URL}/getPromocodeReferById/${id}`);
           if (response.data && response.data.data) {
             setCommissions(response.data.data); // no need to wrap in array
             setPromoCode(response.data.data.promocode || "N/A");
@@ -32,7 +32,7 @@
     const referralList = commissions?.referrals || [];
 
     // Calculate total commission
-    const totalCommission = referralList.reduce((acc, curr) => acc + (curr.commission || 0), 0);
+    const totalCommission = commissions?.monthlySummary?.[0]?.total_commission || 0;
 
     // CSV Export Function
     const exportToCSV = () => {
@@ -80,7 +80,7 @@
                     <tr key={`${ref.email}-${index}`}>
                       <td>{ref.email}</td>
                       <td>{ref.plan_name}</td>
-                      <td>{Number(ref.commission).toFixed(2)} TL</td>
+                      <td>{ref.commission} TL</td>
                     </tr>
                   ))}
                 </tbody>
@@ -92,7 +92,7 @@
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <h5 style={{ color: "#ffc107" }}>
-              Total Commission of the Month: ${totalCommission.toFixed(2)}
+              Total Commission of the Month: ${totalCommission}
             </h5>
             <button className="btn btn-warning" onClick={exportToCSV}>
               Download CSV
