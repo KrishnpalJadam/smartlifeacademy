@@ -11,6 +11,8 @@ const AdminPanel = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [challengeUsers, setChallengeUsers] = useState([]); // Ensure initial state is an empty array
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);  // ✅ Current page number
+  const itemsPerPage = 5;  // ✅ Har page pe kitni items dikhani hain
 
   useEffect(() => {
     const getChallengeData = async () => {
@@ -44,6 +46,19 @@ const AdminPanel = () => {
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
     )
     : [];
+
+ //  Current page ke liye records ko slice karna
+ const indexOfLastItem = currentPage * itemsPerPage;  // ✅ Current page ka last item index
+ const indexOfFirstItem = indexOfLastItem - itemsPerPage;  // ✅ Current page ka first item index
+ const currentItems = filteredChallengeUsers.slice(indexOfFirstItem, indexOfLastItem);  // ✅ Paginated items
+
+ //  Total pages ka calculation
+ const totalPages = Math.ceil(filteredChallengeUsers.length / itemsPerPage);  // ✅ Total pages count
+
+
+
+
+
 
   return (
     <div>
@@ -104,6 +119,48 @@ const AdminPanel = () => {
             </table>
           </div>
         </div>
+        <div className="pagination-buttons d-flex justify-content-center mt-4">
+  <button 
+    onClick={() => setCurrentPage(currentPage - 1)} 
+    disabled={currentPage === 1}
+    className="btn btn-outline-light mx-2"
+  >
+    Prev
+  </button>
+  
+  {
+    Array.from({ length: totalPages }, (_, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentPage(index + 1)}
+        className={`btn ${currentPage === index + 1 ? 'btn-warning' : 'btn-outline-light'} mx-1`}
+      >
+        {index + 1}
+      </button>
+    ))
+  }
+  
+  <button 
+    onClick={() => setCurrentPage(currentPage + 1)} 
+    disabled={currentPage === totalPages}
+    className="btn btn-outline-light mx-2"
+  >
+    Next
+  </button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         {/* User Commission Tracking Table */}

@@ -395,7 +395,7 @@ const Settings = () => {
                 }}
             >
                 <h4 className="mb-2">
-                    <span className="me-2">
+                    <span className="me-2 ">
                         <i className="fa-solid fa-folder-closed" />
                     </span>
                     Subscription Management
@@ -407,9 +407,9 @@ const Settings = () => {
                     <strong>Promocode:</strong> {plan.promocode}
                 </p>
                 <div className="row g-2">
-                    <div className="col-12 col-md-4">
+                    <div className="col-12 col-md-4 ">
                         <button
-                            className="progress1-plan-btn"
+                            className="progress1-plan-btn mt-3"
                             style={{
                                 backgroundColor: "#2a2a2a",
                                 color: "white",

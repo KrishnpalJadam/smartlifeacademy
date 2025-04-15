@@ -5,6 +5,9 @@ import axios from "axios";
 import BASE_URL from '../../Config';
 
 function Review() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5; // ek page me kitne reviews dikhane hain
+
     const [searchTerm, setSearchTerm] = useState("");
     const [challengeUsers, setChallengeUsers] = useState([]);
     const navigate = useNavigate();
@@ -29,12 +32,28 @@ function Review() {
     useEffect(() => {
         getChallengeData();
     }, []);
+       // ✅ Jab search term change ho to page ko reset karo
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
 
+      // ✅ Search filter logic
     const filteredChallengeUsers = Array.isArray(challengeUsers)
         ? challengeUsers.filter((user) =>
             (user.firstname || "").toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
+
+
+    // ✅ Pagination logic: slice karke current page ke items nikaalo
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredChallengeUsers.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredChallengeUsers.length / itemsPerPage);
+
+
+
+
 
     const handleStatusUpdate = async (id, newStatus) => {
         try {
@@ -78,7 +97,7 @@ function Review() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredChallengeUsers.map((user) => (
+                                {currentItems.map((user) => (
                                     <tr key={user.id}>
                                         <td>{user.firstname}</td>
                                         <td>{user.book_name}</td>
@@ -105,9 +124,49 @@ function Review() {
                                 ))}
                             </tbody>
                         </table>
+
+                         {/* ✅ Pagination Buttons */}
+                         {totalPages > 1 && (
+                            <div className="mt-3 d-flex justify-content-center gap-2 flex-wrap">
+                                <button
+                                    className="btn btn-sm btn-secondary"
+                                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                                    disabled={currentPage === 1}
+                                >
+                                    Prev
+                                </button>
+
+                                {Array.from({ length: totalPages }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        className={`btn btn-sm ${currentPage === index + 1 ? "btn-primary" : "btn-outline-light"}`}
+                                        onClick={() => setCurrentPage(index + 1)}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+
+                                <button
+                                    className="btn btn-sm btn-secondary"
+                                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+
+
+
+
+
+
+
+
                         
                     </div>
                 </div>
+               
             </div>
         </div>
     )

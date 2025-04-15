@@ -35,7 +35,7 @@ const BookDetails = () => {
         infinite: true,
         speed: 500,
         slidesToShow: 3,   
-        slidesToScroll: 3,
+        slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 3000,
         centerMode: true,
@@ -169,8 +169,8 @@ const BookDetails = () => {
             <ToastContainer/>
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <nav className="flex items-center justify-between mb-12">
-                    <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
-                        <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
+                    <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white text-xxl">
+                        <i className="fa-solid fa-chevron-left me-2 " /> Back to Dashboard
                     </Link>
                 </nav>
                 <div className="grid lg:grid-cols-2 gap-12">
@@ -236,10 +236,10 @@ const BookDetails = () => {
                             </div>  */}
                         </div>
                         {showReviewModal && (
-                            <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
-                                <div className="bg-gray-900 p-6 rounded-lg max-w-4xl w-full relative">
+                            <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 ">
+                                <div className="bg-gray-900 p-6 rounded-lg max-w-4xl w-full relative ">
                                     <h3 className="text-xl font-bold text-amber-400 mb-4">Write Your Review</h3>
-                                    <div className="flex items-center mb-4">
+                                    <div className="flex items-center mb-4  ">
                                         {[1, 2, 3, 4, 5].map((star) => (
                                             <button
                                                 key={star}
