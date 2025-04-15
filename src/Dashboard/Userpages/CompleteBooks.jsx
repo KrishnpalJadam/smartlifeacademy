@@ -49,8 +49,10 @@ const CompleteBooks = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
+  console.log("Current Items:", currentItems);
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-
+  const plan_name = localStorage.getItem('plan_name');
+  console.log("Plan Name:", plan_name);
   return (
     <div>
       <div className="container mt-5">
@@ -104,11 +106,14 @@ const CompleteBooks = () => {
                       </td>
                       <td>
                         {book.name}
-                        {book.status === "completed" && (
-                          <span style={{ color: "#ffc107", marginLeft: "5px" }}>
-                            (*)
-                          </span>
-                        )}
+                        {book.status === "completed" &&
+                          plan_name==="1 Month" && (
+                            <span
+                              style={{ color: "#ffc107", marginLeft: "5px" }}
+                            >
+                              (*)
+                            </span>
+                          )}
                       </td>
                       <td>{book.email}</td>
                       <td>

@@ -39,8 +39,6 @@ function Sidebar() {
     const plan_name = localStorage.getItem('plan_name');
     menuItems.push({ path: '/usercompltebook', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/usermycomition', icon: <FaBookReader />, text: 'MyCommision' });
-     
-    
     {plan_name==="1 Month" &&menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' }) }
     menuItems.push({ path: '/userprofile', icon: <FaUser />, text: 'Profile' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
