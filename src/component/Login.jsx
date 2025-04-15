@@ -26,6 +26,7 @@ function Login() {
           position: "top-right",
           autoClose: 2000,
           onClose: () => {
+            localStorage.setItem('id', response.data.data.id); 
             localStorage.setItem('plan_name', response.data.data.plan_name);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('Role', response.data.role);

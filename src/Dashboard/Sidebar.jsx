@@ -26,7 +26,7 @@ function Sidebar() {
     menuItems.push({ path: '/completeBooks', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/adminpanel', icon: <FaHome />, text: 'Admin Panel' });
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
-    menuItems.push({ path: '/progrestrackingadmin', icon: <FaChartLine />, text: 'Progress Tracking' });
+    // menuItems.push({ path: '/progrestrackingadmin', icon: <FaChartLine />, text: 'Progress Tracking' });
     menuItems.push({ path: '/Review', icon: <FaClipboardCheck />, text: 'Review' }); 
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
