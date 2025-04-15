@@ -43,18 +43,20 @@ const UserProfile = () => {
         {(signupData || userdata) ? (
           <>
             <div className="mt-3">
-              <p><strong>Name : </strong> {firstName}</p>
+              <p><strong>Name : </strong> { firstName}</p>
               <p><strong>Email : </strong> {email}</p>
               <p><strong>Promo Code : </strong> {promoCode}</p>
               <p><strong>Plan Name : </strong> {planName}</p>
 
               {/* Share Icons */}
-              <div className="d-flex align-items-center mt-3">
-                <a href={whatsappShareUrl} target="_blank" rel="noopener noreferrer">
+              <div className="d-flex align-items-center mt-3 ">
+                <a href={whatsappShareUrl} target="_blank" rel="noopener noreferrer " className="flex align-items-center gap-2">
                   <FaWhatsappSquare className="fs-3 text-success" />
+                   whatsapp
                 </a>
-                <a href={gmailShareUrl} target="_blank" rel="noopener noreferrer" className="ms-4">
+                <a href={gmailShareUrl} target="_blank" rel="noopener noreferrer" className="ms-4 flex align-items-center gap-2">
                   <BiLogoGmail className="fs-3 text-danger" />
+                     Gmail
                 </a>
               </div>
             </div>
