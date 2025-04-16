@@ -5,6 +5,7 @@ import { FaBars, FaTimes, FaBook, FaBookReader, FaChartLine, FaCog, FaQuestionCi
 import logo from "../assets/logo.jpg";
 import Chatbot from './Chatbot';
 import { FaClipboardCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 
 function Sidebar() {
@@ -12,10 +13,15 @@ function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const navigate = useNavigate();
 
   const Role = localStorage.getItem('Role');  // Get user role from localStorage
   const Signupdata = JSON.parse(localStorage.getItem("signupData")); // parse kar le object me
-
+   const logout = ()=>{
+    localStorage.clear()
+    navigate("/login")
+    
+   }
 
   const menuItems = [
  
@@ -77,10 +83,9 @@ function Sidebar() {
 
         <div className={`user-section ${isSidebarOpen ? 'show' : 'hide'}`}>
           {/* <p className="user-email">kemalkarasulu1@hotmail.com</p> */}
-          <div className='logout-btn'>
-            <Link to="/login" onClick={() => localStorage.removeItem('Role')}>
-              Logout
-            </Link>
+          <div >
+            
+            <button onClick={()=>{logout()}} className='logout-btn'>Logout</button>
           </div>
         </div>
       </aside>

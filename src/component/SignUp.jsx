@@ -85,7 +85,7 @@ function SignUp() {
 
 
   };
-
+   
   return (
     <div className="dark-signup-page">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
@@ -95,7 +95,7 @@ function SignUp() {
         </button>
         <div className="row">
           <div className="col-sm-6">
-            <h1 className="text-yellow">Select a Plan</h1>
+            <h1  style={{color: "#fcd34d" , margin:'20px'}}>Select a Plan</h1>
             <div className="plans-container2 row">
               {plans.length > 0 ? (
                 plans.map((plan) => (
@@ -104,8 +104,10 @@ function SignUp() {
                     className={`plan-card col-sm-7 mt-3 ${selectedPlan === plan.plan_name ? 'selected' : ''}`}
                     onClick={() => setSelectedPlan(plan.plan_name)}>
                     <h2 style={{ color: "#fcd34d", fontSize: "20px" }}>{plan.plan_name}</h2>
-                    <span style={{ color: "white" }}>Original Price:</span> <div className="price"> {plan.original_price} TL</div>
+                    <span style={{ color: "white", fontSize: "20px" }}>Original Price:</span> <div className="price"> {plan.original_price} TL</div>
+                    {plan.plan_name === "1 Month" && <span  style={{ color: "#fcd34d", fontSize: "20px" }}> 30 day challenge is for only 1 month membership </span>} <div className="price"> {plan.discount_price}</div>
                   </div>
+                    
                 ))
               ) : (
                 <p className="" style={{ color: "#fcd34d" }}>Loading plans...</p>

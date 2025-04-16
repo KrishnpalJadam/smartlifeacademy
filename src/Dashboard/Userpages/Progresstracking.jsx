@@ -10,22 +10,16 @@ const Progresstracking = () => {
     const getChallengeData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/getUserChallengeProgress/${localStorage.getItem("id")}`);
-        //  console.log("response",response.data);
-
-        // console.log("challengeData", response.data);
-
-        // Ensure response.data.data is an array before setting state
          
           setChallengeUsers(response.data);
          
       } catch (error) {
         console.error("Error fetching challenge data:", error);
-        setChallengeUsers([]); // Set empty array on error to avoid breaking UI
+        setChallengeUsers([]);  
       }
     };
     getChallengeData();
   }, []);
-  console.log("challengeUsers", challengeUsers);
   return (
     <div>
       <div className="container mt-5">
@@ -66,8 +60,8 @@ const Progresstracking = () => {
         style={{ width: "0%" }}
       />
     </div>
-    <div className="row mt-3">
-      <div className="col-md-3 mt-2">
+    <div className="row mt-4">
+      <div className="col-md-4 mt-2">
         <div
           className="progress-stat-card"
           style={{
@@ -80,12 +74,12 @@ const Progresstracking = () => {
           <div className="progress-icon" style={{ fontSize: 24 }}>
             <i className="fa-solid fa-book-open" />
           </div>
-          <h5 className="mt-2">{ challengeUsers.books_completed}</h5>
+          <h5 className="mt-2">{challengeUsers.books_completed}</h5>
           <p>Books Read</p>
         </div>
       </div>
-      <div className="col-md-3 mt-2">
-        <div
+      {/* <div className="col-md-3 mt-2"> */}
+        {/* <div
           className="progress-stat-card"
           style={{
             backgroundColor: "#241e0d",
@@ -93,15 +87,15 @@ const Progresstracking = () => {
             borderRadius: 10,
             textAlign: "center"
           }}
-        >
+        > */}
           {/* <div className="progress-icon" style={{ fontSize: 24 }}>
             <i className="fa-solid fa-clock" />
           </div> */}
-          <h5 className="mt-2">0</h5>
+          {/* <h5 className="mt-2">0</h5>
           <p>Hours Spent</p>
-        </div>
-      </div>
-      <div className="col-md-3 mt-2">
+        </div> */}
+      {/* </div> */}
+      <div className="col-md-4 mt-2">
         <div
           className="progress-stat-card"
           style={{
@@ -118,7 +112,7 @@ const Progresstracking = () => {
           <p>Avg Test Score</p>
         </div>
       </div>
-      <div className="col-md-3 mt-2">
+      <div className="col-md-4 mt-2">
         <div
           className="progress-stat-card"
           style={{
