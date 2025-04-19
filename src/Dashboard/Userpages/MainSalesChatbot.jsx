@@ -39,7 +39,7 @@ const MainSalesChatbot = () => {
 
   return (
     <div>
-      <button onClick={() => setIsVisible(!isVisible)}>Toggle Chatbot</button>
+      {/* <button onClick={() => setIsVisible(!isVisible)}>Toggle Chatbot</button> */}
       <div
         id="chatbot-container"
         style={{

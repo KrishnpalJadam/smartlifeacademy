@@ -34,6 +34,7 @@ function Sidebar() {
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
     // menuItems.push({ path: '/progrestrackingadmin', icon: <FaChartLine />, text: 'Progress Tracking' });
     menuItems.push({ path: '/Review', icon: <FaClipboardCheck />, text: 'Review' }); 
+        menuItems.push({ path: '/getAllUsers', icon: <FaUser />, text: 'All Users' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
 
@@ -48,6 +49,7 @@ function Sidebar() {
     {plan_name==="1 Month" &&menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' }) }
     menuItems.push({ path: '/userprofile', icon: <FaUser />, text: 'Profile' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
+
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
   }
   const user_data = JSON.parse(localStorage.getItem("userdata"));

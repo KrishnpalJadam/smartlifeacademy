@@ -16,14 +16,30 @@ const Testimonial = () => {
         dots: true,
         infinite: true,
         speed: 500,
-        slidesToShow: 3,   
-        slidesToScroll: 3,
-        autoplay: true, 
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        autoplay: true,
         autoplaySpeed: 3000,
         centerMode: true,
         centerPadding: "20px",
-         
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 2,
+              centerMode: false
+            }
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 1,
+              centerMode: false
+            }
+          }
+        ]
       };
+      
 
     const getChallengeData = async () => {
         try {
