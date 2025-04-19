@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Library from './Library';
-import Chatbot from './Chatbot';
 
 function Dashboard() {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Optional: Auto-close after a delay
-    const timer = setTimeout(() => setShowModal(false), 3000);  
-    return () => clearTimeout(timer);
+    const hasVisited = localStorage.getItem('hasVisitedDashboard');
+    if (!hasVisited) {
+      setShowModal(true);
+      localStorage.setItem('hasVisitedDashboard', 'true');
+    }
   }, []);
   const user_data = JSON.parse(localStorage.getItem("userdata"));
-     
   return (
     <div>
       <Sidebar />
       <Library />
 
       {showModal && (
-        
         <div style={styles.overlay}>
           <div style={styles.modal}>
-            <h2 className='text-2xl'>👋 Welcome {user_data.firstname} {user_data.lastname}</h2>
-            <p>Glad to see you </p>
-           <div> Plan : {user_data.plan_name}</div>
+          <h2 className='text-2xl'>👋 Welcome {user_data.firstname} {user_data.lastname}</h2>
+             <p>Glad to see you </p>
+            <div> Plan : {user_data.plan_name}</div>
+            <div> Remaining Days : {user_data?.remaining_days}</div>
 
             <button style={styles.button} onClick={() => setShowModal(false)}>
               Close
@@ -45,14 +45,13 @@ const styles = {
     zIndex: 9999
   },
   modal: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     padding: '2rem',
-    border: '1px solid #fcd34d',
+    borderRadius: '1rem',
     boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
     textAlign: 'center',
     maxWidth: '400px',
     width: '90%',
-    color: '#fff'
   },
   button: {
     marginTop: '1rem',

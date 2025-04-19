@@ -29,7 +29,8 @@ const UserProfile = () => {
 
   const whatsappShareUrl = `https://api.whatsapp.com/send?text=My%20Promo%20Code%3A%20${promoCode}`;
   const gmailShareUrl = `https://mail.google.com/mail/u/0/#inbox`;
-
+  const user_data = JSON.parse(localStorage.getItem("userdata"));
+  console.log("user_data", user_data);
   return (
     <div className="container mt-5 d-flex justify-content-center">
       <div className="card p-4 shadow-lg text-light bg-dark" style={{ width: "400px", borderRadius: "10px" }}>
