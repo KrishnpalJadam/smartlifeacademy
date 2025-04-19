@@ -269,8 +269,12 @@ const CompleteBooks = () => {
           <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
         </Link>
         <h2 className="mb-4 text-white fs-4 fw-bold">All Books</h2>
+<div className="d-flex" style={{justifyContent: "space-between"}}>
+
 
         {/* Search input */}
+        <div>
+        <label htmlFor="month-select" className="form-label text-white">Search Book:</label>
         <input
           type="text"
           placeholder="Search by Book Name or Email"
@@ -278,10 +282,12 @@ const CompleteBooks = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-
-        {/* Month Filter Dropdown */}
-        <div className="mb-3">
-          <label htmlFor="month-select" className="form-label text-white">Select Month:</label>
+        </div>
+     
+      {/* Month Filter Dropdown */}
+      <div className="mb-3 d-flex">
+        <div>
+        <label htmlFor="month-select" className="form-label text-white">Select Month:</label>
           <select
             id="month-select"
             className="form-select"
@@ -295,6 +301,17 @@ const CompleteBooks = () => {
               </option>
             ))}
           </select>
+        </div>
+      <div>
+      <button
+              className="btn btn-primary mt-8 ms-4"
+              onClick={downloadCSV}
+            >
+              Download CSV for {selectedMonth === null ? 'All Months' : new Date(0, selectedMonth - 1).toLocaleString('default', { month: 'long' })}
+            </button> 
+      </div>
+       
+        </div>
         </div>
 
         <div
@@ -368,15 +385,7 @@ const CompleteBooks = () => {
             </table>
           </div>
 
-          {/* Button to download CSV */}
-          <div className="mt-3 d-flex justify-content-end">
-            <button
-              className="btn btn-primary"
-              onClick={downloadCSV}
-            >
-              Download CSV for {selectedMonth === null ? 'All Months' : new Date(0, selectedMonth - 1).toLocaleString('default', { month: 'long' })}
-            </button>
-          </div>
+       
         </div>
       </div>
     </div>
