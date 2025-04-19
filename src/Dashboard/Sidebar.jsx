@@ -183,7 +183,8 @@ function Sidebar() {
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
   }
-
+  const user_data = JSON.parse(localStorage.getItem("userdata"));
+  console.log(user_data);
   return (
     <div style={{ position: "relative" }}>
       <button className="sidebar-toggle" onClick={toggleSidebar} style={{ position: "absolute", left: 260 }}>
@@ -196,16 +197,14 @@ function Sidebar() {
           <h1 className={isSidebarOpen ? 'show' : 'hide'}>Smart Life Academy</h1>
         </div>
 
-        {/* Search Input */}
-        {/* <div className={`search-container ${isSidebarOpen ? 'show' : 'hide'}`} style={{ marginTop: "20px" }}>
-          <input
-            type="text"
-            placeholder="Search books..."
-            className="search-input"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
+        {/* <div className={`search-container ${isSidebarOpen ? 'show' : 'hide'}`}>
+          <input type="text" placeholder="Search books..." className="search-input" />
         </div> */}
+        <div className=" display flex flex-col justify-center items-center  text-amber-400">
+           <div className='text-2xl '>{user_data.firstname} {user_data.lastname}</div>
+           {/* <div>{user_data.email}</div> */}
+           <div> Plan : {user_data.plan_name}</div>
+        </div>
 
         <nav className="nav-menu">
           {menuItems.map((item, index) => (
