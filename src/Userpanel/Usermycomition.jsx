@@ -27,7 +27,7 @@ const Usermycomition = () => {
 
     const fetchCommissionData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getPromocodeRefer/${userId}`);
+        const response = await axios.get(`${BASE_URL}/getPromocodeReferById/${userId}`);
         console.log("API Response:", response.data);
 
         if (response.data && response.data.data) {

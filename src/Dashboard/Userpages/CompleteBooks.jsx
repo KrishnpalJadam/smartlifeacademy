@@ -6,28 +6,25 @@ import BASE_URL from "../../Config";
 const CompleteBooks = () => {
   const [books, setBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
-  // ✅ Pagination ke liye states
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [filteredBooks, setFilteredBooks] = useState([]);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
-        // console.log("Fetched Data:", response.data);
 
+        // Format books data
         const formattedBooks = response.data.data.map((book) => ({
           id: book.book_id,
-          image: book.image || "https://i.ibb.co/chfGcpmZ/6.png",
-          name: book.book_name,
+          image: book.image || "https://via.placeholder.com/50", // Placeholder image
+          name: book.book_name || "No Name", // Default to "No Name" if book name is empty
           email: book.email,
           status: book.status ? book.status.toLowerCase() : "incompleted",
           is30DaysChallenge: book.correct_answers / book.total_questions >= 0.8,
         }));
 
-        console.log("Formatted Books:", formattedBooks);
         setBooks(formattedBooks);
+        setFilteredBooks(formattedBooks); // Initially, set all books as the filtered books
       } catch (error) {
         console.log("Error fetching books:", error);
       }
@@ -35,24 +32,42 @@ const CompleteBooks = () => {
 
     fetchBooks();
   }, []);
-  // ✅ Search hone par current page reset
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
 
-  const filteredBooks = books.filter(
-    (book) =>
-      book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      book.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  // ✅ Pagination ke liye slice karna
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
-  console.log("Current Items:", currentItems);
-  const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-  const plan_name = localStorage.getItem('plan_name');
-  console.log("Plan Name:", plan_name);
+  // Update filtered books based on search query
+  useEffect(() => {
+    const filtered = books.filter(
+      (book) =>
+        book.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.email.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredBooks(filtered);
+  }, [searchQuery, books]);
+
+  // Function to export books to CSV
+  const exportToCSV = () => {
+    const data = filteredBooks.map((book) => ({
+      "S.No": book.id,
+      "Book Image": book.image,
+      "Book Name": book.name,
+      "User Name": book.email,
+      "Status": book.status.charAt(0).toUpperCase() + book.status.slice(1),
+    }));
+
+    const header = ["S.No", "Book Image", "Book Name", "User Name", "Status"];
+
+    let csvContent = header.join(",") + "\n";
+
+    data.forEach((row) => {
+      csvContent += `${row["S.No"]},${row["Book Image"]},${row["Book Name"]},${row["User Name"]},${row["Status"]}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `Completed_Books_${new Date().toLocaleDateString()}.csv`;
+    link.click();
+  };
+
   return (
     <div>
       <div className="container mt-5">
@@ -72,6 +87,11 @@ const CompleteBooks = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
+        {/* Export to CSV Button */}
+        <button className="btn btn-success mb-3" onClick={exportToCSV}>
+          Export to CSV
+        </button>
+
         <div
           className="card-custom p-3 mb-3 rounded-3 border border-secondary"
           style={{ backgroundColor: "#1a1a1a" }}
@@ -88,8 +108,8 @@ const CompleteBooks = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentItems.length > 0 ? (
-                  currentItems.map((book, index) => (
+                {filteredBooks.length > 0 ? (
+                  filteredBooks.map((book, index) => (
                     <tr key={book.id}>
                       <td>{index + 1}.</td>
                       <td>
@@ -106,14 +126,6 @@ const CompleteBooks = () => {
                       </td>
                       <td>
                         {book.name}
-                        {book.status === "completed" &&
-                          plan_name==="1 Month" && (
-                            <span
-                              style={{ color: "#ffc107", marginLeft: "5px" }}
-                            >
-                              (*)
-                            </span>
-                          )}
                       </td>
                       <td>{book.email}</td>
                       <td>
@@ -140,45 +152,6 @@ const CompleteBooks = () => {
                 )}
               </tbody>
             </table>
-
-            {/* ✅ Pagination buttons */}
-            {totalPages > 1 && (
-              <div className="mt-3 d-flex justify-content-center gap-2 flex-wrap">
-                <button
-                  className="btn btn-sm btn-secondary"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                >
-                  Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    className={`btn btn-sm ${
-                      currentPage === index + 1
-                        ? "btn-primary"
-                        : "btn-outline-light"
-                    }`}
-                    onClick={() => setCurrentPage(index + 1)}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
-
-                <button
-                  className="btn btn-sm btn-secondary"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-              </div>
-            )}
           </div>
         </div>
       </div>

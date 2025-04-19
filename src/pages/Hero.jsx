@@ -40,7 +40,7 @@ const Hero = () => {
             <h1 className="hero-title">Transform Your Life in 30 Days</h1>
             <p className="hero-description">
               Complete our 30-day challenge: Listen to 30 books, engage with AI coaching,
-              and if you successfully complete the challenge, get 2 months of free access to continue your transformation journey!
+              and if you successfully complete the challenge, get 11 months of free access to continue your transformation journey!
             </p>
           </div>
           <div className="hero-image">
