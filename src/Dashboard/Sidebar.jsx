@@ -143,12 +143,7 @@ function Sidebar() {
 
   const menuItems = [];
 
-  const bookData = axios.get(`${BASE_URL}/book`)
-    .then(response => {
-      setBooks(response.data.data);
-      setFilteredBooks(response.data.data); // Set all books initially
-    })
-    .catch(error => console.error("Error fetching books:", error));
+
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
