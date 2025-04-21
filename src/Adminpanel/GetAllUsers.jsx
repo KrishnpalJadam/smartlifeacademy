@@ -85,7 +85,7 @@ const GetAllUsers = () => {
                                     <td>{index + 1}.</td>
                                     <td onClick={() => navigate(`/fineluserDetails/${user.id}`)}>  {user.email} </td>
                                     {/* <td>{user.password}</td> */}
-                                    <td onClick={() => navigate(`/myCommision/${user.id}`)}>{user.promocode}z</td>
+                                    <td onClick={() => navigate(`/finelUserCommition/${user.id}`)}>{user.promocode}z</td>
                                     <td>
                                         <button className="btn btn-danger btn-sm" onClick={() => handleDelete(user.id)}>
                                             Delete

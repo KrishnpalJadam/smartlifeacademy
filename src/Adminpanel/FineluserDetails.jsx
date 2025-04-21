@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import BASE_URL from "../Config";
+import MyCommissions from "../Dashboard/Userpages/MyCommision";
 
 
 const FineluserDetails = () => {
@@ -25,7 +26,7 @@ const FineluserDetails = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError("No commission data available.");
+        setError("This User Buy Other Plan");
       } finally {
         setLoading(false);
       }
@@ -133,6 +134,7 @@ const FineluserDetails = () => {
           </div>
         </div>
       </div>
+      <MyCommissions/>
     </div>
   );
 };

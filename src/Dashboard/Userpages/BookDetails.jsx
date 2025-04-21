@@ -127,22 +127,22 @@ const BookDetails = () => {
      // important to track change
      const saveProgressToBackend = (currentTime, duration) => {
         console.log("📤 Saving progress...");
-        console.log("⏱️ Current Time:", currentTime);
-        console.log("🎯 Total Duration:", duration);
+        // console.log("⏱️ Current Time:", currentTime);
+        // console.log("🎯 Total Duration:", duration);
         console.log("✅ Percent Complete:", ((currentTime / duration) * 100).toFixed(2));
-        console.log("🎧 Real Listened Time:", listenedTime);
-    
+        // console.log("🎧 Real Listened Time:", listenedTime);
+        const   percent_complete=  ((currentTime / duration) * 100).toFixed(2);
         // Here you can call your API
-        /*
-        axios.post(`${BASE_URL}/book-progress`, {
-            user_id: userId,
+    
+        axios.post(`${BASE_URL}/adioprogressprogress`, {
+            user_id: userId, 
             book_id: id,
-            current_time: currentTime,
-            total_duration: duration,
+            // current_time: currentTime,
+            // total_duration: duration,
             percent_complete: ((currentTime / duration) * 100).toFixed(2),
-            listened_time: listenedTime
+            // listened_time: listenedTime
         });
-        */
+        
     };
     
         

@@ -144,7 +144,10 @@ const Library = () => {
   return (
     <div className="library-page" style={{ paddingTop: "70px" }}>
       {/* Search bar */}
-      <div className="search-container" style={{ marginBottom: "20px" }}>
+      <div className="row">
+
+     
+      <div className="search-container col-sm-10" style={{ marginBottom: "20px" }}>
         <input
           type="text"
           placeholder="Search books..."
@@ -153,7 +156,10 @@ const Library = () => {
           onChange={handleSearch}
         />
       </div>
-
+      <div className="col-sm-2 mt-2">
+        <Link to="/addbook" className="btn btn-primary">Add Book +</Link>
+      </div>
+      </div>
       {categories.map((category) => (
         <section
           key={category.id}

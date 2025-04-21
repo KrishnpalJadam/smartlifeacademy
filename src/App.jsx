@@ -82,6 +82,7 @@ import Usermycomition from "./Userpanel/Usermycomition";
 import Progrestrackingadmin from "./Adminpanel/Progrestrackingadmin";
 import Review from "./Dashboard/Userpages/Review";
 import FineluserDetails from "./Adminpanel/FineluserDetails";
+import FinelUserCommition from "./Adminpanel/FinelUserCommition";
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
@@ -128,6 +129,8 @@ function App() {
             <Route path="/usermycomition" element={<Usermycomition />} />
             <Route path="/progrestrackingadmin" element={<Progrestrackingadmin />} />
             <Route path="/fineluserDetails" element={<FineluserDetails />} />
+            <Route path="/finelUserCommition" element={<FinelUserCommition />} />
+            <Route path="/finelUserCommition/:id" element={<FinelUserCommition />} />
             <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
 
             
