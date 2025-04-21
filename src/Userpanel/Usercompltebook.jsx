@@ -92,10 +92,12 @@ const Usercompltebook = () => {
               <thead>
                 <tr>
                   <th>S.No</th>
-                  <th>Book Image</th>
-                  <th>Book Name</th>
-                  <th>User Name</th>
+                  <th>Book name</th>
+                  <th>Listening progress</th>
                   <th>Status</th>
+                  <th>Test result</th>
+                  <th>Date completed</th>
+    
                 </tr>
               </thead>
               <tbody>
@@ -104,7 +106,8 @@ const Usercompltebook = () => {
                     <tr key={book.id}>
                       <td>{index + 1}.</td>
                       <td>
-                        <img
+                        <div className="flex items-center space-x-3 ">
+                          <span><img
                           src={book.image}
                           className="bookimg"
                           alt="Book"
@@ -113,17 +116,18 @@ const Usercompltebook = () => {
                             height: "50px",
                             objectFit: "cover",
                           }}
-                        />
-                      </td>
-                      <td>
-                        {book.name}
+                        /></span>
+                        <span>  {book.name}
                         {book.status === "completed" && (
                           <span style={{ color: "#ffc107", marginLeft: "5px" }}>
                             (*)
                           </span>
-                        )}
+                        )}</span>
+                        </div>
+                        
                       </td>
-                      <td>{book.email}</td>
+                      
+                      <td>{' '}</td>
                       <td>
                         <span
                           className={`badge ${
@@ -137,6 +141,13 @@ const Usercompltebook = () => {
                             book.status.slice(1)}
                         </span>
                       </td>
+                      <td>
+                        <span
+                        >
+                          
+                        </span>
+                      </td>
+                      <td>{' '}</td>      
                     </tr>
                   ))
                 ) : (
