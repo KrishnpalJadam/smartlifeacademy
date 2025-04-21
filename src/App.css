@@ -443,3 +443,10 @@ nav a{
   padding: 10px;
   box-sizing: border-box;
 }
+
+
+.msgss{
+  background-color: white !important;
+  width: 2000px !important;
+  color: red;
+}

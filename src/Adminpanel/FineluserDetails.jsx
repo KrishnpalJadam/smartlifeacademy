@@ -134,7 +134,7 @@ const FineluserDetails = () => {
           </div>
         </div>
       </div>
-      <MyCommissions/>
+     
     </div>
   );
 };

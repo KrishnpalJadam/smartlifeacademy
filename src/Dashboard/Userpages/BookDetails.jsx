@@ -1,4 +1,4 @@
- 
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -26,9 +26,14 @@ const BookDetails = () => {
     const [reviewText, setReviewText] = useState("");
     const [reviewRating, setReviewRating] = useState(0); // ✅ FIX added here
     const [recapMode, setRecapMode] = useState(false);
-    const [listenProgress, setListenProgress] = useState(0);
-    const [listenedTime, setListenedTime] = useState(0);
+    // const [listenProgress, setListenProgress] = useState(0);
+    // const [listenedTime, setListenedTime] = useState(0);
     const lastSavedSecondRef = useRef(0);
+
+
+    const [audioStatus, setAudioStatus] = useState("incomplete"); // default
+    const [buttonClickedWhileDisabled, setButtonClickedWhileDisabled] = useState(false);
+
     let lastSentPercent = 0;
 
 
@@ -74,48 +79,48 @@ const BookDetails = () => {
     }, []);
     useEffect(() => {
         if (currentModal !== 'flipbook') return;
-    
+
         const audio = audioRef.current;
         if (!audio) return;
-    
+
         let interval = null;
         let lastSavedSecond = 0;
-    
+
         const trackListeningTime = () => {
             setListenedTime(prev => prev + 1);
         };
-    
+
         const handlePlay = () => {
             interval = setInterval(trackListeningTime, 1000);
         };
-    
+
         const handlePause = () => {
             clearInterval(interval);
             saveProgressToBackend(audio.currentTime, audio.duration);
         };
-    
+
         const handleEnded = () => {
             clearInterval(interval);
             saveProgressToBackend(audio.currentTime, audio.duration);
         };
-    
+
         const handleTimeUpdate = () => {
             const percent = (audio.currentTime / audio.duration) * 100;
             setListenProgress(percent.toFixed(2));
-    
+
             const currentSecond = Math.floor(audio.currentTime);
             if (currentSecond % 10 === 0 && currentSecond !== lastSavedSecond) {
                 lastSavedSecond = currentSecond;
                 saveProgressToBackend(audio.currentTime, audio.duration);
             }
         };
-    
+
         // Attach listeners
         audio.addEventListener('play', handlePlay);
         audio.addEventListener('pause', handlePause);
         audio.addEventListener('ended', handleEnded);
         audio.addEventListener('timeupdate', handleTimeUpdate);
-    
+
         return () => {
             audio.removeEventListener('play', handlePlay);
             audio.removeEventListener('pause', handlePause);
@@ -124,37 +129,113 @@ const BookDetails = () => {
             clearInterval(interval);
         };
     }, [currentModal]); // 👈 Depend on modal opening
-    
-     // important to track change
-      
-       // Track the last sent percentage
 
-const saveProgressToBackend = (currentTime, duration) => {
-    const percent_complete = ((currentTime / duration) * 100).toFixed(2);
-    
-    // Send API request only if progress crosses 50% or 90% and hasn't been sent before
-    if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
-        // Send API request when progress is 50% or more
-        axios.post(`${BASE_URL}/adioprogress`, {
-            user_id: userId, 
-            book_id: id,
-            progress: percent_complete,
-        });
-        lastSentPercent = percent_complete; // Update the last sent percentage
-    } else if (percent_complete >= 90 && lastSentPercent < 90) {
-        // Send API request when progress reaches 90% or more
-        axios.post(`${BASE_URL}/adioprogress`, {
-            user_id: userId, 
-            book_id: id,
-            progress: percent_complete,
-        });
-        lastSentPercent = percent_complete; // Update the last sent percentage
-    }
-};
+    // important to track change
 
-    
-        
-   
+    // Track the last sent percentage
+
+    const saveProgressToBackend = (currentTime, duration) => {
+        const percent_complete = ((currentTime / duration) * 100).toFixed(2);
+
+        // Send API request only if progress crosses 50% or 90% and hasn't been sent before
+        if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
+            // Send API request when progress is 50% or more
+            axios.post(`${BASE_URL}/adioprogress`, {
+                user_id: userId,
+                book_id: id,
+                progress: percent_complete,
+            });
+            lastSentPercent = percent_complete; // Update the last sent percentage
+        } else if (percent_complete >= 90 && lastSentPercent < 90) {
+            // Send API request when progress reaches 90% or more
+            axios.post(`${BASE_URL}/adioprogress`, {
+                user_id: userId,
+                book_id: id,
+                progress: percent_complete,
+            });
+            lastSentPercent = percent_complete; // Update the last sent percentage
+        }
+    };
+
+
+    useEffect(() => {
+        if (currentModal !== 'flipbook') return;
+
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        let interval = null;
+        let progressChecker = null;
+        let lastSavedSecond = 0;
+
+        const fetchAudioStatus = () => {
+            axios.get(`${BASE_URL}/getAudioProgress`, {
+                params: {
+                    user_id: userId,
+                    book_id: id
+                }
+            })
+                .then((res) => {
+                    if (res.data?.data?.status === "complete") {
+                        setAudioStatus("complete");
+                    }
+                })
+                .catch((err) => {
+                    console.error("Error fetching audio progress:", err);
+                });
+        };
+
+        const trackListeningTime = () => {
+            setListenedTime(prev => prev + 1);
+        };
+
+        const handlePlay = () => {
+            interval = setInterval(trackListeningTime, 1000);
+            progressChecker = setInterval(fetchAudioStatus, 5000); // 🔁 Check status every 5 sec
+        };
+
+        const handlePause = () => {
+            clearInterval(interval);
+            clearInterval(progressChecker);
+            saveProgressToBackend(audio.currentTime, audio.duration);
+        };
+
+        const handleEnded = () => {
+            clearInterval(interval);
+            clearInterval(progressChecker);
+            saveProgressToBackend(audio.currentTime, audio.duration);
+            fetchAudioStatus(); // immediate fetch
+        };
+
+        const handleTimeUpdate = () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            setListenProgress(percent.toFixed(2));
+
+            const currentSecond = Math.floor(audio.currentTime);
+            if (currentSecond % 10 === 0 && currentSecond !== lastSavedSecond) {
+                lastSavedSecond = currentSecond;
+                saveProgressToBackend(audio.currentTime, audio.duration);
+            }
+        };
+
+        // Attach listeners
+        audio.addEventListener('play', handlePlay);
+        audio.addEventListener('pause', handlePause);
+        audio.addEventListener('ended', handleEnded);
+        audio.addEventListener('timeupdate', handleTimeUpdate);
+
+        return () => {
+            audio.removeEventListener('play', handlePlay);
+            audio.removeEventListener('pause', handlePause);
+            audio.removeEventListener('ended', handleEnded);
+            audio.removeEventListener('timeupdate', handleTimeUpdate);
+            clearInterval(interval);
+            clearInterval(progressChecker);
+        };
+    }, [currentModal]);
+
+
+
 
     useEffect(() => {
         const fetchBookAndQuestions = async () => {
@@ -242,7 +323,7 @@ const saveProgressToBackend = (currentTime, duration) => {
             toast.success("Test submitted successfully!");
         } catch (error) {
             console.error("Error submitting test:", error);
-            toast.error("Error submitting test. Please try again.");
+            toast.error("You have already attempted this book today.");
         }
     };
 
@@ -309,15 +390,25 @@ const saveProgressToBackend = (currentTime, duration) => {
                                 <span>Read & Listen</span>
                             </button>
                             <button
-                                onClick={() => setShowQuiz(true)}
+  onClick={() => {
+    if (audioStatus === "complete") {
+      setShowQuiz(true);
+    } else {
+      toast.warn("Please listen to the book completely before taking the test.");
+    }
+  }}
+  className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${
+    audioStatus === "complete"
+      ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
+      : "bg-gray-300 text-gray-600 cursor-not-allowed"
+  }`}
+>
+  <i className="fas fa-pencil-alt text-2xl"></i>
+  <span>Test Knowledge</span>
+</button>
 
-                                className="!rounded-button flex items-center justify-center space-x-3 bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 transition-colors"
-                                style={{ color: "black" }}
-                            >
-                                <i className="fas fa-pencil-alt text-2xl"></i>
-                                <span>Test Knowledge</span>
-                            </button>
-                          
+
+                      
                         </div>
                         {showReviewModal && (
                             <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 ">
@@ -395,13 +486,14 @@ const saveProgressToBackend = (currentTime, duration) => {
                                     <h2 className="mb-4 text-lg text-yellow-300">
                                         {questions[currentQuestion]?.question}
                                     </h2>
+                                 
                                     {['option_1', 'option_2', 'option_3', 'option_4'].map((opt, index) => (
                                         <button
                                             key={index}
                                             onClick={() => handleAnswerSelect(index)}
                                             className={`block w-full p-3 mb-2 rounded-md text-left ${selectedAnswers[questions[currentQuestion]?.id] === String(index + 1)
-                                                    ? 'bg-blue-500'
-                                                    : 'bg-gray-700'
+                                                ? 'bg-blue-500'
+                                                : 'bg-gray-700'
                                                 }`}
                                         >
                                             {questions[currentQuestion]?.[opt]}
@@ -479,6 +571,7 @@ const saveProgressToBackend = (currentTime, duration) => {
                                         return (
                                             <div key={q.id} className="mb-6 bg-gray-800 p-4 rounded">
                                                 <p className="font-bold mb-2">Q{index + 1}. {q.question}</p>
+
                                                 {['option_1', 'option_2', 'option_3', 'option_4'].map((opt, i) => {
                                                     const optionValue = String(i + 1);
                                                     const isCorrect = optionValue === correctAnswer;
@@ -496,9 +589,15 @@ const saveProgressToBackend = (currentTime, duration) => {
                                                             {q[opt]}
                                                             {isCorrect && <span className="ml-2 text-sm text-white">(Correct)</span>}
                                                             {isSelected && <span className="ml-2 text-sm text-white">(Your Answer)</span>}
+
                                                         </div>
                                                     );
                                                 })}
+                                                <div>
+
+                                                <p><strong className='' style={{color: "goldenrod"}}>Qustion Explanation : </strong> {questions[currentQuestion]?.qustionexplanation}</p>
+                                                </div>
+                                               
                                             </div>
                                         );
                                     })}
@@ -554,7 +653,7 @@ const saveProgressToBackend = (currentTime, duration) => {
             </section>
 
             {localStorage.getItem('Role') === 'user' && (
-                <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative" style={{marginLeft: "auto", marginRight: "auto"}}>
+                <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative" style={{ marginLeft: "auto", marginRight: "auto" }}>
                     <h3 className="text-xl font-bold text-amber-400 mb-4">Write Your Review</h3>
                     <div className="flex items-center mb-4">
                         {[1, 2, 3, 4, 5].map((star) => (

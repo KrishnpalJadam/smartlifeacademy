@@ -109,8 +109,8 @@ const AdminPanel = () => {
                       </span>
                     </td>
                     <td>
-                      <span className={`badge ${user.books_completed > 0 ? "bg-success" : "bg-secondary"}`}>
-                        {user.books_completed > 0 ? "Complete" : "Incomplete"}
+                      <span className={`badge ${user.bookk_status_for_1_month > 0 ? "bg-success" : "bg-secondary"}`}>
+                        {user.bookk_status_for_1_month > 0 ? "Complete" : "Incomplete"}
                       </span>
                     </td>
                   </tr>

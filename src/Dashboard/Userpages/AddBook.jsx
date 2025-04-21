@@ -329,7 +329,7 @@ const AddBook = () => {
     book_name: "",
     author: "",
     description: "",
-    qustionexplanation: "",
+   
 
     flip_book_url: "",
     audio_book_url: "",
@@ -340,6 +340,7 @@ const AddBook = () => {
         question_text: "",
         options: [{ text: "" }, { text: "" }, { text: "" }, { text: "" }],
         correct_option: 1,
+        qustionexplanation: "",
       },
     ],
   });
@@ -379,6 +380,7 @@ const AddBook = () => {
               { text: q.option_4 || "" },
             ],
             correct_option: q.correct_option || 1,
+            qustionexplanation: q.qustionexplanation || "", // ✅ Add here
           })),
         });
       }
@@ -405,6 +407,13 @@ const AddBook = () => {
     setBook({ ...book, questions: updatedQuestions });
   };
 
+  const handleQuestionExplanationChange = (index, e) => {
+    const { value } = e.target;
+    const updatedQuestions = [...book.questions];
+    updatedQuestions[index].qustionexplanation = value;
+    setBook({ ...book, questions: updatedQuestions });
+  };
+  
   const handleOptionChange = (qIndex, oIndex, e) => {
     const { value } = e.target;
     const updatedQuestions = [...book.questions];
@@ -588,8 +597,18 @@ const AddBook = () => {
                 ))}
               </select>
               <div>
-            <label className="block text-sm font-medium text-gray-700 mt-2">explanation box</label>
-            <textarea name="qustionexplanation" value={book.qustionexplanation} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" rows="3" required></textarea>
+              <div>
+  <label className="block text-sm font-medium text-gray-700 mt-2">Explanation Box</label>
+  <textarea
+    name={`qustionexplanation-${qIndex}`}
+    value={question.qustionexplanation}
+    onChange={(e) => handleQuestionExplanationChange(qIndex, e)}
+    className="mt-1 p-2 w-full border rounded-md"
+    rows="3"
+    required
+  ></textarea>
+</div>
+
           </div>
               <button type="button" onClick={() => removeQuestion(qIndex)} className="text-red-500 mt-2">
                 Remove Question
