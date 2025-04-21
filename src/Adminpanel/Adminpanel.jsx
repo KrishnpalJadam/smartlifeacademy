@@ -95,7 +95,7 @@ const AdminPanel = () => {
                   <th>Remaining Books</th>
                   <th>Subscription</th>
                   <th>Challenge Status</th>
-                </tr>
+                </tr>  
               </thead>
               <tbody>
                 {filteredChallengeUsers.map((user) => (

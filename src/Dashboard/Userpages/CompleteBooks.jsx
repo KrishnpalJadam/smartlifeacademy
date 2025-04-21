@@ -12,7 +12,7 @@
 //     const fetchBooks = async () => {
 //       try {
 //         const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
-        
+
 //         const formattedBooks = response.data.data.map((book) => ({
 //           id: book.book_id,
 //           image: book.image || "https://i.ibb.co/chfGcpmZ/6.png",
@@ -196,9 +196,9 @@ const CompleteBooks = () => {
     const fetchBooks = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
-        
+
         console.log("API Response:", response); // Log the full response to check structure
-        
+
         if (response.data && response.data.data) {
           const formattedBooks = response.data.data.map((book) => ({
             id: book.book_id, // Use book_id as id
@@ -269,49 +269,49 @@ const CompleteBooks = () => {
           <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
         </Link>
         <h2 className="mb-4 text-white fs-4 fw-bold">All Books</h2>
-<div className="d-flex" style={{justifyContent: "space-between"}}>
+        <div className="d-flex" style={{ justifyContent: "space-between" }}>
 
 
-        {/* Search input */}
-        <div>
-        <label htmlFor="month-select" className="form-label text-white">Search Book:</label>
-        <input
-          type="text"
-          placeholder="Search by Book Name or Email"
-          className="form-control mb-3"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        </div>
-     
-      {/* Month Filter Dropdown */}
-      <div className="mb-3 d-flex">
-        <div>
-        <label htmlFor="month-select" className="form-label text-white">Select Month:</label>
-          <select
-            id="month-select"
-            className="form-select"
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
-          >
-            <option value={null}>All Months</option>
-            {[...Array(12).keys()].map((month) => (
-              <option key={month} value={month + 1}>
-                {new Date(0, month).toLocaleString('default', { month: 'long' })}
-              </option>
-            ))}
-          </select>
-        </div>
-      <div>
-      <button
-              className="btn btn-primary mt-8 ms-4"
-              onClick={downloadCSV}
-            >
-              Download CSV for {selectedMonth === null ? 'All Months' : new Date(0, selectedMonth - 1).toLocaleString('default', { month: 'long' })}
-            </button> 
-      </div>
-       
-        </div>
+          {/* Search input */}
+          <div>
+            <label htmlFor="month-select" className="form-label text-white">Search Book:</label>
+            <input
+              type="text"
+              placeholder="Search by Book Name or Email"
+              className="form-control mb-3"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Month Filter Dropdown */}
+          <div className="mb-3 d-flex">
+            <div>
+              <label htmlFor="month-select" className="form-label text-white">Select Month:</label>
+              <select
+                id="month-select"
+                className="form-select"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(parseInt(e.target.value))}
+              >
+                <option value={null}>All Months</option>
+                {[...Array(12).keys()].map((month) => (
+                  <option key={month} value={month + 1}>
+                    {new Date(0, month).toLocaleString('default', { month: 'long' })}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <button
+                className="btn btn-primary mt-8 ms-4"
+                onClick={downloadCSV}
+              >
+                Download CSV for {selectedMonth === null ? 'All Months' : new Date(0, selectedMonth - 1).toLocaleString('default', { month: 'long' })}
+              </button>
+            </div>
+
+          </div>
         </div>
 
         <div
@@ -350,7 +350,7 @@ const CompleteBooks = () => {
                         {book.name}
                         {book.status === "completed" &&
                           // plan_name === "1 Month" &&
-                           (
+                          (
                             <span
                               style={{ color: "#ffc107", marginLeft: "5px" }}
                             >
@@ -361,11 +361,10 @@ const CompleteBooks = () => {
                       <td>{book.email}</td>
                       <td>
                         <span
-                          className={`badge ${
-                            book.status === "completed"
+                          className={`badge ${book.status === "completed"
                               ? "bg-success"
                               : "bg-warning"
-                          } text-white`}
+                            } text-white`}
                           style={{ cursor: "pointer" }}
                         >
                           {book.status.charAt(0).toUpperCase() +
@@ -385,7 +384,7 @@ const CompleteBooks = () => {
             </table>
           </div>
 
-       
+
         </div>
       </div>
     </div>

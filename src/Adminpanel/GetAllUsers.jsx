@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BASE_URL from '../Config';
 
 
 const GetAllUsers = () => {
     const [users, setUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -31,6 +31,9 @@ const GetAllUsers = () => {
         fetchUsers();
     }, []);
 
+
+
+    
     const handleDelete = async (id) => {
         if (window.confirm("Are you sure you want to delete this user?")) {
             try {
@@ -70,7 +73,7 @@ const GetAllUsers = () => {
                         <thead>
                             <tr>
                                 <th>S.No</th>
-                                <th>Email</th>
+                           <th>Email</th>  
                                 {/* <th>Password</th> */}
                                 <th>Promo Code</th>
                                 <th>Action</th>
@@ -80,9 +83,9 @@ const GetAllUsers = () => {
                             {filteredUsers.length > 0 ? filteredUsers.map((user, index) => (
                                 <tr key={user.id}>
                                     <td>{index + 1}.</td>
-                                    <td>{user.email}</td>
+                                    <td onClick={() => navigate(`/fineluserDetails/${user.id}`)}>  {user.email} </td>
                                     {/* <td>{user.password}</td> */}
-                                    <td>{user.promocode}</td>
+                                    <td onClick={() => navigate(`/myCommision/${user.id}`)}>{user.promocode}z</td>
                                     <td>
                                         <button className="btn btn-danger btn-sm" onClick={() => handleDelete(user.id)}>
                                             Delete

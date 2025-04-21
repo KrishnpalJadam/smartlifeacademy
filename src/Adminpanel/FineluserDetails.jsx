@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import BASE_URL from "../../Config";
+import BASE_URL from "../Config";
 
-const UserDetails = () => {
+
+const FineluserDetails = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState(null); // State to store user data
   const [loading, setLoading] = useState(true); // Loading state
@@ -24,7 +25,7 @@ const UserDetails = () => {
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
-        setError("Failed to fetch data");
+        setError("No commission data available.");
       } finally {
         setLoading(false);
       }
@@ -50,7 +51,7 @@ const UserDetails = () => {
     <div>
       <div className="container mt-5">
         <Link
-          to="/adminpanel"
+          to="/getAllUsers"
           className="text-white mb-3 d-block text-decoration-none"
           style={{ color: "white", textDecoration: "none", display: "block", marginBottom: 15 }}
         >
@@ -136,4 +137,4 @@ const UserDetails = () => {
   );
 };
 
-export default UserDetails;
+export default FineluserDetails;
