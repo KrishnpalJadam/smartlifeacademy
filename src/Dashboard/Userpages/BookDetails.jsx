@@ -29,6 +29,7 @@ const BookDetails = () => {
     const [listenProgress, setListenProgress] = useState(0);
     const [listenedTime, setListenedTime] = useState(0);
     const lastSavedSecondRef = useRef(0);
+    let lastSentPercent = 0;
 
 
 
@@ -125,25 +126,32 @@ const BookDetails = () => {
     }, [currentModal]); // 👈 Depend on modal opening
     
      // important to track change
-     const saveProgressToBackend = (currentTime, duration) => {
-        console.log("📤 Saving progress...");
-        // console.log("⏱️ Current Time:", currentTime);
-        // console.log("🎯 Total Duration:", duration);
-        console.log("✅ Percent Complete:", ((currentTime / duration) * 100).toFixed(2));
-        // console.log("🎧 Real Listened Time:", listenedTime);
-        const   percent_complete=  ((currentTime / duration) * 100).toFixed(2);
-        // Here you can call your API
+      
+       // Track the last sent percentage
+
+const saveProgressToBackend = (currentTime, duration) => {
+    const percent_complete = ((currentTime / duration) * 100).toFixed(2);
     
-        axios.post(`${BASE_URL}/adioprogressprogress`, {
+    // Send API request only if progress crosses 50% or 90% and hasn't been sent before
+    if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
+        // Send API request when progress is 50% or more
+        axios.post(`${BASE_URL}/adioprogress`, {
             user_id: userId, 
             book_id: id,
-            // current_time: currentTime,
-            // total_duration: duration,
-            percent_complete: ((currentTime / duration) * 100).toFixed(2),
-            // listened_time: listenedTime
+            progress: percent_complete,
         });
-        
-    };
+        lastSentPercent = percent_complete; // Update the last sent percentage
+    } else if (percent_complete >= 90 && lastSentPercent < 90) {
+        // Send API request when progress reaches 90% or more
+        axios.post(`${BASE_URL}/adioprogress`, {
+            user_id: userId, 
+            book_id: id,
+            progress: percent_complete,
+        });
+        lastSentPercent = percent_complete; // Update the last sent percentage
+    }
+};
+
     
         
    
