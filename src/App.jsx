@@ -48,6 +48,11 @@
 // export default App
 
 
+
+
+
+
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import MasterClassSignUp from "./component/MasterClassSignUp";
@@ -83,18 +88,20 @@ import Progrestrackingadmin from "./Adminpanel/Progrestrackingadmin";
 import Review from "./Dashboard/Userpages/Review";
 import FineluserDetails from "./Adminpanel/FineluserDetails";
 import FinelUserCommition from "./Adminpanel/FinelUserCommition";
+import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
   return role === 'admin' ? children : <Navigate to="/Dashboard" />;
 };
-
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 function App() {
   return (
     <>
 
       <AudioProvider>
         <Router>
+          {isLoggedIn && <SoftwhereNavbar />}
           <Routes>
             <Route path="/" element={<MasterClassSignUp />} />
             <Route path="/selfimprovement" element={<SelfImprovementSection />} />

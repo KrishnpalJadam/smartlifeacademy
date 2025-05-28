@@ -31,9 +31,12 @@ function Login() {
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('Role', response.data.role);
              localStorage.setItem("userdata", JSON.stringify(response.data.data))
+             localStorage.setItem("isLoggedIn", "true");
+
              console.log("userdata", response);
             if (response.data.role === 'admin') {
               navigate('/dashboard'); 
+              window.location.reload()
             } else if (response.data.role === 'user') {
               navigate('/dashboard');
             } else {

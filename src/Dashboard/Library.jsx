@@ -90,6 +90,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../Config";
+import Chatbot from "./Chatbot";
 
 const Library = () => {
   const [categories, setCategories] = useState([]);
@@ -143,6 +144,7 @@ const Library = () => {
 
   return (
     <div className="library-page" style={{ paddingTop: "70px" }}>
+   
       {/* Search bar */}
       <div className="row">
 

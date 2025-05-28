@@ -138,7 +138,10 @@ function Sidebar() {
   
   const logout = () => {
     localStorage.clear()
+    localStorage.removeItem("isLoggedIn");
+
     navigate("/login")
+
   }
 
   const menuItems = [];
@@ -213,7 +216,7 @@ function Sidebar() {
           <button onClick={logout} className='logout-btn'>Logout</button>
         </div>
       </aside>
-      <Chatbot />
+ 
     </div>
   );
 }
