@@ -8,6 +8,20 @@ body {
   font-family: "Poppins", sans-serif !important;
 }
 
+#google_translate_element select {
+  display: block;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.VIpgJd-ZVi9od-ORHb {
+  display: none !important;
+}
+
 /* testimonials */
 .testimonials-section {
   background-color: var(--primary-black);
@@ -19,7 +33,7 @@ body {
 
   margin: 0 auto;
   margin-top: 100px;
-  
+
 
 }
 
@@ -30,15 +44,15 @@ body {
 
   padding: 20px;
   transition: transform 0.3s ease;
-  
+
 
 
   height: 300px;
 
 
   margin: 0 10px;
-  
- 
+
+
 
 }
 
@@ -65,7 +79,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  
+
 
 }
 
@@ -384,16 +398,20 @@ body {
   .mobileaudio {
     display: none !important;
   }
+
   .deskaudio {
     display: block !important;
   }
 }
+
 .deskaudio {
   display: none;
 }
+
 .Toastify__toast-container {
   z-index: 9999 !important;
 }
+
 /* nav{
   border: 1px solid goldenrod;
   width: 200px;
@@ -409,6 +427,7 @@ nav a{
 .fa-star {
   transition: color 0.2s;
 }
+
 /* .slick-track {
   width: auto !important;
   display: flex;
@@ -422,8 +441,8 @@ nav a{
 
 } */
 /* .slick-slide{ */
-  
-  /* width: 200%; */
+
+/* width: 200%; */
 /* } */
 
 
@@ -433,20 +452,37 @@ nav a{
   border-radius: 12px;
   padding: 2rem;
   margin: 0 10px;
-  height: 100%; /* ensure uniform height */
+  height: 100%;
+  /* ensure uniform height */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
 }
+
 .testimonials-grid .slick-slide {
   padding: 10px;
   box-sizing: border-box;
 }
 
 
-.msgss{
+.msgss {
   background-color: white !important;
   width: 2000px !important;
   color: red;
+}
+
+
+.mobiletestbutton {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .desktoptestbutton {
+    display: none !important;
+  }
+
+  .mobiletestbutton {
+    display: block !important;
+  }
 }

@@ -1,4 +1,5 @@
- 
+
+
 // import React, { useState, useEffect } from "react";
 // import { Link, useNavigate, useParams } from "react-router-dom";
 // import axios from "axios";
@@ -13,6 +14,8 @@
 //     book_name: "",
 //     author: "",
 //     description: "",
+
+
 //     flip_book_url: "",
 //     audio_book_url: "",
 //     image: null,
@@ -22,6 +25,7 @@
 //         question_text: "",
 //         options: [{ text: "" }, { text: "" }, { text: "" }, { text: "" }],
 //         correct_option: 1,
+//         qustionexplanation: "",
 //       },
 //     ],
 //   });
@@ -61,6 +65,7 @@
 //               { text: q.option_4 || "" },
 //             ],
 //             correct_option: q.correct_option || 1,
+//             qustionexplanation: q.qustionexplanation || "", // ✅ Add here
 //           })),
 //         });
 //       }
@@ -84,6 +89,13 @@
 //     const { value } = e.target;
 //     const updatedQuestions = [...book.questions];
 //     updatedQuestions[index].question_text = value;
+//     setBook({ ...book, questions: updatedQuestions });
+//   };
+
+//   const handleQuestionExplanationChange = (index, e) => {
+//     const { value } = e.target;
+//     const updatedQuestions = [...book.questions];
+//     updatedQuestions[index].qustionexplanation = value;
 //     setBook({ ...book, questions: updatedQuestions });
 //   };
 
@@ -137,8 +149,8 @@
 //     formData.append("category_id", book.category_id);
 //     formData.append("book_name", book.book_name);
 //     formData.append("author", book.author);
-    // formData.append("description", book.description);
-  
+//     formData.append("description", book.description);
+//     formData.append("qustionexplanation", book.qustionexplanation);
 //     formData.append("flip_book_url", book.flip_book_url);
 //     formData.append("status", book.status);
 
@@ -270,8 +282,18 @@
 //                 ))}
 //               </select>
 //               <div>
-//             {/* <label className="block text-sm font-medium text-gray-700 mt-2">explanation box</label>
-//             <textarea name="qustionexplanation" value={book.qustionexplanation} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" rows="3" required></textarea> */}
+//               <div>
+//   <label className="block text-sm font-medium text-gray-700 mt-2">Explanation Box</label>
+//   <textarea
+//     name={`qustionexplanation-${qIndex}`}
+//     value={question.qustionexplanation}
+//     onChange={(e) => handleQuestionExplanationChange(qIndex, e)}
+//     className="mt-1 p-2 w-full border rounded-md"
+//     rows="3"
+//     required
+//   ></textarea>
+// </div>
+
 //           </div>
 //               <button type="button" onClick={() => removeQuestion(qIndex)} className="text-red-500 mt-2">
 //                 Remove Question
@@ -304,17 +326,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
- 
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -323,18 +334,16 @@ import BASE_URL from "../../Config";
 const AddBook = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [book, setBook] = useState({
     category_id: "",
     book_name: "",
     author: "",
     description: "",
-   
-
     flip_book_url: "",
     audio_book_url: "",
     image: null,
-    status: "active",
+    status: "active",  // Active status for draft or published
     questions: [
       {
         question_text: "",
@@ -345,10 +354,15 @@ const AddBook = () => {
     ],
   });
 
+  const [isDraft, setIsDraft] = useState(false);  // Track if it's a draft or complete book
+  const [isRestored, setIsRestored] = useState(false);  // Track if draft has been restored
+
   useEffect(() => {
     fetchCategories();
     if (id) {
       fetchBookById(id);
+    } else {
+      loadDraft();  // Load the saved draft when adding a new book
     }
   }, [id]);
 
@@ -367,7 +381,6 @@ const AddBook = () => {
     try {
       const response = await axios.get(`${BASE_URL}/book/${bookId}`);
       const bookData = response.data.data;
-      console.log('book', bookData)
       if (bookData) {
         setBook({
           ...bookData,
@@ -380,12 +393,22 @@ const AddBook = () => {
               { text: q.option_4 || "" },
             ],
             correct_option: q.correct_option || 1,
-            qustionexplanation: q.qustionexplanation || "", // ✅ Add here
+            qustionexplanation: q.qustionexplanation || "",
           })),
         });
       }
     } catch (error) {
       console.error("Error fetching book details:", error);
+    }
+  };
+
+  const loadDraft = () => {
+    const draftData = localStorage.getItem("draftBook");
+    if (draftData) {
+      const parsedDraft = JSON.parse(draftData);
+      setBook(parsedDraft);
+      setIsDraft(true);
+      setIsRestored(true);  // Set to true when the draft is restored
     }
   };
 
@@ -399,6 +422,10 @@ const AddBook = () => {
     setBook((prevBook) => ({ ...prevBook, image: file }));
   };
 
+  const handleAudioFileChange = (e) => {
+    const file = e.target.files[0];
+    setBook((prevBook) => ({ ...prevBook, audio_book_url: file }));
+  };
 
   const handleQuestionChange = (index, e) => {
     const { value } = e.target;
@@ -413,7 +440,7 @@ const AddBook = () => {
     updatedQuestions[index].qustionexplanation = value;
     setBook({ ...book, questions: updatedQuestions });
   };
-  
+
   const handleOptionChange = (qIndex, oIndex, e) => {
     const { value } = e.target;
     const updatedQuestions = [...book.questions];
@@ -449,13 +476,43 @@ const AddBook = () => {
     setBook({ ...book, questions: updatedQuestions });
   };
 
+  const saveDraft = async () => {
+    const formData = new FormData();
+    formData.append("category_id", book.category_id);
+    formData.append("book_name", book.book_name);
+    formData.append("author", book.author);
+    formData.append("description", book.description);
+    formData.append("flip_book_url", book.flip_book_url);
+    formData.append("status", "draft");  // Save as draft
 
+    if (book.image instanceof File) {
+      formData.append("image", book.image);
+    }
 
-  const handleAudioFileChange = (e) => {
-    const file = e.target.files[0];
-    setBook((prevBook) => ({ ...prevBook, audio_book_url: file }));
+    if (book.audio_book_url instanceof File) {
+      formData.append("audio_book_url", book.audio_book_url);
+    }
+
+    formData.append("questions", JSON.stringify(book.questions));
+
+    try {
+      if (id) {
+        await axios.put(`${BASE_URL}/book/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        await axios.post(`${BASE_URL}/book`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      }
+      localStorage.setItem("draftBook", JSON.stringify(book));  // Save draft to localStorage
+      alert("Book saved as draft successfully");
+      setIsRestored(true);  // Set restored flag to true after saving draft
+    } catch (error) {
+      console.error("Error saving draft:", error);
+      alert("Error saving draft. Please try again.");
+    }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -465,14 +522,12 @@ const AddBook = () => {
     formData.append("book_name", book.book_name);
     formData.append("author", book.author);
     formData.append("description", book.description);
-    formData.append("qustionexplanation", book.qustionexplanation);
     formData.append("flip_book_url", book.flip_book_url);
-    formData.append("status", book.status);
+    formData.append("status", "active");  // Submit as active
 
     if (book.image instanceof File) {
       formData.append("image", book.image);
     }
-
 
     if (book.audio_book_url instanceof File) {
       formData.append("audio_book_url", book.audio_book_url);
@@ -486,18 +541,42 @@ const AddBook = () => {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Book updated successfully");
-        navigate("/bookManagment")
+        navigate("/bookManagment");
       } else {
         await axios.post(`${BASE_URL}/book`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         alert("Book added successfully");
-        navigate("/bookManagment")
+        navigate("/bookManagment");
       }
     } catch (error) {
       console.error("Error saving book:", error);
       alert("Error saving book. Please try again.");
     }
+  };
+
+  const handleReset = () => {
+    setBook({
+      category_id: "",
+      book_name: "",
+      author: "",
+      description: "",
+      flip_book_url: "",
+      audio_book_url: "",
+      image: null,
+      status: "active",
+      questions: [
+        {
+          question_text: "",
+          options: [{ text: "" }, { text: "" }, { text: "" }, { text: "" }],
+          correct_option: 1,
+          qustionexplanation: "",
+        },
+      ],
+    });
+    setIsDraft(false);  // Reset the draft flag to false
+    setIsRestored(false);  // Reset the restore flag
+    localStorage.removeItem("draftBook");  // Clear the draft from localStorage
   };
 
   return (
@@ -512,6 +591,7 @@ const AddBook = () => {
         <form onSubmit={handleSubmit} className="space-y-4 col-sm-8 bg-white p-6 rounded-4" style={{ marginLeft: "auto", marginRight: "auto" }}>
           <h2 className="text-2xl font-bold mb-4">{id ? "Edit Book" : "Add New Book"}</h2>
 
+          {/* Book Name, Author, Description, Flip Book URL, etc. */}
           <div className="row">
             <div className="col-sm-6">
               <label className="block text-sm font-medium text-gray-700">Book Name</label>
@@ -523,6 +603,7 @@ const AddBook = () => {
             </div>
           </div>
 
+          {/* Category Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Category</label>
             <select name="category_id" value={book.category_id} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" required>
@@ -535,37 +616,31 @@ const AddBook = () => {
             </select>
           </div>
 
+          {/* Book Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Description</label>
             <textarea name="description" value={book.description} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" rows="3" required></textarea>
           </div>
 
+          {/* Flip Book URL */}
           <div>
             <label className="block text-sm font-medium text-gray-700">Flip Book URL</label>
             <input type="url" name="flip_book_url" value={book.flip_book_url} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" required />
           </div>
 
-          {/* <div>
-            <label className="block text-sm font-medium text-gray-700">Audio Book URL</label>
-            <input type="url" name="audio_book_url" value={book.audio_book_url} onChange={handleChange} className="mt-1 p-2 w-full border rounded-md" required />
-          </div> */}
+          {/* Upload Audio */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Upload Audio Book (*Only 8 MB Audio Support in MP3*)</label>
+            <label className="block text-sm font-medium text-gray-700">Upload Audio Book</label>
             <input type="file" accept=".mp3" onChange={handleAudioFileChange} className="mt-1 p-2 w-full border rounded-md" required />
           </div>
 
+          {/* Upload Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Upload (only support JPEG, PNG)</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="mt-1 p-2 w-full border rounded-md"
-              required
-            />
+            <label className="block text-sm font-medium text-gray-700">Upload Book Image</label>
+            <input type="file" accept="image/*" onChange={handleImageChange} className="mt-1 p-2 w-full border rounded-md" required />
           </div>
 
-
+          {/* Add Questions Section */}
           <h3 className="text-lg font-bold mt-4">Add Questions</h3>
           {book.questions.map((question, qIndex) => (
             <div key={qIndex} className="border p-3 rounded-md mb-3 relative">
@@ -587,7 +662,6 @@ const AddBook = () => {
                   className="mt-1 p-2 w-full border rounded-md"
                 />
               ))}
-
               <label className="block text-sm font-medium text-gray-700 mt-2">Correct Option</label>
               <select value={question.correct_option} onChange={(e) => handleCorrectOptionChange(qIndex, e)} className="mt-1 p-2 w-full border rounded-md">
                 {question.options.map((_, i) => (
@@ -596,20 +670,20 @@ const AddBook = () => {
                   </option>
                 ))}
               </select>
-              <div>
-              <div>
-  <label className="block text-sm font-medium text-gray-700 mt-2">Explanation Box</label>
-  <textarea
-    name={`qustionexplanation-${qIndex}`}
-    value={question.qustionexplanation}
-    onChange={(e) => handleQuestionExplanationChange(qIndex, e)}
-    className="mt-1 p-2 w-full border rounded-md"
-    rows="3"
-    required
-  ></textarea>
-</div>
 
-          </div>
+              {/* Explanation Box */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mt-2">Explanation Box</label>
+                <textarea
+                  name={`qustionexplanation-${qIndex}`}
+                  value={question.qustionexplanation}
+                  onChange={(e) => handleQuestionExplanationChange(qIndex, e)}
+                  className="mt-1 p-2 w-full border rounded-md"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+
               <button type="button" onClick={() => removeQuestion(qIndex)} className="text-red-500 mt-2">
                 Remove Question
               </button>
@@ -622,8 +696,38 @@ const AddBook = () => {
             </button>
           )}
 
-          <button type="submit" className="mt-4 bg-green-500 text-white p-2 rounded-md w-full">
-            {id ? "Update Book" : "Add Book"}
+          {/* Save as Draft or Submit */}
+          <div className="flex space-x-4">
+            {/* <button
+              type="button"
+              onClick={saveDraft} 
+              className="bg-gray-500 text-white p-2 rounded-md"
+            >
+              {isRestored ? "Restore Draft" : "Save as Draft"}
+            </button> */}
+<button
+              type="button"
+              onClick={saveDraft} // Call handleSaveDraft for saving as draft
+              className="bg-gray-500 text-white p-2 rounded-md"
+            >
+              Save as Draft
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="bg-green-500 text-white p-2 rounded-md w-full"
+            >
+              {id ? "Update Book" : "Add Book"}
+            </button>
+          </div>
+
+          {/* Reset Button */}
+          <button
+            type="button"
+            onClick={handleReset} // Reset form to initial state
+            className="bg-red-500 text-white p-2 rounded-md w-full mt-4"
+          >
+            Reset Form
           </button>
         </form>
       </div>
@@ -632,16 +736,3 @@ const AddBook = () => {
 };
 
 export default AddBook;
-
-
-
-
-
-
-
-
-
-
-
-
-

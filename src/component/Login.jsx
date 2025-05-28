@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,6 +9,15 @@ function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+useEffect(() => {
+  const hasReloaded = sessionStorage.getItem("loginPageReloaded");
+  if (!hasReloaded) {
+    sessionStorage.setItem("loginPageReloaded", "true");
+    setTimeout(() => {
+      window.location.reload();
+    }, 100); // Delay to ensure sessionStorage is saved before reload
+  }
+}, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,17 +35,16 @@ function Login() {
           position: "top-right",
           autoClose: 2000,
           onClose: () => {
-            localStorage.setItem('id', response.data.data.id); 
+            localStorage.setItem('id', response.data.data.id);
             localStorage.setItem('plan_name', response.data.data.plan_name);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('Role', response.data.role);
-             localStorage.setItem("userdata", JSON.stringify(response.data.data))
-             localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("userdata", JSON.stringify(response.data.data))
+            localStorage.setItem("isLoggedIn", "true");
 
-             console.log("userdata", response);
+            console.log("userdata", response);
             if (response.data.role === 'admin') {
-              navigate('/dashboard'); 
-              window.location.reload()
+              navigate('/dashboard');
             } else if (response.data.role === 'user') {
               navigate('/dashboard');
             } else {
@@ -49,9 +57,30 @@ function Login() {
       }
     } catch (error) {
       console.error('Login Error:', error);
-      toast.error("Error logging in. Please try again.", { position: "top-right", autoClose: 3000 });
+
+      if (error.response && error.response.status === 403) {
+        const errorMessage = error.response.data?.message || "";
+        if (errorMessage.includes("already logged in")) {
+          toast.error("You are already logged in on another device.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        } else {
+          toast.error("Access denied. Please check your credentials or contact support.", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        }
+      } else {
+        toast.error("Error logging in. Please try again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+
     }
   };
+
 
   return (
     <div className="container">

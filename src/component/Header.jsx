@@ -2,32 +2,48 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa';
 import logo from "../assets/logo.jpg";
+import axios from 'axios';
+import BASE_URL from '../Config';
+
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
+   
     const navigate = useNavigate();
 
-  
     useEffect(() => {
         const storedUser = localStorage.getItem("userdata");
         if (storedUser) {
             setUser(JSON.parse(storedUser));
         }
-    }, []); 
+    }, []);
 
     // ✅ Logout function
-    const handleLogout = () => {
-        localStorage.removeItem("userdata"); // Remove user from localStorage
-        setUser(null); // Reset user state
-        navigate("/login"); // Redirect to login page
+    const handleLogout = async () => {
+        const user_data = JSON.parse(localStorage.getItem("userdata"));
+        const userId = user_data?.id;
+        
+        try {
+            const response = await axios.post(`${BASE_URL}/logout`, {
+                userId: userId,
+            });
+            console.log(response, "logggg");
+            localStorage.removeItem("userdata"); // Remove user from localStorage
+            setUser(null); // Reset user state
+            navigate("/login"); // Redirect to login page
+        } catch (error) {
+            console.error("Logout error:", error);
+        }
     };
 
-    
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-
+const login = ()=>{
+    navigate('/login')
+    window.location.reload();
+}
     return (
         <>
             <header className="fixed top-0 left-0 right-0 flex justify-between items-center px-4 md:px-8 py-4 bg-black z-50 container-fluid">
@@ -70,7 +86,7 @@ const Header = () => {
                     ) : (
                         // If user is NOT logged in
                         <>
-                            <Link to="/login">
+                            <Link onClick={login}>
                                 <button className="px-6 md:px-8 py-2 bg-[#1a1a1a] text-white font-medium rounded-lg hover:bg-gray-800 transition-colors">
                                     Login
                                 </button>

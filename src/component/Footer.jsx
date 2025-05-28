@@ -11,20 +11,15 @@ function Footer() {
           <div>
             <h3 className="text-yellow-300 text-xl font-bold mb-4">Smart Life Academy</h3>
             <p className="text-sm mb-4">Transform your life with our curated learning experiences and personalized coaching.</p>
-            <div className="flex space-x-4">
-              <a href="#" className="hover:text-yellow-300 transition-colors"><FaFacebook size={24} /></a>
-             
-              <a href="#" className="hover:text-yellow-300 transition-colors"><FaInstagram size={24} /></a>
-              <a href="#" className="hover:text-yellow-300 transition-colors"><FaLinkedin size={24} /></a>
-            </div>
+           
           </div>
 
           {/* Quick Links */}
           <div>
             <h3 className="text-yellow-300 text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="#" className="hover:text-yellow-300 transition-colors">Legal</Link></li>
-              <li><Link to="#" className="hover:text-yellow-300 transition-colors">Privacy Policies</Link></li>
+              <li><Link to="#" className="hover:text-yellow-300 transition-colors">Legal Disclaimer</Link></li>
+              <li><Link to="#" className="hover:text-yellow-300 transition-colors">Privacy Policy</Link></li>
               <li><Link to="/contact" className="hover:text-yellow-300 transition-colors">Contact </Link></li>
              
             </ul>
@@ -36,19 +31,12 @@ function Footer() {
           <div>
             <h3 className="text-yellow-300 text-lg font-bold mb-4">Newsletter</h3>
             <p className="text-sm mb-4">Subscribe to get updates on new courses and features.</p>
-            <form className="space-y-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full px-4 py-2 bg-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-300"
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-yellow-300 text-black font-semibold rounded-lg hover:bg-yellow-400 transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <div className="flex space-x-4">
+              <a href="#" className="hover:text-yellow-300 transition-colors"><FaFacebook size={24} /></a>
+             
+              <a href="#" className="hover:text-yellow-300 transition-colors"><FaInstagram size={24} /></a>
+              <a href="#" className="hover:text-yellow-300 transition-colors"><FaLinkedin size={24} /></a>
+            </div>
           </div>
         </div>
 

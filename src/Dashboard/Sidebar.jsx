@@ -21,11 +21,11 @@
 //    const logout = ()=>{
 //     localStorage.clear()
 //     navigate("/login")
-    
+
 //    }
 
 //   const menuItems = [
- 
+
 //   ];
 
 
@@ -90,7 +90,7 @@
 //         <div className={`user-section ${isSidebarOpen ? 'show' : 'hide'}`}>
 //           {/* <p className="user-email">kemalkarasulu1@hotmail.com</p> */}
 //           <div >
-            
+
 //             <button onClick={()=>{logout()}} className='logout-btn'>Logout</button>
 //           </div>
 //         </div>
@@ -141,7 +141,6 @@ function Sidebar() {
     localStorage.removeItem("isLoggedIn");
 
     navigate("/login")
-
   }
 
   const menuItems = [];
@@ -165,8 +164,9 @@ function Sidebar() {
     menuItems.push({ path: '/completeBooks', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/adminpanel', icon: <FaHome />, text: 'Admin Panel' });
     menuItems.push({ path: '/bookManagment', icon: <FaBook />, text: 'BookManagement' });
-    menuItems.push({ path: '/Review', icon: <FaClipboardCheck />, text: 'Review' }); 
+    menuItems.push({ path: '/Review', icon: <FaClipboardCheck />, text: 'Review' });
     menuItems.push({ path: '/getAllUsers', icon: <FaUser />, text: 'All Users' });
+    menuItems.push({ path: '/visitedUser', icon: <FaUser />, text: 'Visited Users' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
   }
@@ -176,13 +176,14 @@ function Sidebar() {
     const plan_name = localStorage.getItem('plan_name');
     menuItems.push({ path: '/usercompltebook', icon: <FaBookReader />, text: 'Complete Books' });
     menuItems.push({ path: '/usermycomition', icon: <FaBookReader />, text: 'MyCommision' });
-    {plan_name === "1 Month" && menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' }) }
+    { plan_name === "1 Month" && menuItems.push({ path: '/progresstracking', icon: <FaChartLine />, text: 'Progress Tracking' }) }
     menuItems.push({ path: '/userprofile', icon: <FaUser />, text: 'Profile' });
     menuItems.push({ path: '/settings', icon: <FaCog />, text: 'Settings' });
     menuItems.push({ path: '/helpCenter', icon: <FaQuestionCircle />, text: 'Help Center' });
   }
   const user_data = JSON.parse(localStorage.getItem("userdata"));
-  console.log(user_data);
+  const userId = user_data?.id;
+  console.log(userId);
   return (
     <div style={{ position: "relative" }}>
       <button className="sidebar-toggle" onClick={toggleSidebar} style={{ position: "absolute", left: 260 }}>
@@ -195,7 +196,7 @@ function Sidebar() {
           <h1 className={isSidebarOpen ? 'show' : 'hide'}>Smart Life Academy</h1>
         </div>
 
-        
+
 
         <nav className="nav-menu">
           {menuItems.map((item, index) => (
@@ -213,7 +214,7 @@ function Sidebar() {
         </nav>
 
         <div className={`user-section ${isSidebarOpen ? 'show' : 'hide'}`}>
-          <button onClick={logout} className='logout-btn'>Logout</button>
+          <button onClick={() => logout(userId)} className='logout-btn'>Logout</button>
         </div>
       </aside>
  
