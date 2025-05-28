@@ -96,12 +96,18 @@ const Library = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
-
+  const [roledata, setRoledata] = useState("")
+  // console.log(roledata)
   useEffect(() => {
-    // Fetch categories and books when the component is mounted
+    const role = localStorage.getItem("Role")
+    if (role) {
+      setRoledata(role)
+    }
+    window.scrollTo(0, 0);
     fetchCategories();
     fetchAllBooks();
   }, []);
+
 
   // Fetch categories
   const fetchCategories = async () => {
@@ -157,7 +163,11 @@ const Library = () => {
         />
       </div>
       <div className="col-sm-2 mt-2">
-        <Link to="/addbook" className="btn btn-primary">Add Book +</Link>
+      {roledata === "admin" && (
+        <Link to="/addBook" className="mb-4" style={{ display: "flex", justifyContent: "end" }}>
+          <button className="btn btn-primary">Add Book</button>
+        </Link>
+      )}
       </div>
       </div>
       {categories.map((category) => (

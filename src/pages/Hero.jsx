@@ -55,17 +55,20 @@ const Hero = () => {
       {/* testimonial section start */}
       <Testimonial />
       {/* Feature Cards */}
-      <div className="features-container">
+      {/* <div className="features-container">
         {features.map((feature, index) => (
           <div key={index} className="feature-card">
             <h3 className="feature-title">{feature.title}</h3>
             <p className="feature-description">{feature.description}</p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Previous sections remain unchanged */}
       <section className="transformation-section">
+
+
+        <h2 className="financial-title mb-12">What is SLA?</h2>
         <div className="transformation-container">
           <div className="transformation-content">
             <h2 className="section-title">30 Days to a New You</h2>
@@ -109,7 +112,7 @@ const Hero = () => {
       {/* FinancialFreedom */}
       <section className="financial-section">
         <div className="financial-content">
-          <h2 className="financial-title">Who is Smart Life Academy for?</h2>
+          <h2 className="financial-title">Who it’s forSmart Life Academy?</h2>
           <div className="financial-image-container">
             <img
               src={DAEB7A1}
@@ -133,7 +136,7 @@ const Hero = () => {
       <section className="unlock-section">
         <div className="unlock-container">
           <div className="unlock-content">
-            <h2 className="unlock-title"> How does it work ?</h2>
+            <h2 className="unlock-title"> How it Works?</h2>
             <p className="unlock-description">
               Smart Life Academy is a structured 30-day program designed to help you unlock your full potential through guided learning, AI-powered insights, and actionable steps. The process is simple yet highly effective, requiring just 15-20 minutes a day to create lasting change.
             </p>
@@ -240,9 +243,10 @@ const Hero = () => {
             </button></Link>
         </div>
       </section>
-    <MainSalesChatbot/>
-    {/* <ReviewSlider/> */}
-{/* <Chatbot/> */}
+
+
+      <MainSalesChatbot/>
+    
       <Footer />
 
 

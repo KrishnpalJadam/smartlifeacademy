@@ -83,6 +83,9 @@ import Progrestrackingadmin from "./Adminpanel/Progrestrackingadmin";
 import Review from "./Dashboard/Userpages/Review";
 import FineluserDetails from "./Adminpanel/FineluserDetails";
 import FinelUserCommition from "./Adminpanel/FinelUserCommition";
+import VisitedUser from "./Adminpanel/VisitedUser";
+import GoogleTranslate from "./GoogleTranslate";
+import LogoutOnTabClose from "./LogoutOnTabClose";
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
@@ -90,10 +93,15 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
+  // const user = JSON.parse(localStorage.getItem("userdata"));
+  // const currentUserId = user?.id;
   return (
     <>
 
       <AudioProvider>
+        {/* <GoogleTranslate/> */}
+        {/* <LogoutOnTabClose userId={currentUserId} /> */}
+
         <Router>
           <Routes>
             <Route path="/" element={<MasterClassSignUp />} />
@@ -132,6 +140,7 @@ function App() {
             <Route path="/finelUserCommition" element={<FinelUserCommition />} />
             <Route path="/finelUserCommition/:id" element={<FinelUserCommition />} />
             <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
+            <Route path="/visitedUser" element={<VisitedUser />} />
 
             
 

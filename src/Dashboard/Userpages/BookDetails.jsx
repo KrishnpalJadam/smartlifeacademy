@@ -26,7 +26,7 @@ const BookDetails = () => {
     const [reviewText, setReviewText] = useState("");
     const [reviewRating, setReviewRating] = useState(0); // ✅ FIX added here
     const [recapMode, setRecapMode] = useState(false);
-    // const [listenProgress, setListenProgress] = useState(0);
+    const [listenProgress, setListenProgress] = useState(0);
     // const [listenedTime, setListenedTime] = useState(0);
     const lastSavedSecondRef = useRef(0);
 
@@ -134,26 +134,87 @@ const BookDetails = () => {
 
     // Track the last sent percentage
 
+    // const saveProgressToBackend = (currentTime, duration) => {
+    //     const percent_complete = ((currentTime / duration) * 100).toFixed(2);
+
+    //     // Send API request only if progress crosses 50% or 90% and hasn't been sent before
+    //     if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
+    //         // Send API request when progress is 50% or more
+    //         axios.post(`${BASE_URL}/adioprogress`, {
+    //             user_id: userId,
+    //             book_id: id,
+    //             progress: percent_complete,
+    //         });
+    //         lastSentPercent = percent_complete; // Update the last sent percentage
+    //     } else if (percent_complete >= 90 && lastSentPercent < 90) {
+    //         // Send API request when progress reaches 90% or more
+    //         axios.post(`${BASE_URL}/adioprogress`, {
+    //             user_id: userId,
+    //             book_id: id,
+    //             progress: percent_complete,
+    //         });
+    //         lastSentPercent = percent_complete; // Update the last sent percentage
+    //     }
+    // };
+
+    // const saveProgressToBackend = (currentTime, duration) => {
+    //     const percent_complete = ((currentTime / duration) * 100).toFixed(2);
+
+    //     // Send API request for every 5% progress
+    //     const progressInterval = Math.floor(percent_complete / 5) * 5; // Get the last 5% milestone
+
+    //     // Send API request when progress crosses 50%, 55%, 60%, ..., and 90%
+    //     if (percent_complete >= progressInterval && percent_complete < 100 && lastSentPercent < progressInterval) {
+    //         // Send API request at the 5% increment
+    //         axios.post(`${BASE_URL}/adioprogress`, {
+    //             user_id: userId,
+    //             book_id: id,
+    //             progress: percent_complete,
+    //         });
+    //         lastSentPercent = percent_complete; // Update the last sent percentage
+    //     } else if (percent_complete >= 100 && lastSentPercent < 100) {
+    //         // Send API request when progress reaches 90% or more
+    //         axios.post(`${BASE_URL}/adioprogress`, {
+    //             user_id: userId,
+    //             book_id: id,
+    //             progress: percent_complete,
+
+    //         });
+    //         lastSentPercent = percent_complete; // Update the last sent percentage
+    //     }
+    // };
+
+
     const saveProgressToBackend = (currentTime, duration) => {
         const percent_complete = ((currentTime / duration) * 100).toFixed(2);
+        const progressInterval = Math.floor(percent_complete / 10) * 10; // every 10%
 
-        // Send API request only if progress crosses 50% or 90% and hasn't been sent before
-        if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
-            // Send API request when progress is 50% or more
+        if (percent_complete >= progressInterval && percent_complete < 100 && lastSentPercent < progressInterval) {
             axios.post(`${BASE_URL}/adioprogress`, {
                 user_id: userId,
                 book_id: id,
                 progress: percent_complete,
             });
-            lastSentPercent = percent_complete; // Update the last sent percentage
-        } else if (percent_complete >= 90 && lastSentPercent < 90) {
-            // Send API request when progress reaches 90% or more
+            lastSentPercent = progressInterval; // Update only at exact 10% milestone
+        } else if (percent_complete >= 100 && lastSentPercent < 100) {
             axios.post(`${BASE_URL}/adioprogress`, {
                 user_id: userId,
                 book_id: id,
                 progress: percent_complete,
             });
-            lastSentPercent = percent_complete; // Update the last sent percentage
+            lastSentPercent = 100;
+        }
+    };
+
+
+    const handleTimeUpdate = () => {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        const roundedPercent = Math.floor(percent / 10) * 10; // for GET + POST every 10%
+        setListenProgress(percent.toFixed(2));
+
+        if (roundedPercent !== lastSentPercent && roundedPercent < 100) {
+            saveProgressToBackend(audio.currentTime, audio.duration);
+            fetchAudioStatus(); // GET request on every 10%
         }
     };
 
@@ -243,6 +304,8 @@ const BookDetails = () => {
                 const bookResponse = await axios.get(`${BASE_URL}/book/${id}`);
                 if (bookResponse.data && bookResponse.data.data) {
                     setDemoBook(bookResponse.data.data);
+                    // Save the book ID to local storage
+                    localStorage.setItem('currentBookId', id);
                 }
 
                 const questionResponse = await axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
@@ -256,6 +319,18 @@ const BookDetails = () => {
         };
         fetchBookAndQuestions();
     }, [id]);
+
+
+    useEffect(() => {
+        const attempted = localStorage.getItem(`testAttempted_${id}_${userId}`);
+        if (attempted === "true") {
+            setQuizCompleted(true);
+            setAudioStatus("complete");  // force button enable after test dene ke baad
+            // don't open recap modal on load
+        }
+    }, [id, userId]);
+
+
 
 
     const closeModal = () => {
@@ -305,6 +380,8 @@ const BookDetails = () => {
                 total_questions: questions.length
             };
             console.log("Submitting this data: ", testData); // 👀 Check what's being sent
+            localStorage.setItem("testData", JSON.stringify(testData));
+
             const response = await axios.post(`${BASE_URL}/submitChallengeTest`, testData);
             const { correct_answers, total_questions, message, status, requiredCorrect } = response.data;
 
@@ -320,7 +397,11 @@ const BookDetails = () => {
             });
             setQuizCompleted(true);
             setRecapMode(false); // Reset recap mode after submission
+            localStorage.setItem(`testAttempted_${id}_${userId}`, "true");
+
+
             toast.success("Test submitted successfully!");
+
         } catch (error) {
             console.error("Error submitting test:", error);
             toast.error("You have already attempted this book today.");
@@ -390,25 +471,31 @@ const BookDetails = () => {
                                 <span>Read & Listen</span>
                             </button>
                             <button
-  onClick={() => {
-    if (audioStatus === "complete") {
-      setShowQuiz(true);
-    } else {
-      toast.warn("Please listen to the book completely before taking the test.");
-    }
-  }}
-  className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${
-    audioStatus === "complete"
-      ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
-      : "bg-gray-300 text-gray-600 cursor-not-allowed"
-  }`}
->
-  <i className="fas fa-pencil-alt text-2xl"></i>
-  <span>Test Knowledge</span>
-</button>
+                                onClick={() => {
+                                    const alreadyAttempted = localStorage.getItem(`testAttempted_${id}_${userId}`) === "true";
+
+                                    if (audioStatus === "complete") {
+                                        if (alreadyAttempted) {
+                                            setRecapMode(true);   // recap mode activate karo
+                                            setShowQuiz(true);    // recap modal dikhao
+                                        } else {
+                                            setShowQuiz(true);    // quiz start karo agar pehli baar hai
+                                        }
+                                    } else {
+                                        toast.warn("You did not listen to the book yet. Please complete the book summary to access the test");
+                                    }
+                                }}
+                                className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${audioStatus === "complete"
+                                    ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
+                                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                    }`}
+                            >
+                                <i className="fas fa-pencil-alt text-2xl"></i>
+                                <span>Test Knowledge</span>
+                            </button>
 
 
-                      
+
                         </div>
                         {showReviewModal && (
                             <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50 ">
@@ -441,9 +528,12 @@ const BookDetails = () => {
                         )}
                     </div>
                 </div>
+
+
+
                 {currentModal === 'flipbook' && (
-                    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50" style={{ height: "auto" }}>
-                        <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative">
+                    <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50" style={{ height: "100%" }}>
+                        <div className="bg-gray-900 p-6 rounded-lg w-full max-w-full relative max-h-full overflow-y-auto">
                             <h3 className="text-xl font-bold text-amber-400 mb-4">Flipbook & Audio - {demoBook?.book_name}</h3>
                             <iframe
                                 src={demoBook?.flip_book_url}
@@ -459,7 +549,7 @@ const BookDetails = () => {
                             </audio>
                             <button
                                 onClick={() => playAudio(demoBook.audio_book_url, demoBook.book_name)}
-                                className="!rounded-button deskaudio  bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 mt-3"
+                                className="!rounded-button deskaudio bg-amber-400 text-custom py-4 px-6 text-lg font-semibold hover:bg-amber-500 mt-3"
                                 style={{ color: "black", width: "100%" }}
                             >
                                 <i className="fas fa-book-open me-2"></i> Audio Play
@@ -473,6 +563,8 @@ const BookDetails = () => {
                         </div>
                     </div>
                 )}
+
+
                 {showQuiz && (
                     <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
                         <div className="bg-gray-900 p-6 rounded-lg max-w-4xl w-full relative max-h-[90vh] overflow-y-auto">
@@ -486,7 +578,7 @@ const BookDetails = () => {
                                     <h2 className="mb-4 text-lg text-yellow-300">
                                         {questions[currentQuestion]?.question}
                                     </h2>
-                                 
+
                                     {['option_1', 'option_2', 'option_3', 'option_4'].map((opt, index) => (
                                         <button
                                             key={index}
@@ -540,9 +632,9 @@ const BookDetails = () => {
                                         📊 Score: <span className="text-blue-400 font-bold">{scoreData.score}%</span>
                                     </p>
 
-                                    <p className={`text-lg mb-4 font-bold ${scoreData.status === "completed" ? "text-green-400" : "text-red-400"}`}>
+                                    {/* <p className={`text-lg mb-4 font-bold ${scoreData.status === "completed" ? "text-green-400" : "text-red-400"}`}>
                                         Status: {scoreData.status === "completed" ? "Passed" : "Not Completed"}
-                                    </p>
+                                    </p> */}
 
                                     <button
                                         onClick={() => setRecapMode(true)}
@@ -595,9 +687,9 @@ const BookDetails = () => {
                                                 })}
                                                 <div>
 
-                                                <p><strong className='' style={{color: "goldenrod"}}>Qustion Explanation : </strong> {questions[currentQuestion]?.qustionexplanation}</p>
+                                                    <p><strong className='' style={{ color: "goldenrod" }}>Qustion Explanation : </strong> {questions[currentQuestion]?.qustionexplanation}</p>
                                                 </div>
-                                               
+
                                             </div>
                                         );
                                     })}
@@ -674,9 +766,42 @@ const BookDetails = () => {
                         placeholder="Write your review here..."
                     ></textarea>
                     <div className="flex justify-between mt-4">
-                        {/* <button onClick={() => setShowReviewModal(false)} className="bg-red-500 text-white px-4 py-2 rounded">Cancel</button> */}
-                        <button onClick={submitReview} className="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
+
+                        {/* <button onClick={submitReview}
+                         className="bg-green-500 text-white px-4 py-2 rounded">Submit</button> */}
+
+                        <button onClick={() => {
+                            if (audioStatus === "complete") {
+                                submitReview();
+                            } else {
+                                toast.warn("You did not listen to the book yet. Please complete the book summary to access the review submit.");
+                            }
+                        }}
+                            className={`!rounded-button flex items-center justify-center space-x-3 py-2 px-6 text-lg font-semibold transition-colors ${audioStatus === "complete"
+                                ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
+                                : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                                }`}>Submit</button>
                     </div>
+
+
+                    {/* <button
+                        onClick={() => {
+                            if (audioStatus === "complete") {
+                                setShowQuiz(true);
+                            } else {
+                                toast.warn("You did not listen to the book yet. Please complete the book summary to access the test");
+                            }
+                        }}
+                        className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${audioStatus === "complete"
+                            ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
+                            : "bg-gray-300 text-gray-600 cursor-not-allowed"
+                            }`}
+                    >
+                        <i className="fas fa-pencil-alt text-2xl"></i>
+                        <span>Test Knowledge</span>
+                    </button> */}
+
+
                 </div>
             )}
 
@@ -685,6 +810,12 @@ const BookDetails = () => {
 };
 
 export default BookDetails;
+
+
+
+
+
+
 
 
 

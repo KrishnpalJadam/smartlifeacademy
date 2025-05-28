@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BASE_URL from "../Config";
+import SignupContent from "./SignupContent";
+import MainSalesChatbot from "../Dashboard/Userpages/MainSalesChatbot";
 
 function SignUp() {
   const [selectedPlan, setSelectedPlan] = useState(null);
@@ -83,18 +85,17 @@ function SignUp() {
       toast.error(error.response?.data?.message || "Error signing up. Please try again.");
     }
 
-
   };
    
   return (
-    <div className="dark-signup-page">
+    <div className="dark-signup-page container">
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <div className="dark-signup-container container">
         <button className="btn btn-primary">
           <Link to="/hero"><i className="fa-solid fa-left-long me-2"></i> Home</Link>
         </button>
         <div className="row">
-          <div className="col-sm-6">
+          <div className="col-sm-6 ">
             <h1  style={{color: "#fcd34d" , margin:'20px'}}>Select a Plan</h1>
             <div className="plans-container2 row">
               {plans.length > 0 ? (
@@ -187,6 +188,9 @@ function SignUp() {
             </form>
           </div>
         </div>
+
+        <SignupContent/>
+        
       </div>
     </div>
   );

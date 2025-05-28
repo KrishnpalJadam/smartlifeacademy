@@ -1,8 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.jpg"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import BASE_URL from "../Config";
 
 function MasterClassSignUp() {
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({ email: '' });
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handelSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post(`${BASE_URL}/saveUserVisited`, {
+        Uemail: formData.email, // 👈 Yehi tumhara correct key hai
+      });
+      console.log("Submitted:", response.data);
+      // Optionally clear form
+      setFormData({ email: "" });
+      navigate("/selfimprovement")
+    } catch (error) {
+      console.error("Error submitting email:", error);
+    }
+  };
+
   return (
     // bg-dark
     <div className="container-fluid bg-black min-vh-100 d-flex justify-content-center align-items-center p-3">
@@ -40,37 +64,43 @@ function MasterClassSignUp() {
         </div>
 
         {/* Input and Button - Responsive */}
-        <Link to={"/selfimprovement"}>
-        <div className="d-flex flex-column gap-2 align-items-center">
-          <input
-            type="text"
-            placeholder="Enter Your Email"
-            className="form-control custom-input"
-            style={{
-              backgroundColor: "#27272a",
-              color: "white",
-              border: "1px solid #a1a1aa",
-              maxWidth: "100%",
-              padding: "10px",
-              borderRadius: "5px",
-              fontSize: "clamp(0.8rem, 3vw, 1rem)",
-            }}
-          />
+        {/* <Link to={"/selfimprovement"}> */}
+        <form onSubmit={handelSubmit}>
+          <div className="d-flex flex-column gap-2 align-items-center">
+            <input
+              type="text"
+              name="email"
+              onChange={handleChange}
+              required
+              placeholder="Enter Your Email"
+              className="form-control custom-input"
+              style={{
+                backgroundColor: "#27272a",
+                color: "white",
+                border: "1px solid #a1a1aa",
+                maxWidth: "100%",
+                padding: "10px",
+                borderRadius: "5px",
+                fontSize: "clamp(0.8rem, 3vw, 1rem)",
+              }}
+            />
 
-         
-          <button
-            className="btn w-100"
-            style={{
-              backgroundColor: "#ffd24c",
-              color: "black",
-              padding: "10px",
-              borderRadius: "5px",
-              fontSize: "clamp(0.9rem, 3vw, 1rem)",
-            }}
-          >
-            Get Free Masterclass Access
-          </button>
-        </div></Link>
+
+            <button type="submit"
+              className="btn w-100"
+              style={{
+                backgroundColor: "#ffd24c",
+                color: "black",
+                padding: "10px",
+                borderRadius: "5px",
+                fontSize: "clamp(0.9rem, 3vw, 1rem)",
+              }}
+            >
+              Get Free Masterclass Access
+            </button>
+          </div>
+        </form>
+        {/* </Link> */}
 
         <p
           style={{

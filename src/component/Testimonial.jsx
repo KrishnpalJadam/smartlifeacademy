@@ -69,8 +69,8 @@ const Testimonial = () => {
         <div>
             <section className="testimonials-section">
                 <div className="testimonials-container">
-                    <h4 className="section-title fs-1 fw-bold text-center">Our Happy Users</h4>
-                    
+                    {/* <h4 className="section-title fs-1 fw-bold text-center">Our Happy Users</h4> */}
+                    <h2 className="financial-title">Our Happy Users</h2>
                     <div className="testimonials-grid">
                     <Slider {...settings}>
                         {filteredChallengeUsers.length > 0 ? (   
@@ -102,7 +102,7 @@ const Testimonial = () => {
                         )}
                         </Slider>
                     </div>
-                    <Link to="/login" style={{ display: "flex", justifyContent: "center" }}>
+                    <Link to="/signup" style={{ display: "flex", justifyContent: "center" }}>
                         <button className="btn btn-primary fw-bold text-center mt-5">Join Now</button>
                     </Link>
                 </div>
