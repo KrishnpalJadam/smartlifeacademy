@@ -33,16 +33,14 @@ const BookDetails = () => {
 
     const [audioStatus, setAudioStatus] = useState("incomplete"); // default
     const [buttonClickedWhileDisabled, setButtonClickedWhileDisabled] = useState(false);
-
     let lastSentPercent = 0;
-
-
-
-
+    const lastSentPercentRef = useRef(0); // ✅ Yeh persist karega render ke beech
     const audioRef = useRef(null);
     const { setIsAudioPlayerVisible } = useAudio();
     const { playAudio } = useAudio();
     const userId = newid?.id || "";
+
+    const planName = localStorage.getItem("plan_name");
     const settings = {
         dots: true,
         infinite: true,
@@ -132,91 +130,59 @@ const BookDetails = () => {
 
     // important to track change
 
-    // Track the last sent percentage
+    const waitUntilComplete = async () => {
+        let attempts = 0;
+        const maxAttempts = 5;
 
-    // const saveProgressToBackend = (currentTime, duration) => {
-    //     const percent_complete = ((currentTime / duration) * 100).toFixed(2);
+        while (attempts < maxAttempts) {
+            const response = await axios.get(`${BASE_URL}/getAudioProgress`, {
+                params: { user_id: userId, book_id: id }
+            });
 
-    //     // Send API request only if progress crosses 50% or 90% and hasn't been sent before
-    //     if (percent_complete >= 50 && percent_complete < 90 && lastSentPercent < 50) {
-    //         // Send API request when progress is 50% or more
-    //         axios.post(`${BASE_URL}/adioprogress`, {
-    //             user_id: userId,
-    //             book_id: id,
-    //             progress: percent_complete,
-    //         });
-    //         lastSentPercent = percent_complete; // Update the last sent percentage
-    //     } else if (percent_complete >= 90 && lastSentPercent < 90) {
-    //         // Send API request when progress reaches 90% or more
-    //         axios.post(`${BASE_URL}/adioprogress`, {
-    //             user_id: userId,
-    //             book_id: id,
-    //             progress: percent_complete,
-    //         });
-    //         lastSentPercent = percent_complete; // Update the last sent percentage
-    //     }
-    // };
+            if (response.data?.data?.status === "complete") {
+                setAudioStatus("complete");
+                break;
+            }
 
-    // const saveProgressToBackend = (currentTime, duration) => {
-    //     const percent_complete = ((currentTime / duration) * 100).toFixed(2);
-
-    //     // Send API request for every 5% progress
-    //     const progressInterval = Math.floor(percent_complete / 5) * 5; // Get the last 5% milestone
-
-    //     // Send API request when progress crosses 50%, 55%, 60%, ..., and 90%
-    //     if (percent_complete >= progressInterval && percent_complete < 100 && lastSentPercent < progressInterval) {
-    //         // Send API request at the 5% increment
-    //         axios.post(`${BASE_URL}/adioprogress`, {
-    //             user_id: userId,
-    //             book_id: id,
-    //             progress: percent_complete,
-    //         });
-    //         lastSentPercent = percent_complete; // Update the last sent percentage
-    //     } else if (percent_complete >= 100 && lastSentPercent < 100) {
-    //         // Send API request when progress reaches 90% or more
-    //         axios.post(`${BASE_URL}/adioprogress`, {
-    //             user_id: userId,
-    //             book_id: id,
-    //             progress: percent_complete,
-
-    //         });
-    //         lastSentPercent = percent_complete; // Update the last sent percentage
-    //     }
-    // };
-
-
-    const saveProgressToBackend = (currentTime, duration) => {
+            attempts++;
+            await new Promise((res) => setTimeout(res, 1000)); // wait 1 second before retry
+        }
+    };
+    const saveProgressToBackend = async (currentTime, duration) => {
         const percent_complete = ((currentTime / duration) * 100).toFixed(2);
-        const progressInterval = Math.floor(percent_complete / 10) * 10; // every 10%
+        const progressInterval = Math.floor(percent_complete / 10) * 10;
 
-        if (percent_complete >= progressInterval && percent_complete < 100 && lastSentPercent < progressInterval) {
-            axios.post(`${BASE_URL}/adioprogress`, {
+        if (percent_complete >= progressInterval && percent_complete < 100 && lastSentPercentRef.current < progressInterval) {
+            await axios.post(`${BASE_URL}/adioprogress`, {
                 user_id: userId,
                 book_id: id,
                 progress: percent_complete,
             });
-            lastSentPercent = progressInterval; // Update only at exact 10% milestone
-        } else if (percent_complete >= 100 && lastSentPercent < 100) {
-            axios.post(`${BASE_URL}/adioprogress`, {
+            lastSentPercentRef.current = progressInterval;
+        } else if (percent_complete >= 100 && lastSentPercentRef.current < 100) {
+            await axios.post(`${BASE_URL}/adioprogress`, {
                 user_id: userId,
                 book_id: id,
                 progress: percent_complete,
             });
-            lastSentPercent = 100;
+            lastSentPercentRef.current = 100;
+            await waitUntilComplete(); // ✅ status complete hone tak wait karo
         }
     };
 
 
-    const handleTimeUpdate = () => {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        const roundedPercent = Math.floor(percent / 10) * 10; // for GET + POST every 10%
-        setListenProgress(percent.toFixed(2));
 
-        if (roundedPercent !== lastSentPercent && roundedPercent < 100) {
-            saveProgressToBackend(audio.currentTime, audio.duration);
-            fetchAudioStatus(); // GET request on every 10%
-        }
-    };
+
+    // const handleTimeUpdate = () => {
+    //     const percent = (audio.currentTime / audio.duration) * 100;
+    //     const roundedPercent = Math.floor(percent / 10) * 10; // for GET + POST every 10%
+    //     setListenProgress(percent.toFixed(2));
+
+    //     if (roundedPercent !== lastSentPercent && roundedPercent < 100) {
+    //         saveProgressToBackend(audio.currentTime, audio.duration);
+    //         fetchAudioStatus(); // GET request on every 10%
+    //     }
+    // };
 
 
     useEffect(() => {
@@ -229,30 +195,13 @@ const BookDetails = () => {
         let progressChecker = null;
         let lastSavedSecond = 0;
 
-        const fetchAudioStatus = () => {
-            axios.get(`${BASE_URL}/getAudioProgress`, {
-                params: {
-                    user_id: userId,
-                    book_id: id
-                }
-            })
-                .then((res) => {
-                    if (res.data?.data?.status === "complete") {
-                        setAudioStatus("complete");
-                    }
-                })
-                .catch((err) => {
-                    console.error("Error fetching audio progress:", err);
-                });
-        };
-
         const trackListeningTime = () => {
             setListenedTime(prev => prev + 1);
         };
 
         const handlePlay = () => {
             interval = setInterval(trackListeningTime, 1000);
-            progressChecker = setInterval(fetchAudioStatus, 5000); // 🔁 Check status every 5 sec
+            progressChecker = setInterval(waitUntilComplete, 5000); // ✅ status check every 5s
         };
 
         const handlePause = () => {
@@ -265,7 +214,6 @@ const BookDetails = () => {
             clearInterval(interval);
             clearInterval(progressChecker);
             saveProgressToBackend(audio.currentTime, audio.duration);
-            fetchAudioStatus(); // immediate fetch
         };
 
         const handleTimeUpdate = () => {
@@ -470,29 +418,31 @@ const BookDetails = () => {
                                 <i className="fas fa-book-open text-2xl"></i>
                                 <span>Read & Listen</span>
                             </button>
-                            <button
-                                onClick={() => {
-                                    const alreadyAttempted = localStorage.getItem(`testAttempted_${id}_${userId}`) === "true";
+                       {planName === "1 Month" && (
+    <button
+        onClick={() => {
+            const alreadyAttempted = localStorage.getItem(`testAttempted_${id}_${userId}`) === "true";
 
-                                    if (audioStatus === "complete") {
-                                        if (alreadyAttempted) {
-                                            setRecapMode(true);   // recap mode activate karo
-                                            setShowQuiz(true);    // recap modal dikhao
-                                        } else {
-                                            setShowQuiz(true);    // quiz start karo agar pehli baar hai
-                                        }
-                                    } else {
-                                        toast.warn("You did not listen to the book yet. Please complete the book summary to access the test");
-                                    }
-                                }}
-                                className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${audioStatus === "complete"
-                                    ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
-                                    : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                                    }`}
-                            >
-                                <i className="fas fa-pencil-alt text-2xl"></i>
-                                <span>Test Knowledge</span>
-                            </button>
+            if (audioStatus === "complete") {
+                if (alreadyAttempted) {
+                    setRecapMode(true);
+                    setShowQuiz(true);
+                } else {
+                    setShowQuiz(true);
+                }
+            } else {
+                toast.warn("You did not listen to the book yet. Please complete the book summary to access the test");
+            }
+        }}
+        className={`!rounded-button flex items-center justify-center space-x-3 py-4 px-6 text-lg font-semibold transition-colors ${audioStatus === "complete"
+            ? "bg-amber-400 hover:bg-amber-500 text-black cursor-pointer"
+            : "bg-gray-300 text-gray-600 cursor-not-allowed"
+            }`}
+    >
+        <i className="fas fa-pencil-alt text-2xl"></i>
+        <span>Test Knowledge</span>
+    </button>
+)}
 
 
 
