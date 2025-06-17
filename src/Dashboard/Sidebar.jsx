@@ -135,22 +135,13 @@ function Sidebar() {
 
   const Role = localStorage.getItem('Role');  // Get user role from localStorage
   const Signupdata = JSON.parse(localStorage.getItem("signupData")); // parse kar le object me
+  
+  const logout = () => {
+    localStorage.clear()
+    localStorage.removeItem("isLoggedIn");
 
-
-  const logout = async (userId) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/logout`, {
-        userId: userId,
-      });
-
-      navigate("/login");
-      localStorage.removeItem("Role")
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-
+    navigate("/login")
+  }
 
   const menuItems = [];
 
@@ -226,7 +217,7 @@ function Sidebar() {
           <button onClick={() => logout(userId)} className='logout-btn'>Logout</button>
         </div>
       </aside>
-      <Chatbot />
+ 
     </div>
   );
 }

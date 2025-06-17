@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Library from './Library';
+import Chatbot from './Chatbot';
 
 function Dashboard() {
   const [showModal, setShowModal] = useState(false);

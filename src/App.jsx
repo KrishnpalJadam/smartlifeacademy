@@ -48,6 +48,11 @@
 // export default App
 
 
+
+
+
+
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import MasterClassSignUp from "./component/MasterClassSignUp";
@@ -86,12 +91,13 @@ import FinelUserCommition from "./Adminpanel/FinelUserCommition";
 import VisitedUser from "./Adminpanel/VisitedUser";
 import GoogleTranslate from "./GoogleTranslate";
 import LogoutOnTabClose from "./LogoutOnTabClose";
+import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
   return role === 'admin' ? children : <Navigate to="/Dashboard" />;
 };
-
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 function App() {
   // const user = JSON.parse(localStorage.getItem("userdata"));
   // const currentUserId = user?.id;
@@ -103,6 +109,7 @@ function App() {
         {/* <LogoutOnTabClose userId={currentUserId} /> */}
 
         <Router>
+          {isLoggedIn && <SoftwhereNavbar />}
           <Routes>
             <Route path="/" element={<MasterClassSignUp />} />
             <Route path="/selfimprovement" element={<SelfImprovementSection />} />
