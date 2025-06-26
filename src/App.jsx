@@ -92,12 +92,13 @@ import VisitedUser from "./Adminpanel/VisitedUser";
 import GoogleTranslate from "./GoogleTranslate";
 import LogoutOnTabClose from "./LogoutOnTabClose";
 import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
+
 // import Userprofile from "./Userpanel/Userprofile";
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
   return role === 'admin' ? children : <Navigate to="/Dashboard" />;
 };
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 function App() {
   // const user = JSON.parse(localStorage.getItem("userdata"));
   // const currentUserId = user?.id;
@@ -105,7 +106,10 @@ function App() {
     <>
 
       <AudioProvider>
-        {/* <GoogleTranslate/> */}
+       
+
+        <GoogleTranslate />
+       
         {/* <LogoutOnTabClose userId={currentUserId} /> */}
 
         <Router>
@@ -119,7 +123,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/helpCenter" element={<HelpCenter />} />
-            <Route path="/Review" element={<Review/>} />
+            <Route path="/Review" element={<Review />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/progresstracking" element={<Progresstracking />} />
             <Route path="/myreadingList" element={<MyreadingList />} />
@@ -128,8 +132,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/myCommision" element={<MyCommision />} />
-            <Route path="/myCommision/:id" element={<MyCommision  />} />
-           
+            <Route path="/myCommision/:id" element={<MyCommision />} />
+
             <Route path="/bookDetails/:id" element={<BookDetails />} />
             <Route path="/userDetails/:id" element={<UserDetails />} />
             <Route path="addBook" element={<AddBook />} />
@@ -149,7 +153,7 @@ function App() {
             <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
             <Route path="/visitedUser" element={<VisitedUser />} />
 
-            
+
 
 
             {/* Admin-only Route */}

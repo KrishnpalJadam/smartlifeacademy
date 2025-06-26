@@ -22,7 +22,7 @@ const CompleteBooks = () => {
                     is30DaysChallenge: book.correct_answers / book.total_questions >= 0.8 // 80% ya zyada pass hone par
                 }));
 
-                console.log("Formatted Books:", formattedBooks);
+            
                 setBooks(formattedBooks);
             } catch (error) {
                 console.log("Error fetching books:", error);

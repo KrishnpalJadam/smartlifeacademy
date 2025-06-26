@@ -10,6 +10,7 @@ import Testimonial from '../component/Testimonial';
 import Chatbot from '../Dashboard/Chatbot';
 import MainSalesChatbot from '../Dashboard/Userpages/MainSalesChatbot';
 import ReviewSlider from '../component/ReviewSlider';
+import Faqs from './Faqs';
 const Hero = () => {
   const features = [
     {
@@ -226,7 +227,7 @@ const Hero = () => {
         </div>
       </section>
 
-
+<Faqs/>
 
       <section id="call-to-action" class="text-center bg-dark text-white py-5">
         <div class="container">

@@ -61,14 +61,14 @@ function SignUp() {
         selectedPlan: selectedPlan
       });
 
-      console.log("Signup Response:", response.data.data);
+   
       const id = response.data.data.id;
       // Response ko local storage me save karna
       localStorage.setItem("signupData", JSON.stringify(response.data.data));
 
 
       const promoCode = response.data.data.subscription.promocode; // ✅ Correct way to access promo code
-      console.log("Promo Code:", promoCode);
+   
       if (response.data.success && id) {
         toast.success(
           `${response.data.message}`, {

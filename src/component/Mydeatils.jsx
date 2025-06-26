@@ -311,7 +311,7 @@ const BookDetails = () => {
                 const questionResponse = await axios.get(`${BASE_URL}/getquestionanswerbyid/${id}`);
                 if (questionResponse.data && questionResponse.data.data) {
                     setQuestions(questionResponse.data.data);
-                    console.log("Questions loaded:", questionResponse.data.data);
+                   
                 }
             } catch (error) {
                 console.error("Error fetching book or questions:", error);
@@ -367,7 +367,7 @@ const BookDetails = () => {
                 correct_answers: correctCount,
                 total_questions: questions.length
             };
-            console.log("Submitting this data: ", testData); // 👀 Check what's being sent
+            
             const response = await axios.post(`${BASE_URL}/submitChallengeTest`, testData);
             const { correct_answers, total_questions, message, status, requiredCorrect } = response.data;
 

@@ -476,43 +476,12 @@ const AddBook = () => {
     setBook({ ...book, questions: updatedQuestions });
   };
 
-  const saveDraft = async () => {
-    const formData = new FormData();
-    formData.append("category_id", book.category_id);
-    formData.append("book_name", book.book_name);
-    formData.append("author", book.author);
-    formData.append("description", book.description);
-    formData.append("flip_book_url", book.flip_book_url);
-    formData.append("status", "draft");  // Save as draft
-
-    if (book.image instanceof File) {
-      formData.append("image", book.image);
-    }
-
-    if (book.audio_book_url instanceof File) {
-      formData.append("audio_book_url", book.audio_book_url);
-    }
-
-    formData.append("questions", JSON.stringify(book.questions));
-
-    try {
-      if (id) {
-        await axios.put(`${BASE_URL}/book/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      } else {
-        await axios.post(`${BASE_URL}/book`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-      }
-      localStorage.setItem("draftBook", JSON.stringify(book));  // Save draft to localStorage
-      alert("Book saved as draft successfully");
-      setIsRestored(true);  // Set restored flag to true after saving draft
-    } catch (error) {
-      console.error("Error saving draft:", error);
-      alert("Error saving draft. Please try again.");
-    }
+  const saveDraft = () => {
+    localStorage.setItem("draftBook", JSON.stringify(book));
+    alert("Book draft saved successfully in browser (localStorage).");
+    setIsRestored(true);
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -548,6 +517,8 @@ const AddBook = () => {
         });
         alert("Book added successfully");
         navigate("/bookManagment");
+        localStorage.removeItem("draftBook");
+
       }
     } catch (error) {
       console.error("Error saving book:", error);
@@ -705,7 +676,7 @@ const AddBook = () => {
             >
               {isRestored ? "Restore Draft" : "Save as Draft"}
             </button> */}
-<button
+            <button
               type="button"
               onClick={saveDraft} // Call handleSaveDraft for saving as draft
               className="bg-gray-500 text-white p-2 rounded-md"

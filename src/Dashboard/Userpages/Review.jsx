@@ -16,7 +16,7 @@ function Review() {
   const getChallengeData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/getReviews`);
-      console.log("challengeData", response.data);
+   
 
       if (response.data && Array.isArray(response.data.data)) {
         setChallengeUsers(response.data.data);

@@ -129,19 +129,35 @@ function Sidebar() {
   const [searchTerm, setSearchTerm] = useState(""); // State to store the search term
   const [books, setBooks] = useState([]); // State for books
   const [filteredBooks, setFilteredBooks] = useState([]); // Filtered books for search
-
+  const [user, setUser] = useState(null);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const navigate = useNavigate();
 
   const Role = localStorage.getItem('Role');  // Get user role from localStorage
   const Signupdata = JSON.parse(localStorage.getItem("signupData")); // parse kar le object me
-  
-  const logout = () => {
-    localStorage.clear()
-    localStorage.removeItem("isLoggedIn");
 
-    navigate("/login")
-  }
+
+
+  // ✅ Logout function
+  const handleLogout = async () => {
+    const user_data = JSON.parse(localStorage.getItem("userdata"));
+    const userId = user_data?.id;
+
+    try {
+      const response = await axios.post(`${BASE_URL}/logout`, {
+        userId: userId,
+      });
+
+      localStorage.removeItem("userdata");
+      setUser(null); // Reset user state
+      localStorage.clear()
+      navigate("/login"); // Redirect to login page
+
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
 
   const menuItems = [];
 
@@ -183,7 +199,7 @@ function Sidebar() {
   }
   const user_data = JSON.parse(localStorage.getItem("userdata"));
   const userId = user_data?.id;
-  console.log(userId);
+
   return (
     <div style={{ position: "relative" }}>
       <button className="sidebar-toggle" onClick={toggleSidebar} style={{ position: "absolute", left: 260 }}>
@@ -214,10 +230,10 @@ function Sidebar() {
         </nav>
 
         <div className={`user-section ${isSidebarOpen ? 'show' : 'hide'}`}>
-          <button onClick={() => logout(userId)} className='logout-btn'>Logout</button>
+          <button onClick={handleLogout} className='logout-btn'>Logout</button>
         </div>
       </aside>
- 
+
     </div>
   );
 }

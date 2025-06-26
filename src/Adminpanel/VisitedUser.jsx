@@ -27,7 +27,7 @@ const VisitedUser = () => {
 
         fetchUsers();
     }, []);
- console.log(users)
+
 
     return (
         <div className="container mt-5">

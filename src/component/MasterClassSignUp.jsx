@@ -18,7 +18,7 @@ function MasterClassSignUp() {
       const response = await axios.post(`${BASE_URL}/saveUserVisited`, {
         Uemail: formData.email, // 👈 Yehi tumhara correct key hai
       });
-      console.log("Submitted:", response.data);
+     
       // Optionally clear form
       setFormData({ email: "" });
       navigate("/selfimprovement")

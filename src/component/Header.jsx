@@ -28,7 +28,7 @@ const Header = () => {
             const response = await axios.post(`${BASE_URL}/logout`, {
                 userId: userId,
             });
-            console.log(response, "logggg");
+          
             localStorage.removeItem("userdata"); // Remove user from localStorage
             setUser(null); // Reset user state
             navigate("/login"); // Redirect to login page

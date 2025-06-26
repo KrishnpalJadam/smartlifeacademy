@@ -16,7 +16,7 @@ const CommsionTrackinglist = () => {
     const getPromoUsers = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/getPromocodeRefer`);
-        console.log("Promo Code Usage Data:", response.data);
+      
 
         if (response.data && Array.isArray(response.data.data)) {
           setPromoUsers(response.data.data);

@@ -78,8 +78,6 @@
 
 
 
-
-
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -87,40 +85,40 @@ const Chatbot = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const location = useLocation();
 
-  // ✅ Add allowed routes here
+  const Role = localStorage.getItem("Role");
+
+  // ✅ Always define outside the render condition
   const allowedRoutes = [
+    "/Dashboard",
     "/dashboard",
     "/completeBooks",
-    '/adminpanel',
-    '/bookManagment',
-    '/Review',
-    '/getAllUsers',
-    '/visitedUser',
-    '/settings',
-    '/helpCenter',
-    '/usercompltebook',
-    '/usermycomition',
-    '/progresstracking',
-    '/userprofile',
-    '/settings',
-    '/helpCenter',
-    "/userDetails/:id",
-
-
+    "/adminpanel",
+    "/bookManagment",
+    "/Review",
+    "/getAllUsers",
+    "/visitedUser",
+    "/settings",
+    "/helpCenter",
+    "/usercompltebook",
+    "/usermycomition",
+    "/progresstracking",
+    "/userprofile",
+    "/userDetails/:id", // NOTE: this won't match dynamic route, we’ll fix that next
   ];
 
-  // ✅ Check if current path is in the allowedRoutes
-  const isRouteAllowed = allowedRoutes.includes(location.pathname);
+  // ✅ Allow partial match for dynamic routes
+  const isRouteAllowed = allowedRoutes.some(route =>
+    route.includes(":")
+      ? location.pathname.startsWith(route.split("/:")[0])
+      : route === location.pathname
+  );
 
-  // ✅ Get role from localStorage
-  const Role = localStorage.getItem("Role");
   const shouldShowChatbot = (Role === "admin" || Role === "user") && isRouteAllowed;
 
-  if (!shouldShowChatbot) {
-    return null;
-  }
-
+  // ✅ Always call useEffect
   useEffect(() => {
+    if (!shouldShowChatbot) return;
+
     (function () {
       if (!window.chatbase || window.chatbase("getState") !== "initialized") {
         window.chatbase = (...args) => {
@@ -155,7 +153,7 @@ const Chatbot = () => {
         window.addEventListener("load", onLoad);
       }
     })();
-  }, []);
+  }, [shouldShowChatbot]);
 
   const toggleChatbot = () => {
     if (isChatbotOpen) {
@@ -166,6 +164,8 @@ const Chatbot = () => {
     setIsChatbotOpen(!isChatbotOpen);
   };
 
+  if (!shouldShowChatbot) return null;
+
   return (
     <div
       style={{
@@ -175,7 +175,9 @@ const Chatbot = () => {
         zIndex: 1000,
       }}
     >
-     
+      <button onClick={toggleChatbot}>
+        {isChatbotOpen ? "Close Chatbot" : "Open Chatbot"}
+      </button>
     </div>
   );
 };

@@ -1,0 +1,83 @@
+:root {
+  --faq-smartlife-primary: #ffc107; /* Yellow like Join Now button */
+  --faq-smartlife-bg: #000000;     /* Dark background */
+  --faq-smartlife-light: #f5f5f5;
+  --faq-smartlife-accent: #4f8f70;
+}
+
+/* General Reset */
+.faq-smartlife-section * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Section Background */
+.faq-smartlife-section {
+  background-color: var(--faq-smartlife-bg);
+  color: var(--faq-smartlife-light);
+}
+
+/* Headings */
+.faq-smartlife-subtitle {
+  color: var(--faq-smartlife-primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.faq-smartlife-title {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+/* Accordion Styles */
+.faq-smartlife-section .accordion-button {
+  background-color: #111111;
+  color: var(--faq-smartlife-primary);
+  font-weight: 600;
+  border: none;
+  position: relative;
+}
+
+.faq-smartlife-section .accordion-button:not(.collapsed) {
+  background-color: #1a1a1a;
+}
+
+.faq-smartlife-section .accordion-body {
+  background-color: #222222;
+  color: #dddddd;
+  padding: 1rem 1.5rem;
+}
+
+/* Custom Icon Lines */
+.faq-smartlife-section .accordion-button::before {
+  content: '';
+  position: absolute;
+  right: 1.75rem;
+  top: 1.25rem;
+  height: 2px;
+  width: 1rem;
+  background-color: var(--faq-smartlife-primary);
+}
+
+.faq-smartlife-section .accordion-button.collapsed::after {
+  content: '';
+  position: absolute;
+  right: 1.875rem;
+  top: 0.9rem;
+  height: 1rem;
+  width: 0.125rem;
+  background-color: var(--faq-smartlife-primary);
+}
+
+.faq-smartlife-section .accordion-button:focus {
+  box-shadow: none;
+}
+
+/* Responsive tweaks */
+@media screen and (min-width: 768px) {
+  .faq-smartlife-section .accordion-button h5 {
+    font-size: 1.1rem;
+  }
+}

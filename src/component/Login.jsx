@@ -42,7 +42,6 @@ useEffect(() => {
             localStorage.setItem("userdata", JSON.stringify(response.data.data))
             localStorage.setItem("isLoggedIn", "true");
 
-            console.log("userdata", response);
             if (response.data.role === 'admin') {
               navigate('/dashboard');
             } else if (response.data.role === 'user') {

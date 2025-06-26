@@ -130,7 +130,20 @@ const GetAllUsers = () => {
                                 <tr key={user.id}>
                                     <td>{index + 1}.</td>
                                     <td>{user?.firstname}</td>
-                                    <td style={{ color: "#fcd34d", cursor: "pointer" }} onClick={() => navigate(`/fineluserDetails/${user.id}`)}>  {user.email} </td>
+                                    <td
+                                        style={{
+                                            color: user.plan_name === "1 Month" ? "#fcd34d" : "#ffffff",
+                                            cursor: user.plan_name === "1 Month" ? "pointer" : "default"
+                                        }}
+                                        onClick={() => {
+                                            if (user.plan_name === "1 Month") {
+                                                navigate(`/fineluserDetails/${user.id}`);
+                                            }
+                                        }}
+                                    >
+                                        {user.email}
+                                    </td>
+
                                     <td>{user?.plan_name}</td>
                                     <td style={{ color: "#fcd34d", cursor: "pointer" }} onClick={() => navigate(`/finelUserCommition/${user.id}`)}>{user.promocode}z</td>
                                     <td>{user.subscription_status}</td>

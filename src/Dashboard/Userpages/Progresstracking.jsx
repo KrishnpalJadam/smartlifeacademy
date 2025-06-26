@@ -155,9 +155,6 @@
 
 
 
-
-
-
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -170,7 +167,7 @@ const Progresstracking = () => {
     const getChallengeData = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/getUserChallengeProgress/${localStorage.getItem("id")}`);
-            console.log(response.data)
+
         setChallengeUsers(response.data);
       } catch (error) {
         console.error("Error fetching challenge data:", error);
@@ -185,7 +182,7 @@ const Progresstracking = () => {
   const avgTestScore = challengeUsers.avg_test_score || 0;
   const badgeEarn = challengeUsers.badgeEarn || 0;
 
-  
+
   const challengeStatus = challengeUsers.challenge_status;
 
   const daysLeft = 30 - elapsedDays;
@@ -193,7 +190,7 @@ const Progresstracking = () => {
   const progressPercent = ((booksCompleted / 30) * 100).toFixed(1);
 
   const dailyBookReadCount = challengeUsers.distinct_days || 0;
-  
+
   const getStatusColor = () => {
     return challengeStatus === "Completed"
       ? "limegreen"
@@ -203,7 +200,7 @@ const Progresstracking = () => {
   };
 
 
-  
+
   return (
     <div>
       <div className="container mt-5">
@@ -324,34 +321,49 @@ const Progresstracking = () => {
               </div>
             </div>
 
-           {/* Distinct Days Completed */}
-<div className="col-md-4 mt-3">
-  <div
-    className="progress-stat-card"
-    style={{
-      backgroundColor: "#241e0d",
-      padding: 15,
-      borderRadius: 10,
-      textAlign: "center"
-    }}
-  >
-    <i className="fa-solid fa-calendar-day" style={{ fontSize: 24 }} />
+            {/* Distinct Days Completed */}
+            {/* Distinct Days Completed */}
+            <div className="col-md-4 mt-3">
+              <div
+                className="progress-stat-card"
+                style={{
+                  backgroundColor: "#241e0d",
+                  padding: 15,
+                  borderRadius: 10,
+                  textAlign: "center",
+                  maxHeight: "250px", // Limit height
+                  overflowY: challengeUsers?.dailyBookReadCount?.length > 4 ? "auto" : "unset"
+                }}
+              >
+                <i className="fa-solid fa-calendar-day" style={{ fontSize: 24 }} />
+                <h5 className="mt-2">
+                  {challengeUsers?.dailyBookReadCount?.length || 0} / 10
+                </h5>
+                <div className="mt-2" style={{ fontSize: "14px", lineHeight: "1.4" }}>
+                  {challengeUsers?.dailyBookReadCount?.slice(0, 10)?.map((item, index) => (
+                    <div key={index}>
+                      📅 {new Date(item.date).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                      })} – {item.count} book{item.count > 1 ? "s" : ""}
+                    </div>
+                  ))}
+                  {challengeUsers?.dailyBookReadCount?.length > 10 && (
+                    <div
+                      style={{ color: "gold", cursor: "pointer", marginTop: "8px" }}
+                      onClick={() => alert("Show More functionality coming soon!")}
+                    >
+                      Show More...
+                    </div>
+                  )}
+                </div>
+                <p className="mt-2">Distinct Completion Days</p>
+              </div>
+            </div>
 
 
 
-    <h5 className="mt-2">
-  {challengeUsers?.dailyBookReadCount?.map((item, index) => (
-    <div key={index}>
-      {item?.count}/10 <br />
-      Date: {item?.date},
-    </div>
-  ))}
-</h5>
-
-    
-    <p>Distinct Completion Days</p>
-  </div>
-</div>
 
 
             {/* Days Left */}

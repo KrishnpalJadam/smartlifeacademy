@@ -15,8 +15,6 @@ const Bookmanagement = () => {
   const itemsPerPage = 5;  // Items per page
   
 
-
-
   useEffect(() => {
     const role = localStorage.getItem("Role");
     if (role) {
@@ -61,9 +59,6 @@ const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentItems = filteredBooks.slice(indexOfFirstItem, indexOfLastItem);
 
 const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-
-
-
 
   return (
     <div className="container mt-5">
@@ -153,12 +148,6 @@ const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
           Next
         </button>
       </div>
-
-
-
-
-
-
 
     </div>
   );

@@ -191,36 +191,47 @@ const CompleteBooks = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Default to current month
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
-        if (response.data && response.data.data) {
-          const formattedBooks = response.data.data.map((book) => ({
-            id: book.book_id,
-            image: book.image || "https://i.ibb.co/chfGcpmZ/6.png",
-            name: book.book_name,
-            email: book.email,
-            parcent: book.test_date,
-            status: book.status ? book.status.toLowerCase() : "incompleted",
-            correctAnswers: book.correct_answers,
-            totalQuestions: book.total_questions,
-            listening_progress: book.listening_progress || 0,
-            correct_percentage: book.correct_percentage || 0,
-            createdAt: book.created_at ? new Date(book.created_at) : new Date(),
-            test_date: book.test_date,
-            is30DaysChallenge: book.correct_answers / book.total_questions >= 0.8,
-          }));
-          setBooks(formattedBooks);
-        } else {
-          console.error("No books data found in the response.");
-        }
-      } catch (error) {
-        console.log("Error fetching books:", error);
+useEffect(() => {
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
+      if (response.data && response.data.data) {
+        // Deduplicate by user_id + book_id
+        const uniqueBookMap = new Map();
+        response.data.data.forEach((book) => {
+          const uniqueKey = `${book.user_id}-${book.book_id}`;
+          if (!uniqueBookMap.has(uniqueKey)) {
+            uniqueBookMap.set(uniqueKey, book);
+          }
+        });
+
+        const formattedBooks = Array.from(uniqueBookMap.values()).map((book) => ({
+          id: book.book_id,
+          image: book.image || "https://i.ibb.co/chfGcpmZ/6.png",
+          name: book.book_name,
+          email: book.email,
+          parcent: book.test_date,
+          status: book.status ? book.status.toLowerCase() : "incompleted",
+          correctAnswers: book.correct_answers,
+          totalQuestions: book.total_questions,
+          listening_progress: book.listening_progress || 0,
+          correct_percentage: book.correct_percentage || 0,
+          createdAt: book.test_date ? new Date(book.test_date) : new Date(),
+          test_date: book.test_date,
+          is30DaysChallenge: book.total_questions > 0 && (book.correct_answers / book.total_questions >= 0.8),
+        }));
+
+        setBooks(formattedBooks);
+      } else {
+        console.error("No books data found in the response.");
       }
-    };
-    fetchBooks();
-  }, []);
+    } catch (error) {
+      console.log("Error fetching books:", error);
+    }
+  };
+  fetchBooks();
+}, []);
+
 
   const filteredBooks = books.filter(
     (book) =>
@@ -322,14 +333,17 @@ const CompleteBooks = () => {
 
                       </td>
                       <td>{parseFloat(book.listening_progress).toFixed(2)}%</td>
+
                       <td>
                         <span
-                          className={`badge ${book.status === "successfully completed" ? "bg-warning" : "bg-success"} text-white`}
+                          className={`badge text-white ${book.status.toLowerCase() === "incomplete" ? "bg-danger" : "bg-success"
+                            }`}
                           style={{ cursor: "pointer" }}
                         >
                           {book.status.charAt(0).toUpperCase() + book.status.slice(1)}
                         </span>
                       </td>
+
                       <td>{parseFloat(book.correct_percentage).toFixed(2)}%</td>
                       <td>
                         {book.test_date && !isNaN(new Date(book.test_date))

@@ -28,7 +28,18 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 
-    
+     <script>
+    window.addEventListener('load', () => {
+      const interval = setInterval(() => {
+        const gtBannerFrame = document.querySelector('iframe.goog-te-banner-frame.skiptranslate');
+        if (gtBannerFrame) {
+          gtBannerFrame.style.display = 'none';
+          document.body.style.top = '0px';
+          clearInterval(interval);
+        }
+      }, 100);
+    });
+  </script>
       
 </body>
 
