@@ -330,11 +330,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../Config";
-
+import Swal from "sweetalert2";
 const AddBook = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const [book, setBook] = useState({
     category_id: "",
     book_name: "",
@@ -478,53 +480,76 @@ const AddBook = () => {
 
   const saveDraft = () => {
     localStorage.setItem("draftBook", JSON.stringify(book));
-    alert("Book draft saved successfully in browser (localStorage).");
+    alert("Book draft saved successfully.");
     setIsRestored(true);
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true); // Show loader
 
-    const formData = new FormData();
-    formData.append("category_id", book.category_id);
-    formData.append("book_name", book.book_name);
-    formData.append("author", book.author);
-    formData.append("description", book.description);
-    formData.append("flip_book_url", book.flip_book_url);
-    formData.append("status", "active");  // Submit as active
+  const formData = new FormData();
+  formData.append("category_id", book.category_id);
+  formData.append("book_name", book.book_name);
+  formData.append("author", book.author);
+  formData.append("description", book.description);
+  formData.append("flip_book_url", book.flip_book_url);
+  formData.append("status", "active");
 
-    if (book.image instanceof File) {
-      formData.append("image", book.image);
+  // IMAGE
+if (book.image instanceof File) {
+  formData.append("image", book.image);
+} else if (typeof book.image === "string") {
+  formData.append("image", book.image); // Or 'image_url' if your backend expects that
+}
+
+// AUDIO
+if (book.audio_book_url instanceof File) {
+  formData.append("audio_book_url", book.audio_book_url);
+} else if (typeof book.audio_book_url === "string") {
+  formData.append("audio_book_url", book.audio_book_url); // Or 'audio_url'
+}
+
+
+  formData.append("questions", JSON.stringify(book.questions));
+
+  try {
+    let response;
+
+    if (id) {
+      response = await axios.put(`${BASE_URL}/book/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+    } else {
+      response = await axios.post(`${BASE_URL}/book`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
     }
 
-    if (book.audio_book_url instanceof File) {
-      formData.append("audio_book_url", book.audio_book_url);
-    }
+    // Show backend message
+    Swal.fire({
+      icon: "success",
+      title: "Success",
+      text: response.data?.message || "Book saved successfully",
+      timer: 2000,
+      showConfirmButton: false,
+    });
 
-    formData.append("questions", JSON.stringify(book.questions));
+    localStorage.removeItem("draftBook");
+    navigate("/bookManagment");
+  } catch (error) {
+    console.error("Error saving book:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: error?.response?.data?.message || "Something went wrong",
+    });
+  } finally {
+    setLoading(false); // Hide loader
+  }
+};
 
-    try {
-      if (id) {
-        await axios.put(`${BASE_URL}/book/${id}`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        alert("Book updated successfully");
-        navigate("/bookManagment");
-      } else {
-        await axios.post(`${BASE_URL}/book`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        alert("Book added successfully");
-        navigate("/bookManagment");
-        localStorage.removeItem("draftBook");
-
-      }
-    } catch (error) {
-      console.error("Error saving book:", error);
-      alert("Error saving book. Please try again.");
-    }
-  };
 
   const handleReset = () => {
     setBook({
@@ -551,7 +576,14 @@ const AddBook = () => {
   };
 
   return (
+    
     <div className="container">
+      {loading && (
+  <div className="loader-overlay">
+    <div className="loader"></div>
+  </div>
+)}
+
       <nav className="mb-12 pt-5">
         <Link to="/bookManagment" className="d-flex align-items-center mb-4 text-decoration-none text-white">
           <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
@@ -600,18 +632,48 @@ const AddBook = () => {
           </div>
 
           {/* Upload Audio */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Upload Audio Book</label>
-            <input type="file" accept=".mp3" onChange={handleAudioFileChange} className="mt-1 p-2 w-full border rounded-md" required />
-          </div>
+       <div>
+  <label className="block text-sm font-medium text-gray-700">Upload Book Image</label>
+
+  {book.image && typeof book.image === "string" && (
+    <p className="text-sm text-gray-600 mb-1">
+      Selected file: <a href={book.image} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+        {book.image}
+      </a>
+    </p>
+  )}
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="mt-1 p-2 w-full border rounded-md"
+  />
+</div>
+
 
           {/* Upload Image */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Upload Book Image</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} className="mt-1 p-2 w-full border rounded-md" required />
-          </div>
+       <div>
+  <label className="block text-sm font-medium text-gray-700">Upload Audio Book</label>
 
-          {/* Add Questions Section */}
+  {book.audio_book_url && typeof book.audio_book_url === "string" && (
+    <p className="text-sm text-gray-600 mb-1">
+      Selected file: <a href={book.audio_book_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+        {book.audio_book_url}
+      </a>
+    </p>
+  )}
+
+  <input
+    type="file"
+    accept=".mp3"
+    onChange={handleAudioFileChange}
+    className="mt-1 p-2 w-full border rounded-md"
+  />
+</div>
+
+
+          {/* Add Questions Section */} 
           <h3 className="text-lg font-bold mt-4">Add Questions</h3>
           {book.questions.map((question, qIndex) => (
             <div key={qIndex} className="border p-3 rounded-md mb-3 relative">

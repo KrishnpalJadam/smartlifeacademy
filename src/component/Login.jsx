@@ -43,9 +43,9 @@ useEffect(() => {
             localStorage.setItem("isLoggedIn", "true");
 
             if (response.data.role === 'admin') {
-              navigate('/dashboard');
+              navigate('/Dashboard');
             } else if (response.data.role === 'user') {
-              navigate('/dashboard');
+              navigate('/Dashboard');
             } else {
               setError('Unknown user role');
             }

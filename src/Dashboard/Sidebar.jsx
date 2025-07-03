@@ -202,6 +202,7 @@ function Sidebar() {
 
   return (
     <div style={{ position: "relative" }}>
+   
       <button className="sidebar-toggle" onClick={toggleSidebar} style={{ position: "absolute", left: 260 }}>
         {isSidebarOpen ? <FaTimes /> : <FaBars />}
       </button>

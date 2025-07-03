@@ -1,8 +1,16 @@
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Sallessupoortchatboard = () => {
+  const location = useLocation();
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+  // 👉 Sirf hero page par aur jab login nahi ho tab dikhana
+  if (location.pathname !== "/hero" || isLoggedIn) {
+    return null;
+  }
+
   useEffect(() => {
-    // Load Chatbase script when the component mounts
     const script = document.createElement("script");
     script.src = "https://www.chatbase.co/embed.min.js";
     script.id = "C2m5Tk3OoCDcV_reP4Rbz";
@@ -10,12 +18,10 @@ const Sallessupoortchatboard = () => {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup if necessary
       document.body.removeChild(script);
     };
   }, []);
 
-  // Function to open Chatbase chatbot
   const openChatbot = () => {
     if (window.chatbase) {
       window.chatbase("open");
@@ -23,17 +29,10 @@ const Sallessupoortchatboard = () => {
   };
 
   return (
-    <div>
-      {/* Sales Support Button */}
-      <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
-        <button
-          className="btn salessupoortbutton"
-          style={{ backgroundColor: "#fcd34d", margin: "10px" }}
-          onClick={openChatbot} // Click to open chatbot
-        >
-          Sales Support
-        </button>
-      </div>
+    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
+      <button className="btn salessupoortbutton" onClick={openChatbot}>
+        Sales Support
+      </button>
     </div>
   );
 };
