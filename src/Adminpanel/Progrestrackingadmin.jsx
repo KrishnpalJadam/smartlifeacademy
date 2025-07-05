@@ -6,7 +6,7 @@ const Progrestrackingadmin = () => {
     <div>
       <div className="container mt-5">
   <Link
-    to="/Dashboard"
+    to="/backdashboard"
     className="text-white mb-3 d-block text-decoration-none"
     style={{
       color: "white",

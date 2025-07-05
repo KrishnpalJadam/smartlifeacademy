@@ -63,7 +63,7 @@ const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
   return (
     <div className="container mt-5">
       <nav className="mb-12">
-        <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
+        <Link to="/backdashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
           <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
         </Link>
       </nav>

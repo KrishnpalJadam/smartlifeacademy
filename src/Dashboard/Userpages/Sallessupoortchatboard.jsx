@@ -1,26 +1,35 @@
-import React, { useEffect } from "react";
+  import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const Sallessupoortchatboard = () => {
   const location = useLocation();
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-  // 👉 Sirf hero page par aur jab login nahi ho tab dikhana
-  if (location.pathname !== "/hero" || isLoggedIn) {
-    return null;
-  }
+  // ✅ Strict condition: show only on exact "/hero" route
+  const shouldShow = location.pathname === "/hero";
 
   useEffect(() => {
+    if (!shouldShow) return;
+
+    // 🧹 Remove old script if already present
+    const existingScript = document.getElementById("sales-chatbot");
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // ➕ Inject Chatbase script with correct chatbotId
     const script = document.createElement("script");
     script.src = "https://www.chatbase.co/embed.min.js";
-    script.id = "C2m5Tk3OoCDcV_reP4Rbz";
-    script.domain = "www.chatbase.co";
+    script.id = "sales-chatbot";
+    script.setAttribute("chatbotId", "YOUR_SALES_BOT_ID"); // 🔁 Replace with your actual Sales Bot ID
+    script.setAttribute("domain", "www.chatbase.co");
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      script.remove(); // 🧼 Cleanup on unmount
     };
-  }, []);
+  }, [shouldShow]);
+
+  if (!shouldShow) return null;
 
   const openChatbot = () => {
     if (window.chatbase) {
@@ -30,7 +39,7 @@ const Sallessupoortchatboard = () => {
 
   return (
     <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
-      <button className="btn salessupoortbutton" onClick={openChatbot}>
+      <button className="btn btn-warning" onClick={openChatbot}>
         Sales Support
       </button>
     </div>

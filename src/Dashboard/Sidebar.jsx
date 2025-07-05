@@ -152,6 +152,8 @@ function Sidebar() {
       setUser(null); // Reset user state
       localStorage.clear()
       navigate("/login"); // Redirect to login page
+    window.location.reload();
+
 
     } catch (error) {
       console.error("Logout error:", error);

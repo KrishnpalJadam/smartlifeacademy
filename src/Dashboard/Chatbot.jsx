@@ -89,8 +89,7 @@ const Chatbot = () => {
 
   // ✅ Always define outside the render condition
   const allowedRoutes = [
-    "/Dashboard",
- 
+    "/backdashboard",
     "/completeBooks",
     "/adminpanel",
     "/bookManagment",

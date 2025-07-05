@@ -6,7 +6,7 @@ const MyreadingList = () => {
         <div>
             <div className="container mt-5">
                 <Link
-                    to="/Dashboard"
+                    to="/backdashboard"
                     className="d-flex align-items-center mb-4 text-decoration-none text-white"
                 >
                     <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard

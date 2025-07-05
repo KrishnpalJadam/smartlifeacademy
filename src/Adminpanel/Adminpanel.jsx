@@ -61,7 +61,7 @@ const AdminPanel = () => {
       <div className="container mt-5">
         <div className="header d-flex justify-content-between">
           <h2 style={{ color: "#ffc107" }}>Admin Panel</h2>
-          <Link to="/Dashboard" className="btn btn-outline-light mb-3">
+          <Link to="/backdashboard" className="btn btn-outline-light mb-3">
             Back to Dashboard
           </Link>
         </div>

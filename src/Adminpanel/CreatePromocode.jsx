@@ -30,7 +30,7 @@ const CreatePromocode = () => {
     return (
         <div className='promo-container'>
             <nav className="promo-nav">
-                <Link to="/Dashboard" className="promo-back-link">
+                <Link to="/backdashboard" className="promo-back-link">
                     <i className="fa-solid fa-chevron-left" /> Back to Dashboard
                 </Link>
             </nav>

@@ -53,7 +53,7 @@
 
 
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import MasterClassSignUp from "./component/MasterClassSignUp";
 import SelfImprovementSection from "./component/SelfImprovementSection";
@@ -94,99 +94,109 @@ import LogoutOnTabClose from "./LogoutOnTabClose";
 import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
 import Sallessupoortchatboard from "./Dashboard/Userpages/Sallessupoortchatboard";
 import Chatbot from "./Dashboard/Chatbot";
+import { useEffect } from "react";
+
 
 // import Userprofile from "./Userpanel/Userprofile";
+
+function ScrollToTopAndForceReload() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/backdashboard") {
+      const hasReloaded = sessionStorage.getItem("dashboardReloaded");
+      if (!hasReloaded) {
+        sessionStorage.setItem("dashboardReloaded", "true");
+        window.location.reload();
+      }
+    }
+  }, [location.pathname]);
+
+  return null;
+}
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
-  return role === 'admin' ? children : <Navigate to="/dashboard" />;
+  return role === 'admin' ? children : <Navigate to="/backdashboard" />;
 };
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 function App() {
   // const user = JSON.parse(localStorage.getItem("userdata"));
   // const currentUserId = user?.id;
-  return (
-    <>
+return (
+  <AudioProvider>
+    <GoogleTranslate />
 
-      <AudioProvider>
+    <Router>
+      {isLoggedIn && <SoftwhereNavbar />}
+  <ScrollToTopAndForceReload />  {/* 👈 Add this line */}
+      <Routes>
+        {/* Public Pages */}
+        <Route path="/" element={<MasterClassSignUp />} />
+        <Route path="/selfimprovement" element={<SelfImprovementSection />} />
+        
+        {/* ✅ Sales Chatbot sirf /hero page par dikhana */}
+        <Route path="/hero" element={
+          <>
+            <Hero />
+            <Sallessupoortchatboard />
+          </>
+        } />
 
+        <Route path="/plan" element={<Plan />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
 
-        <GoogleTranslate />
+        {/* Private Pages - Jab login ho */}
+        {isLoggedIn && (
+          <>
+            <Route path="/helpCenter" element={<HelpCenter />} />
+            <Route path="/Review" element={<Review />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/progresstracking" element={<Progresstracking />} />
+            <Route path="/myreadingList" element={<MyreadingList />} />
+            <Route path="/booksToRead" element={<BooksToRead />} />
+            <Route path="/completeBooks" element={<CompleteBooks />} />
+            <Route path="/myCommision" element={<MyCommision />} />
+            <Route path="/myCommision/:id" element={<MyCommision />} />
+            <Route path="/backdashboard" element={<Dashboard />} />
+            <Route path="/bookDetails/:id" element={<BookDetails />} />
+            <Route path="/userDetails/:id" element={<UserDetails />} />
+            <Route path="/addBook" element={<AddBook />} />
+            <Route path="/addBook/:id" element={<AddBook />} />
+            <Route path="/bookManagment" element={<Bookmanagement />} />
+            <Route path="/createPromocode" element={<CreatePromocode />} />
+            <Route path="/checkout/:id" element={<Checkout />} />
+            <Route path="/getAllUsers" element={<GetAllUsers />} />
+            <Route path="/userprofile" element={<UserProfile />} />
+            <Route path="/usercompltebook" element={<Usercompltebook />} />
+            <Route path="/usermycomition" element={<Usermycomition />} />
+            <Route path="/progrestrackingadmin" element={<Progrestrackingadmin />} />
+            <Route path="/fineluserDetails" element={<FineluserDetails />} />
+            <Route path="/finelUserCommition" element={<FinelUserCommition />} />
+            <Route path="/finelUserCommition/:id" element={<FinelUserCommition />} />
+            <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
+            <Route path="/visitedUser" element={<VisitedUser />} />
 
-        {/* <LogoutOnTabClose userId={currentUserId} /> */}
+            {/* Admin-only Route */}
+            <Route
+              path="/adminpanel"
+              element={
+                <AdminRoute>
+                  <Adminpanel />
+                </AdminRoute>
+              }
+            />
+          </>
+        )}
+      </Routes>
 
+      {/* ✅ Main Chatbot – sirf login ke baad show hoga (admin/user panel) */}
+      {isLoggedIn && <Chatbot />}
+    </Router>
+  </AudioProvider>
+);
 
-
-        <Router>
-          {isLoggedIn && <SoftwhereNavbar />}
-
-          {/* Sales chatbot — sirf hero route par show hoga */}
-          <Sallessupoortchatboard />
-
-          <Routes>
-            {/* Public pages */}
-            <Route path="/" element={<MasterClassSignUp />} />
-            <Route path="/selfimprovement" element={<SelfImprovementSection />} />
-            <Route path="/hero" element={<Hero />} />
-            <Route path="/plan" element={<Plan />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/contact" element={<Contact />} />
-            {/* Private pages — sirf jab login ho */}
-            {isLoggedIn && (
-              <>
-                <Route path="/helpCenter" element={<HelpCenter />} />
-                <Route path="/Review" element={<Review />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/progresstracking" element={<Progresstracking />} />
-                <Route path="/myreadingList" element={<MyreadingList />} />
-                <Route path="/booksToRead" element={<BooksToRead />} />
-                <Route path="/completeBooks" element={<CompleteBooks />} />
-                <Route path="/myCommision" element={<MyCommision />} />
-                <Route path="/myCommision/:id" element={<MyCommision />} />
-
-                <Route path="/Dashboard" element={<Dashboard />} />
-                <Route path="/myCommision" element={<MyCommision />} />
-                <Route path="/myCommision/:id" element={<MyCommision />} />
-
-                <Route path="/bookDetails/:id" element={<BookDetails />} />
-                <Route path="/userDetails/:id" element={<UserDetails />} />
-                <Route path="addBook" element={<AddBook />} />
-                <Route path="addBook/:id" element={<AddBook />} />
-
-                <Route path="/bookManagment" element={<Bookmanagement />} />
-                <Route path="/createPromocode" element={<CreatePromocode />} />
-                <Route path="/checkout/:id" element={<Checkout />} />
-                <Route path="/getAllUsers" element={<GetAllUsers />} />
-                <Route path="/userprofile" element={<UserProfile />} />
-                <Route path="/usercompltebook" element={<Usercompltebook />} />
-                <Route path="/usermycomition" element={<Usermycomition />} />
-                <Route path="/progrestrackingadmin" element={<Progrestrackingadmin />} />
-                <Route path="/fineluserDetails" element={<FineluserDetails />} />
-                <Route path="/finelUserCommition" element={<FinelUserCommition />} />
-                <Route path="/finelUserCommition/:id" element={<FinelUserCommition />} />
-                <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
-                <Route path="/visitedUser" element={<VisitedUser />} />
-
-
-
-
-                {/* Admin-only Route */}
-                <Route path="/adminpanel" element={
-                  <AdminRoute>
-                    <Adminpanel />
-                  </AdminRoute>} />
-                {/* add more protected routes here */}
-              </>
-            )}
-          </Routes>
-
-          {/* ✅ Chatbot: sirf login ke baad admin/user ko show karo */}
-          {isLoggedIn && <Chatbot />}
-        </Router>
-
-      </AudioProvider>
-    </>
-  );
 }
 
 export default App;

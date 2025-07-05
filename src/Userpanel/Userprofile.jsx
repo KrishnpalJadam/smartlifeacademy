@@ -29,7 +29,7 @@ const UserProfile = () => {
         style={{ width: "400px", borderRadius: "10px" }}
       >
         <Link
-          to="/Dashboard"
+          to="/backdashboard"
           className="d-flex align-items-center mb-4 text-decoration-none text-white"
         >
           <FaAngleLeft /> Back to Dashboard
