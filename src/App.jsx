@@ -146,7 +146,7 @@ return (
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<Contact />} />
-
+         <Route path="/checkout/:id" element={<Checkout />} />
         {/* Private Pages - Jab login ho */}
         {isLoggedIn && (
           <>
