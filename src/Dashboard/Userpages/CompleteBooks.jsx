@@ -368,7 +368,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <Chatbot />
+      {/* <Chatbot /> */}
     </div>
   );
 };

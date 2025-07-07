@@ -95,8 +95,7 @@ import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
 import Sallessupoortchatboard from "./Dashboard/Userpages/Sallessupoortchatboard";
 import Chatbot from "./Dashboard/Chatbot";
 import { useEffect } from "react";
-
-
+import CombinedChatbot from "./Dashboard/Userpages/CombinedChatbot";
 // import Userprofile from "./Userpanel/Userprofile";
 
 function ScrollToTopAndForceReload() {
@@ -192,7 +191,8 @@ return (
       </Routes>
 
       {/* ✅ Main Chatbot – sirf login ke baad show hoga (admin/user panel) */}
-      {isLoggedIn && <Chatbot />}
+       {/* {isLoggedIn ?  <MainSalesChatbot />:<Chatbot /> } */}
+       <CombinedChatbot/>
     </Router>
   </AudioProvider>
 );
