@@ -478,7 +478,7 @@ const AddBook = () => {
 
   const saveDraft = () => {
     localStorage.setItem("draftBook", JSON.stringify(book));
-    alert("Book draft saved successfully in browser (localStorage).");
+    alert("Book draft saved successfully .");
     setIsRestored(true);
   };
 

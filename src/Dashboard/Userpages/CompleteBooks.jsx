@@ -196,14 +196,14 @@ useEffect(() => {
     try {
       const response = await axios.get(`${BASE_URL}/GetCompletedBooks`);
       if (response.data && response.data.data) {
-        // Deduplicate by user_id + book_id
-        const uniqueBookMap = new Map();
-        response.data.data.forEach((book) => {
-          const uniqueKey = `${book.user_id}-${book.book_id}`;
-          if (!uniqueBookMap.has(uniqueKey)) {
-            uniqueBookMap.set(uniqueKey, book);
-          }
-        });
+         // Deduplicate by user_id + book_id
+  const uniqueBookMap = new Map();
+  response.data.data.forEach((book) => {
+    const uniqueKey = `${book.user_id}-${book.book_id}`;
+    if (!uniqueBookMap.has(uniqueKey) && book.email && book.email.trim() !== "") {
+      uniqueBookMap.set(uniqueKey, book);
+    }
+  });
 
         const formattedBooks = Array.from(uniqueBookMap.values()).map((book) => ({
           id: book.book_id,
