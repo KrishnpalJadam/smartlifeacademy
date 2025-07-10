@@ -246,7 +246,7 @@ const Hero = () => {
       </section>
 
 
-      <MainSalesChatbot/>
+      {/* <MainSalesChatbot/> */}
     
       <Footer />
 

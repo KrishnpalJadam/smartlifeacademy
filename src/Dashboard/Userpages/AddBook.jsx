@@ -492,14 +492,26 @@ const AddBook = () => {
     formData.append("author", book.author);
     formData.append("description", book.description);
     formData.append("flip_book_url", book.flip_book_url);
-    formData.append("status", "active");  // Submit as active
+
+    formData.append("status", "active"); 
 
     if (book.image instanceof File) {
-      formData.append("image", book.image);
+      const sanitizedFile = new File(
+        [book.image],
+        book.image.name.replace(/[^\w.]/g, "_"),
+        { type: book.image.type }
+      );
+      formData.append("image", sanitizedFile);
     }
 
+
     if (book.audio_book_url instanceof File) {
-      formData.append("audio_book_url", book.audio_book_url);
+       const sanitizedFile = new File(
+        [book.audio_book_url],
+        book.audio_book_url.name.replace(/[^\w.]/g, "_"),
+        { type: book.audio_book_url.type }
+      );
+      formData.append("audio_book_url", sanitizedFile);
     }
 
     formData.append("questions", JSON.stringify(book.questions));

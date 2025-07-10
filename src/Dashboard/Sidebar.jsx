@@ -152,6 +152,8 @@ function Sidebar() {
       setUser(null); // Reset user state
       localStorage.clear()
       navigate("/login"); // Redirect to login page
+    window.location.reload();
+
 
     } catch (error) {
       console.error("Logout error:", error);
@@ -202,6 +204,7 @@ function Sidebar() {
 
   return (
     <div style={{ position: "relative" }}>
+   
       <button className="sidebar-toggle" onClick={toggleSidebar} style={{ position: "absolute", left: 260 }}>
         {isSidebarOpen ? <FaTimes /> : <FaBars />}
       </button>

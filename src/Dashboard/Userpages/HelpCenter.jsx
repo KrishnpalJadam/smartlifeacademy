@@ -28,7 +28,7 @@ export default function HelpCenter() {
   return (
     <div className="container-fluid min-vh-100 text-light py-4" style={{ backgroundColor: "#1a1a1a" }}>
       <div className="container">
-        <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
+        <Link to="/backdashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
           <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
         </Link>
         <h2 className="fs-4 fw-semibold mt-3">Help Center</h2>

@@ -9,15 +9,15 @@ function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
-useEffect(() => {
-  const hasReloaded = sessionStorage.getItem("loginPageReloaded");
-  if (!hasReloaded) {
-    sessionStorage.setItem("loginPageReloaded", "true");
-    setTimeout(() => {
-      window.location.reload();
-    }, 100); // Delay to ensure sessionStorage is saved before reload
-  }
-}, []);
+  useEffect(() => {
+    const hasReloaded = sessionStorage.getItem("loginPageReloaded");
+    if (!hasReloaded) {
+      sessionStorage.setItem("loginPageReloaded", "true");
+      setTimeout(() => {
+        window.location.reload();
+      }, 100); // Delay to ensure sessionStorage is saved before reload
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,12 +43,15 @@ useEffect(() => {
             localStorage.setItem("isLoggedIn", "true");
 
             if (response.data.role === 'admin') {
-              navigate('/dashboard');
+              navigate('/backdashboard');
+               window.location.reload()
             } else if (response.data.role === 'user') {
-              navigate('/dashboard');
+              navigate('/backdashboard');
+               window.location.reload()
             } else {
               setError('Unknown user role');
             }
+            window.location.reload()
           }
         });
       } else {

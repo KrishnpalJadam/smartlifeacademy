@@ -825,33 +825,8 @@ const BookDetails = () => {
     const userId = newid?.id || "";
 
     const planName = localStorage.getItem("plan_name");
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 3000,
-        centerMode: true,
-        centerPadding: "20px",
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    centerMode: false
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 1,
-                    centerMode: false
-                }
-            }
-        ]
-    };
+  
+
 
     useEffect(() => {
         const usernewid = localStorage.getItem('userdata');
@@ -1216,7 +1191,7 @@ const saveProgressToBackend = async (currentTime, duration) => {
             <ToastContainer />
             <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <nav className="flex items-center justify-between mb-12">
-                    <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white text-xxl">
+                    <Link to="/backdashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white text-xxl">
                         <i className="fa-solid fa-chevron-left me-2 " /> Back to Dashboard
                     </Link>
                 </nav>
@@ -1491,39 +1466,86 @@ const saveProgressToBackend = async (currentTime, duration) => {
                 )}
             </div>
 
-            <section className="testimonials-section" style={{ marginTop: "-140px" }}>
-                <div className="testimonials-container">
-                    <div className="testimonials-grid">
-                        {!demoBook ? (
-                            <p>Loading...</p>
-                        ) : demoBook.reviews && Array.isArray(demoBook.reviews) && demoBook.reviews.length > 0 ? (
-                            <Slider {...settings}>
-                                {demoBook.reviews.map((review, index) => (
-                                    <div key={review.review_id || index} className="testimonial-card"  >
-                                        <div className="testimonial-rating">
-                                            {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
-                                        </div>
-                                        <p className="testimonial-text">{review.comment}</p>
-                                        <div className="testimonial-author">
-                                            <img
-                                                src={`https://i.pravatar.cc/150?img=${index + 1}`}
-                                                alt="User"
-                                                className="author-image"
-                                            />
-                                            <div className="author-info">
-                                                <h4>{review.reviewer_name}</h4>
-                                                <p>Verified Reader</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
-                        ) : (
-                            <p className="no-reviews">No reviews available</p>
-                        )}
-                    </div>
+             <section className="testimonials-section" style={{ marginTop: "-140px" }}>
+  <div className="testimonials-container">
+    <div className="testimonials-grid">
+      {!demoBook ? (
+        <p>Loading...</p>
+      ) : demoBook.reviews && Array.isArray(demoBook.reviews) && demoBook?.reviews?.length > 0 ? (
+        demoBook.reviews.length === 1 ? (
+          <div className="testimonial-card">
+            <div className="testimonial-rating">
+              {"★".repeat(demoBook.reviews[0].rating)}{"☆".repeat(5 - demoBook.reviews[0].rating)}
+            </div>
+            <p className="testimonial-text">{demoBook.reviews[0].comment}</p>
+            <div className="testimonial-author">
+              <img
+                src={`https://i.pravatar.cc/150?img=1`}
+                alt="User"
+                className="author-image"
+              />
+              <div className="author-info">
+                <h4>{demoBook.reviews[0].reviewer_name}</h4>
+                <p>Verified Reader</p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <Slider
+            dots={true}
+            infinite={demoBook?.reviews?.length > 1}
+            speed={500}
+            slidesToShow={Math.min(3, demoBook?.reviews?.length)}
+            slidesToScroll={1}
+            autoplay={demoBook?.reviews?.length > 1}
+            autoplaySpeed={3000}
+            centerMode={demoBook?.reviews?.length > 2}
+            centerPadding="20px"
+            responsive={[
+              {
+                breakpoint: 1024,
+                settings: {
+                  slidesToShow: Math.min(2, demoBook?.reviews?.length),
+                  centerMode: false,
+                },
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 1,
+                  centerMode: false,
+                },
+              },
+            ]}
+          >
+            {demoBook.reviews.map((review, index) => (
+              <div key={review.review_id || index} className="testimonial-card">
+                <div className="testimonial-rating">
+                  {"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}
                 </div>
-            </section>
+                <p className="testimonial-text">{review.comment}</p>
+                <div className="testimonial-author">
+                  <img
+                    src={`https://i.pravatar.cc/150?img=${index + 1}`}
+                    alt="User"
+                    className="author-image"
+                  />
+                  <div className="author-info">
+                    <h4>{review.reviewer_name}</h4>
+                    <p>Verified Reader</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </Slider>
+        )
+      ) : (
+        <p className="no-reviews">No reviews available</p>
+      )}
+    </div>
+  </div>
+</section>
+
 
             {localStorage.getItem('Role') === 'user' && (
                 <div className="bg-gray-900 p-6 rounded-lg max-w-5xl w-full relative" style={{ marginLeft: "auto", marginRight: "auto" }}>

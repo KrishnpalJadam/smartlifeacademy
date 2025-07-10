@@ -31,7 +31,7 @@ const VisitedUser = () => {
 
     return (
         <div className="container mt-5">
-            <Link to="/Dashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
+            <Link to="/backdashboard" className="d-flex align-items-center mb-4 text-decoration-none text-white">
                 <i className="fa-solid fa-chevron-left me-2" /> Back to Dashboard
             </Link>
             <h2 className="mb-4 text-white fs-4 fw-bold">All Visited User</h2>

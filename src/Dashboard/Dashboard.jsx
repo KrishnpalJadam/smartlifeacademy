@@ -16,13 +16,14 @@ function Dashboard() {
   const user_data = JSON.parse(localStorage.getItem("userdata"));
   return (
     <div>
+     
       <Sidebar />
       <Library />
 
       {showModal && (
         <div style={styles.overlay}>
           <div style={styles.modal}>
-            <h2 className='text-2xl'>👋 Welcome {user_data.firstname} {user_data.lastname}</h2>
+            <h2 className='text-2xl'>👋 Welcome {user_data.firstname}</h2>
             <p>Glad to see you </p>
             <div> Plan : {user_data.plan_name}</div>
             <div> Remaining Days : {user_data?.remaining_days}</div>

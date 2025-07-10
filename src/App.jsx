@@ -53,7 +53,7 @@
 
 
 
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Dashboard from "./Dashboard/Dashboard";
 import MasterClassSignUp from "./component/MasterClassSignUp";
 import SelfImprovementSection from "./component/SelfImprovementSection";
@@ -92,36 +92,63 @@ import VisitedUser from "./Adminpanel/VisitedUser";
 import GoogleTranslate from "./GoogleTranslate";
 import LogoutOnTabClose from "./LogoutOnTabClose";
 import SoftwhereNavbar from "./Dashboard/SoftwhereNavbar";
-
+import Sallessupoortchatboard from "./Dashboard/Userpages/Sallessupoortchatboard";
+import Chatbot from "./Dashboard/Chatbot";
+import { useEffect } from "react";
+import CombinedChatbot from "./Dashboard/Userpages/CombinedChatbot";
 // import Userprofile from "./Userpanel/Userprofile";
+
+function ScrollToTopAndForceReload() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/backdashboard") {
+      const hasReloaded = sessionStorage.getItem("dashboardReloaded");
+      if (!hasReloaded) {
+        sessionStorage.setItem("dashboardReloaded", "true");
+        window.location.reload();
+      }
+    }
+  }, [location.pathname]);
+
+  return null;
+}
 const AdminRoute = ({ children }) => {
   const role = localStorage.getItem('Role');
-  return role === 'admin' ? children : <Navigate to="/Dashboard" />;
+  return role === 'admin' ? children : <Navigate to="/backdashboard" />;
 };
 const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 function App() {
   // const user = JSON.parse(localStorage.getItem("userdata"));
   // const currentUserId = user?.id;
-  return (
-    <>
+return (
+  <AudioProvider>
+    <GoogleTranslate />
 
-      <AudioProvider>
-       
+    <Router>
+      {isLoggedIn && <SoftwhereNavbar />}
+  <ScrollToTopAndForceReload />  {/* 👈 Add this line */}
+      <Routes>
+        {/* Public Pages */}
+        <Route path="/" element={<MasterClassSignUp />} />
+        <Route path="/selfimprovement" element={<SelfImprovementSection />} />
+        
+        {/* ✅ Sales Chatbot sirf /hero page par dikhana */}
+        <Route path="/hero" element={
+          <>
+            <Hero />
+            <Sallessupoortchatboard />
+          </>
+        } />
 
-        <GoogleTranslate />
-       
-        {/* <LogoutOnTabClose userId={currentUserId} /> */}
-
-        <Router>
-          {isLoggedIn && <SoftwhereNavbar />}
-          <Routes>
-            <Route path="/" element={<MasterClassSignUp />} />
-            <Route path="/selfimprovement" element={<SelfImprovementSection />} />
-            <Route path="/hero" element={<Hero />} />
-            <Route path="/plan" element={<Plan />} />
-            {/* library page  */}
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/signup" element={<SignUp />} />
+        <Route path="/plan" element={<Plan />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/contact" element={<Contact />} />
+         <Route path="/checkout/:id" element={<Checkout />} />
+        {/* Private Pages - Jab login ho */}
+        {isLoggedIn && (
+          <>
             <Route path="/helpCenter" element={<HelpCenter />} />
             <Route path="/Review" element={<Review />} />
             <Route path="/settings" element={<Settings />} />
@@ -129,16 +156,13 @@ function App() {
             <Route path="/myreadingList" element={<MyreadingList />} />
             <Route path="/booksToRead" element={<BooksToRead />} />
             <Route path="/completeBooks" element={<CompleteBooks />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/contact" element={<Contact />} />
             <Route path="/myCommision" element={<MyCommision />} />
             <Route path="/myCommision/:id" element={<MyCommision />} />
-
+            <Route path="/backdashboard" element={<Dashboard />} />
             <Route path="/bookDetails/:id" element={<BookDetails />} />
             <Route path="/userDetails/:id" element={<UserDetails />} />
-            <Route path="addBook" element={<AddBook />} />
-            <Route path="addBook/:id" element={<AddBook />} />
-
+            <Route path="/addBook" element={<AddBook />} />
+            <Route path="/addBook/:id" element={<AddBook />} />
             <Route path="/bookManagment" element={<Bookmanagement />} />
             <Route path="/createPromocode" element={<CreatePromocode />} />
             <Route path="/checkout/:id" element={<Checkout />} />
@@ -153,20 +177,26 @@ function App() {
             <Route path="/fineluserDetails/:id" element={<FineluserDetails />} />
             <Route path="/visitedUser" element={<VisitedUser />} />
 
-
-
-
             {/* Admin-only Route */}
-            <Route path="/adminpanel" element={
-              <AdminRoute>
-                <Adminpanel />
-              </AdminRoute>} />
-          </Routes>
-          <GlobalAudioPlayer />
-        </Router>
-      </AudioProvider>
-    </>
-  );
+            <Route
+              path="/adminpanel"
+              element={
+                <AdminRoute>
+                  <Adminpanel />
+                </AdminRoute>
+              }
+            />
+          </>
+        )}
+      </Routes>
+
+      {/* ✅ Main Chatbot – sirf login ke baad show hoga (admin/user panel) */}
+       {/* {isLoggedIn ?  <MainSalesChatbot />:<Chatbot /> } */}
+       <CombinedChatbot/>
+    </Router>
+  </AudioProvider>
+);
+
 }
 
 export default App;

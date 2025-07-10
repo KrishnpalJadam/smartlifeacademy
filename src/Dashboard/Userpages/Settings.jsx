@@ -325,7 +325,7 @@ const Settings = () => {
     <div className="container my-5">
       <ToastContainer />
       <Link
-        to="/Dashboard"
+        to="/backdashboard"
         className="text-white mb-3 d-block text-decoration-none"
         style={{ color: "white", textDecoration: "none", marginBottom: 15 }}
       >

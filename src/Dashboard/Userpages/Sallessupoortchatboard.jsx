@@ -1,21 +1,36 @@
-import React, { useEffect } from "react";
+  import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const Sallessupoortchatboard = () => {
+  const location = useLocation();
+
+  // ✅ Strict condition: show only on exact "/hero" route
+  const shouldShow = location.pathname === "/hero";
+
   useEffect(() => {
-    // Load Chatbase script when the component mounts
+    if (!shouldShow) return;
+
+    // 🧹 Remove old script if already present
+    const existingScript = document.getElementById("sales-chatbot");
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // ➕ Inject Chatbase script with correct chatbotId
     const script = document.createElement("script");
     script.src = "https://www.chatbase.co/embed.min.js";
-    script.id = "C2m5Tk3OoCDcV_reP4Rbz";
-    script.domain = "www.chatbase.co";
+    script.id = "sales-chatbot";
+    script.setAttribute("chatbotId", "YOUR_SALES_BOT_ID"); // 🔁 Replace with your actual Sales Bot ID
+    script.setAttribute("domain", "www.chatbase.co");
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup if necessary
-      document.body.removeChild(script);
+      script.remove(); // 🧼 Cleanup on unmount
     };
-  }, []);
+  }, [shouldShow]);
 
-  // Function to open Chatbase chatbot
+  if (!shouldShow) return null;
+
   const openChatbot = () => {
     if (window.chatbase) {
       window.chatbase("open");
@@ -23,17 +38,10 @@ const Sallessupoortchatboard = () => {
   };
 
   return (
-    <div>
-      {/* Sales Support Button */}
-      <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
-        <button
-          className="btn salessupoortbutton"
-          style={{ backgroundColor: "#fcd34d", margin: "10px" }}
-          onClick={openChatbot} // Click to open chatbot
-        >
-          Sales Support
-        </button>
-      </div>
+    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
+      <button className="btn btn-warning" onClick={openChatbot}>
+        Sales Support
+      </button>
     </div>
   );
 };
